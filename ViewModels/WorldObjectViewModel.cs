@@ -1,8 +1,4 @@
-﻿using RRSOS_PCC.Class;
-using RRSOS_PCC.Classes;
-using RRSOS_PCC.Enums;
-using RRSOS_PCC.Models;
-using RRSOS_PCC.Services;
+﻿using RRSOS_PCC.Models;
 
 namespace RRSOS_PCC.ViewModels
 {
@@ -20,23 +16,14 @@ namespace RRSOS_PCC.ViewModels
             Id = obj.id;
             GId = obj.gId;
 
-            // Metadata registry gives you type + category
-            var meta = WorldObjectDataService.GetEntry(obj.gId);
+            // obj.Name/Type/Category/Tier are already resolved via
+            // WorldObjectClassifierService during ProcessBinder.BindWorldObjects.
+            DisplayName = string.IsNullOrWhiteSpace(obj.Name)
+                ? obj.gId
+                : string.IsNullOrWhiteSpace(obj.Tier) ? obj.Name : $"{obj.Name} {obj.Tier}";
 
-            DisplayName = meta.Name == null ? obj.gId : meta.Name + " " + meta.Tier;
-
-            // Enum translation
-            // Convert int → enum
-            var typeEnum = (WorldObjectType)meta.Type;
-
-            // UI-friendly type string
-            Type = typeEnum.ToString();
-
-            // Category via your mapper
-            var categoryEnum = WorldObjectResolver.GetCategoryEnum(typeEnum);
-
-            // UI-friendly category string
-            Category = categoryEnum.ToString();
+            Type = obj.Type.ToString();
+            Category = obj.Category.ToString();
         }
     }
 }

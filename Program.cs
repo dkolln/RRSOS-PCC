@@ -24,7 +24,6 @@ builder.Services.AddSingleton<NotebookService>();
 
 
 PathResolver.Initialize(builder.Configuration);
-WorldObjectDataService.Load();
 
 var app = builder.Build();
 

@@ -582,6 +582,7 @@ namespace RRSOS_PCC.Classes
                 wo.Type = def.Type;
                 wo.Category = WorldObjectResolver.GetCategoryEnum(wo.Type);
                 wo.Name = !string.IsNullOrWhiteSpace(wo.text) ? wo.text : def.Name;
+                wo.Tier = def.Tier;
 
                 if(wo.pos != null)
                 {

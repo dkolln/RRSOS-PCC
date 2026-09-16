@@ -73,6 +73,12 @@ namespace RRSOS_PCC.Services
             return CreateUnknown(gId);
         }
 
+        /// <summary>
+        /// True if gId (or its base name with trailing digits stripped) has a
+        /// real entry in worldobjectdata.json, using the same fallback as GetDefinition.
+        /// </summary>
+        public bool IsKnownGid(string gId) => GetDefinition(gId).Type != WorldObjectType.Unknown;
+
         private WorldObjectDefinition CreateUnknown(string gId)
         {
             return new WorldObjectDefinition

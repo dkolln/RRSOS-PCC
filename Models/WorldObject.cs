@@ -26,6 +26,7 @@ namespace RRSOS_PCC.Models
         public Base OwningBase { get; set; }
 
         public string Name { get; set; } = "";
+        public string Tier { get; set; } = "";
 
         public WorldObjectType Type { get; set; } = WorldObjectType.Unknown;
         public WorldObjectCategory Category { get; set; } = WorldObjectCategory.Unknown;

@@ -37,8 +37,7 @@
     protected override void OnInitialized()
     {
         var savePath = PathResolver.FullSavePath;
-        var metaPath = PathResolver.WorldObjectDataPath;
 
-        Missing = SaveSvc.GetMissingGids(savePath, metaPath);
+        Missing = SaveSvc.GetMissingGids(savePath);
     }
 }

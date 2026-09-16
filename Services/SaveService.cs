@@ -157,20 +157,12 @@ public class SaveService
         return gids;
     }
 
-    public List<string> GetMissingGids(string saveFilePath, string metadataJsonPath)
+    public List<string> GetMissingGids(string saveFilePath)
     {
-        // Extract gIds from save file
         var saveGids = ExtractGidsFromSave(saveFilePath);
 
-        // Load metadata dictionary
-        var metadata = JsonSerializer.Deserialize<Dictionary<string, WorldObjectDataEntry>>(
-            File.ReadAllText(metadataJsonPath));
-
-        var metaGids = new HashSet<string>(metadata.Keys, StringComparer.OrdinalIgnoreCase);
-
-        // Compute difference
         return saveGids
-            .Where(gid => !metaGids.Contains(gid))
+            .Where(gid => !_objectService.IsKnownGid(gid))
             .OrderBy(gid => gid)
             .ToList();
     }
