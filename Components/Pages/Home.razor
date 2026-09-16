@@ -1,0 +1,91 @@
+﻿@page "/"
+@using RRSOS_PCC.Services
+@using RRSOS_PCC.Components.Pages
+
+@layout MainLayout
+@inject NavigationManager NavigationManager
+
+<div class="home-grid">
+
+    <div class="readout-section">
+        <div class="readout-header" @onclick="() => ShowPlayer = !ShowPlayer">
+            PLAYER <span>@(ShowPlayer ? "▼" : "▶")</span>
+        </div>
+        @if (ShowPlayer)
+        {
+            <PlayerSummary Data="@PlayerVM" />
+        }
+    </div>
+
+    <div class="readout-section">
+        <div class="readout-header" @onclick="() => ShowPlanet = !ShowPlanet">
+            PLANET <span>@(ShowPlanet ? "▼" : "▶")</span>
+        </div>
+        @if (ShowPlanet)
+        {
+            <PlanetSummary Data="@PlanetVM" />
+        }
+    </div>
+
+    <div class="readout-section">
+        <div class="readout-header" @onclick="() => ShowVehicle = !ShowVehicle">
+            VEHICLE <span>@(ShowVehicle ? "▼" : "▶")</span>
+        </div>
+        @if (ShowVehicle)
+        {
+            <VehicleSummary Data="@VehicleVM" />
+        }
+    </div>
+
+    <div class="readout-section">
+        <div class="readout-header" @onclick="() => ShowBases = !ShowBases">
+            BASES <span>@(ShowBases ? "▼" : "▶")</span>
+        </div>
+        @if (ShowBases)
+        {
+            <BaseSummary Data="@BaseVMs" />
+        }
+    </div>
+
+    <div class="readout-section">
+        <div class="readout-header" @onclick="() => ShowBaseContents = !ShowBaseContents">
+            BASE CONTENTS <span>@(ShowBaseContents ? "▼" : "▶")</span>
+        </div>
+        @if (ShowBaseContents)
+        {
+            <BaseContents SelectedBase="@ClosestBase" />
+        }
+    </div>
+
+    <div class="readout-section">
+        <div class="readout-header" @onclick="() => ShowExtractors = !ShowExtractors">
+            EXTRACTORS <span>@(ShowExtractors ? "▼" : "▶")</span>
+        </div>
+        @if (ShowExtractors)
+        {
+            <Extractors />
+        }
+    </div>
+
+    @if (!IsLoading && Notebook is not null)
+    {
+        <div class="readout-section">
+            <div class="readout-header" @onclick="() => ShowNotebook = !ShowNotebook">
+                NOTES <span>@(ShowNotebook ? "▼" : "▶")</span>
+            </div>
+
+            @if (ShowNotebook)
+            {
+                <NoteSummary NotebookData="@Notebook"
+                             Notes="@NotebookVMs"
+                             OnNotesChanged="ReloadNotebook" />
+            }
+        </div>
+    }
+
+
+
+</div>
+
+
+

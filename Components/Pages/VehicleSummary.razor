@@ -1,0 +1,87 @@
+﻿@using RRSOS_PCC.Classes
+@using RRSOS_PCC.Models
+
+<div class="pcc-readout">
+
+    <div class="readout-header">VEHICLE SUMMARY</div>
+
+    @if (Data is null)
+    {
+        <div class="readout-line">No vehicle data available.</div>
+    }
+    else
+    {
+        <!-- Position -->
+        <div class="readout-section">
+            <div class="readout-header">Position</div>
+
+            <div class="readout-line">
+                <span class="label">» Position</span>
+                <span class="value">@Data.Position.Display2D</span>
+            </div>
+
+            <div class="readout-line">
+                <span class="label">» Elevation</span>
+                <span class="value">@Data.Position.DisplayElevation</span>
+            </div>
+
+            <div class="readout-line">
+                <span class="label">» Heading</span>
+                <span class="value">@Data.Rotation.Heading</span>
+            </div>
+        </div>
+
+        <!-- Modules -->
+        <div class="readout-section">
+            <div class="readout-header">Modules (@Data.Modules.Count)</div>
+
+            <div class="readout-grid-2">
+                <div>
+                    @foreach (var item in ModuleLeftColumn)
+                    {
+                        <div class="readout-line">
+                            <span class="label">» @item.Name</span>
+                        </div>
+                    }
+                </div>
+
+                <div>
+                    @foreach (var item in ModuleRightColumn)
+                    {
+                        <div class="readout-line">
+                            <span class="label">» @item.Name</span>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Trunk -->
+        <div class="readout-section">
+            <div class="readout-header">Trunk (@Data.Trunk.Count)</div>
+
+            <div class="readout-grid-2">
+                <div>
+                    @foreach (var item in LeftColumn)
+                    {
+                        <div class="readout-line">
+                            <span class="label">» @item.Name</span>
+                            <span class="value">@item.Count</span>
+                        </div>
+                    }
+                </div>
+
+                <div>
+                    @foreach (var item in RightColumn)
+                    {
+                        <div class="readout-line">
+                            <span class="label">» @item.Name</span>
+                            <span class="value">@item.Count</span>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+</div>

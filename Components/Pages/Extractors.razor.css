@@ -1,0 +1,124 @@
+﻿.extractor-contents-root {
+    padding: 10px;
+}
+
+.extractor-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 550px;
+    overflow-y: auto;
+    padding-right: 6px;
+}
+
+.extractor-card {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+    .extractor-card .header {
+        display: flex;
+        justify-content: space-between;
+        font-weight: bold;
+        margin-bottom: 4px;
+    }
+
+    .extractor-card .tier {
+        color: #7fc8ff;
+    }
+
+    .extractor-card .distance {
+        color: #aaa;
+    }
+
+    .extractor-card .biome {
+        font-size: 0.9rem;
+        color: #ccc;
+    }
+
+    .extractor-card .ore-group {
+        margin: 4px 0;
+        font-size: 0.9rem;
+    }
+
+.contents {
+    margin-top: 6px;
+    padding-left: 6px;
+    border-left: 2px solid #444;
+}
+
+.item-row {
+    font-size: 0.85rem;
+    color: #ddd;
+}
+
+.full-warning {
+    margin-top: 6px;
+    color: #ff6b6b;
+    font-weight: bold;
+}
+
+.primary-ore {
+    background: rgba(127, 200, 255, 0.15);
+    border-left: 3px solid #7fc8ff;
+    padding-left: 6px;
+    font-weight: bold;
+}
+
+.expand-btn {
+    margin-right: 6px;
+    background: transparent;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    color: #7fc8ff;
+}
+
+
+.group-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 6px;
+    border-bottom: 1px solid #333;
+    cursor: pointer;
+}
+
+    .group-row:hover {
+        background: rgba(255,255,255,0.05);
+    }
+
+.group-name {
+    font-weight: bold;
+    color: #7fc8ff;
+}
+
+.group-total, .group-full {
+    color: #ccc;
+}
+
+.modal-extractor-list {
+    max-height: 70vh;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+.group-details {
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.03);
+    border-left: 2px solid #444;
+}
+
+.extractor-detail {
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #333;
+}
+
+    .extractor-detail .header {
+        display: flex;
+        gap: 12px;
+        font-weight: bold;
+        color: #7fc8ff;
+    }

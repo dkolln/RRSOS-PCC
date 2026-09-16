@@ -1,0 +1,197 @@
+[
+  {
+    "Name": "Iron",
+    "Type": "Ore",
+    "Abbrev": "Fe",
+    "DAbbrev":  "I"
+  },
+  {
+    "Name": "Titanium",
+    "Type": "Ore",
+    "Abbrev": "Ti",
+    "DAbbrev": "T"
+  },
+  {
+    "Name": "Silicon",
+    "Type": "Ore",
+    "Abbrev": "Si",
+    "DAbbrev": "S"
+  },
+  {
+    "Name": "Cobalt",
+    "Type": "Ore",
+    "Abbrev": "Co",
+    "DAbbrev": "C"
+  },
+  {
+    "Name": "Magnesium",
+    "Type": "Ore",
+    "Abbrev": "Mg",
+    "DAbbrev": "M"
+  },
+  {
+    "Name": "Aluminum",
+    "Type": "Ore",
+    "Abbrev": "Al",
+    "DAbbrev": "A"
+  },
+  {
+    "Name": "Iridium",
+    "Type": "Ore",
+    "Abbrev": "Ir"
+  },
+  {
+    "Name": "Uranium",
+    "Type": "Ore",
+    "Abbrev": "U"
+  },
+  {
+    "Name": "Osmium",
+    "Type": "Ore",
+    "Abbrev": "Os",
+    "DAbbrev": "O"
+  },
+  {
+    "Name": "Zeolite",
+    "Type": "Ore",
+    "Abbrev": "Ze",
+    "DAbbrev": "Z"
+  },
+  {
+    "Name": "Sulfur",
+    "Type": "Ore",
+    "Abbrev": "S",
+    "DAbbrev": "Sul"
+  },
+  {
+    "Name": "Super Alloy",
+    "Type": "Crafted",
+    "Abbrev": "Alloy"
+  },
+  {
+    "Name": "Explosive Powder",
+    "Type": "Crafted",
+    "Abbrev": "Gunpowder",
+    "DAbbrev": "ExP"
+  },
+  {
+    "Name": "Fertilizer",
+    "Type": "Crafted",
+    "Abbrev": "Fert 1",
+    "DAbbrev": "Fert"
+  },
+  {
+    "Name": "Fertilizer T2",
+    "Type": "Crafted",
+    "Abbrev": "Fert 2"
+  },
+  {
+    "Name": "Bacteria Sample",
+    "Type": "Crafted",
+    "Abbrev": "Bacteria"
+  },
+  {
+    "Name": "Mutagen",
+    "Type": "Crafted",
+    "Abbrev": "Mut 1",
+    "DAbbrev": "Mute"
+  },
+  {
+    "Name": "Mutagen T2",
+    "Type": "Crafted",
+    "Abbrev": "Mut 2"
+  },
+  {
+    "Name": "Circuit Board",
+    "Type": "Crafted",
+    "Abbrev": "Circ",
+    "DAbbrev": "CB"
+  },
+  {
+    "Name": "Iridium Rod",
+    "Type": "Composite",
+    "Abbrev": "Ir-Rod",
+    "DAbbrev": "IrRod"
+  },
+  {
+    "Name": "Uranium Rod",
+    "Type": "Composite",
+    "Abbrev": "U-Rod",
+    "DAbbrev": "URod"
+  },
+  {
+    "Name": "Osmium Rod",
+    "Type": "Composite",
+    "Abbrev": "Os-Rod",
+    "DAbbrev": "ORod"
+  },
+  {
+    "Name": "Super Alloy Rod",
+    "Type": "Composite",
+    "Abbrev": "Alloy-Rod",
+    "DAbbrev": "ARod"
+  },
+  {
+    "Name": "Ice",
+    "Type": "Liquid",
+    "Abbrev": "Ice"
+  },
+  {
+    "Name": "Water Bottle",
+    "Type": "Liquid",
+    "Abbrev": "Water",
+    "DAbbrev": "Wat"
+  },
+  {
+    "Name": "Oxygen Capsule",
+    "Type": "Gas",
+    "Abbrev": "O2",
+    "DAbbrev": "Ox"
+  },
+  {
+    "Name": "Methane Cartridge",
+    "Type": "Gas",
+    "Abbrev": "Meth",
+    "DAbbrev": "Met"
+  },
+  {
+    "Name": "Seed Lirma",
+    "Type": "Bio",
+    "Abbrev": "Lirma"
+  },
+  {
+    "Name": "Seed Pestera",
+    "Type": "Bio",
+    "Abbrev": "Pestera"
+  },
+  {
+    "Name": "Seed Nulna",
+    "Type": "Bio",
+    "Abbrev": "Nulna"
+  },
+  {
+    "Name": "Seed Tuska",
+    "Type": "Bio",
+    "Abbrev": "Tuska"
+  },
+  {
+    "Name": "Seed Shanga",
+    "Type": "Bio",
+    "Abbrev": "Shanga"
+  },
+  {
+    "Name": "Seed Golden",
+    "Type": "Bio",
+    "Abbrev": "Golden"
+  },
+  {
+    "Name": "Unknown",
+    "Type": "Unknown",
+    "Abbrev": "UNK"
+  },
+  {
+    "Name": "Fabric",
+    "Type": "Crafted",
+    "Abbrev": "Fab"
+  }
+]

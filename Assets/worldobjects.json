@@ -1,0 +1,1688 @@
+[
+  {
+    "gId": "CraftStation1",
+    "name": "T2 Craft Station"
+  },
+  {
+    "gId": "OxygenCapsule1",
+    "name": "Oxygen capsule"
+  },
+  {
+    "gId": "pod",
+    "name": "Living compartment"
+  },
+  {
+    "gId": "door",
+    "name": "Living compartment door"
+  },
+  {
+    "gId": "window",
+    "name": "Living compartment window"
+  },
+  {
+    "gId": "FloorGlass",
+    "name": "Living compartment glass"
+  },
+  {
+    "gId": "WaterBottle1",
+    "name": "Water bottle"
+  },
+  {
+    "gId": "Vegetube1",
+    "name": "T1 Vegetube"
+  },
+  {
+    "gId": "Vegetube2",
+    "name": "T2 Vegetube"
+  },
+  {
+    "gId": "VegetubeOutside1",
+    "name": "T3 Vegetube"
+  },
+  {
+    "gId": "biodome",
+    "name": "Biodome"
+  },
+  {
+    "gId": "Drill0",
+    "name": "T1 Drill"
+  },
+  {
+    "gId": "Drill1",
+    "name": "T2 Drill"
+  },
+  {
+    "gId": "Drill2",
+    "name": "T3 Drill"
+  },
+  {
+    "gId": "EnergyGenerator1",
+    "name": "Wind turbine"
+  },
+  {
+    "gId": "EnergyGenerator2",
+    "name": "T1 Solar Panel"
+  },
+  {
+    "gId": "EnergyGenerator3",
+    "name": "T2 Solar Panel"
+  },
+  {
+    "gId": "ice",
+    "name": "Ice"
+  },
+  {
+    "gId": "Cobalt",
+    "name": "Cobalt"
+  },
+  {
+    "gId": "Stairs",
+    "name": "Outdoor stairs"
+  },
+  {
+    "gId": "ScreenUnlockables",
+    "name": "Screen - Blueprints"
+  },
+  {
+    "gId": "ScreenTerraformation",
+    "name": "Screen - Terraformation"
+  },
+  {
+    "gId": "Container1",
+    "name": "Storage crate"
+  },
+  {
+    "gId": "Desktop1",
+    "name": "Desktop"
+  },
+  {
+    "gId": "Chair1",
+    "name": "Chair"
+  },
+  {
+    "gId": "MultiDeconstruct",
+    "name": "Microchip - Deconstruction"
+  },
+  {
+    "gId": "MultiToolLight",
+    "name": "Microchip - Torch"
+  },
+  {
+    "gId": "Backpack1",
+    "name": "T1 Backpack"
+  },
+  {
+    "gId": "Backpack2",
+    "name": "T2 Backpack"
+  },
+  {
+    "gId": "Backpack3",
+    "name": "T3 Backpack"
+  },
+  {
+    "gId": "EquipmentIncrease1",
+    "name": "T1 Exoskeleton"
+  },
+  {
+    "gId": "OxygenTank1",
+    "name": "T1 Oxygen Tank"
+  },
+  {
+    "gId": "OxygenTank2",
+    "name": "T2 Oxygen Tank"
+  },
+  {
+    "gId": "OxygenTank3",
+    "name": "T3 Oxygen Tank"
+  },
+  {
+    "gId": "ScreenEnergy",
+    "name": "Screen - Energy levels"
+  },
+  {
+    "gId": "Iridium",
+    "name": "Iridium"
+  },
+  {
+    "gId": "Iron",
+    "name": "Iron"
+  },
+  {
+    "gId": "Magnesium",
+    "name": "Magnesium"
+  },
+  {
+    "gId": "Silicon",
+    "name": "Silicon"
+  },
+  {
+    "gId": "Titanium",
+    "name": "Titanium"
+  },
+  {
+    "gId": "Seed0",
+    "name": "Lirma Seed"
+  },
+  {
+    "gId": "Seed1",
+    "name": "Shanga Seed"
+  },
+  {
+    "gId": "Seed2",
+    "name": "Pestera Seed"
+  },
+  {
+    "gId": "OutsideGrid",
+    "name": "External grid"
+  },
+  {
+    "gId": "OutsideLamp1",
+    "name": "Outdoor lamp"
+  },
+  {
+    "gId": "Heater1",
+    "name": "T1 Heater"
+  },
+  {
+    "gId": "Heater2",
+    "name": "T2 Heater"
+  },
+  {
+    "gId": "BedSimple",
+    "name": "Bed"
+  },
+  {
+    "gId": "FabricBlue",
+    "name": "Fabric"
+  },
+  {
+    "gId": "Aluminium",
+    "name": "Aluminum"
+  },
+  {
+    "gId": "Sofa",
+    "name": "Sofa"
+  },
+  {
+    "gId": "SofaAngle",
+    "name": "Corner sofa"
+  },
+  {
+    "gId": "BedDouble",
+    "name": "Double Bed"
+  },
+  {
+    "gId": "TableSmall",
+    "name": "Table"
+  },
+  {
+    "gId": "MultiBuild",
+    "name": "Microchip - Construction"
+  },
+  {
+    "gId": "Beacon",
+    "name": "Beacon"
+  },
+  {
+    "gId": "EquipmentIncrease2",
+    "name": "T2 Exoskeleton"
+  },
+  {
+    "gId": "Foundation",
+    "name": "Foundation grid"
+  },
+  {
+    "gId": "ComAntenna",
+    "name": "Communication Antenna"
+  },
+  {
+    "gId": "ScreenMessage",
+    "name": "Screen - Transmissions"
+  },
+  {
+    "gId": "Heater3",
+    "name": "T3 Heater"
+  },
+  {
+    "gId": "wreckpilar",
+    "name": "Debris"
+  },
+  {
+    "gId": "Rod-iridium",
+    "name": "Iridium Rod"
+  },
+  {
+    "gId": "Uranim",
+    "name": "Uranium"
+  },
+  {
+    "gId": "Rod-uranium",
+    "name": "Uranium Rod"
+  },
+  {
+    "gId": "CraftStation2",
+    "name": "Advanced Craft Station"
+  },
+  {
+    "gId": "Backpack4",
+    "name": "T4 Backpack"
+  },
+  {
+    "gId": "OxygenTank4",
+    "name": "T4 Oxygen Tank"
+  },
+  {
+    "gId": "Alloy",
+    "name": "Super Alloy"
+  },
+  {
+    "gId": "Container2",
+    "name": "Locker Storage"
+  },
+  {
+    "gId": "GoldenContainer",
+    "name": "Golden Crate"
+  },
+  {
+    "gId": "Seed3",
+    "name": "Nulna Seed"
+  },
+  {
+    "gId": "Seed4",
+    "name": "Tuska Seed"
+  },
+  {
+    "gId": "SeedGold",
+    "name": "Golden Seed"
+  },
+  {
+    "gId": "LaunchPlatform",
+    "name": "Launch Platform"
+  },
+  {
+    "gId": "EscapePod",
+    "name": "Escape pod"
+  },
+  {
+    "gId": "astrofood",
+    "name": "Space Food"
+  },
+  {
+    "gId": "GoldenEffigie1",
+    "name": "Golden effigy"
+  },
+  {
+    "gId": "EnergyGenerator4",
+    "name": "T1 Nuclear Reactor"
+  },
+  {
+    "gId": "SpaceMultiplierHeat",
+    "name": "Space heat multiplier"
+  },
+  {
+    "gId": "SpaceMultiplierOxygen",
+    "name": "Space oxygen multiplier"
+  },
+  {
+    "gId": "SpaceMultiplierPressure",
+    "name": "Space pressure multiplier"
+  },
+  {
+    "gId": "RocketOxygen1",
+    "name": "Seed spreader rocket"
+  },
+  {
+    "gId": "RocketPressure1",
+    "name": "Magnetic field protection rocket"
+  },
+  {
+    "gId": "RocketHeat1",
+    "name": "Asteroid attraction rocket"
+  },
+  {
+    "gId": "RocketReactor",
+    "name": "Rocket Engine"
+  },
+  {
+    "gId": "SeedSpreader1",
+    "name": "Flower Spreader"
+  },
+  {
+    "gId": "Ladder",
+    "name": "Indoor ladder"
+  },
+  {
+    "gId": "MultiToolMineSpeed1",
+    "name": "Microchip - T1 Mining Speed"
+  },
+  {
+    "gId": "MultiToolMineSpeed2",
+    "name": "Microchip - T2 Mining Speed"
+  },
+  {
+    "gId": "MultiToolMineSpeed3",
+    "name": "Microchip - T3 Mining Speed"
+  },
+  {
+    "gId": "VegetableGrower1",
+    "name": "Food Grower"
+  },
+  {
+    "gId": "BootsSpeed1",
+    "name": "T1 Agility Boots"
+  },
+  {
+    "gId": "BootsSpeed2",
+    "name": "T2 Agility Boots"
+  },
+  {
+    "gId": "BootsSpeed3",
+    "name": "T3 Agility Boots"
+  },
+  {
+    "gId": "ScreenTerraStage",
+    "name": "Screen - Progress"
+  },
+  {
+    "gId": "Seed0Growable",
+    "name": "Lirma Plant"
+  },
+  {
+    "gId": "Seed1Growable",
+    "name": "Shanga Plant"
+  },
+  {
+    "gId": "Seed2Growable",
+    "name": "Pestera Plant"
+  },
+  {
+    "gId": "Seed3Growable",
+    "name": "Nulna Plant"
+  },
+  {
+    "gId": "Seed4Growable",
+    "name": "Tuska Plant"
+  },
+  {
+    "gId": "SeedGoldGrowable",
+    "name": "Golden Plant"
+  },
+  {
+    "gId": "Vegetable0Seed",
+    "name": "Eggplant seeds"
+  },
+  {
+    "gId": "Vegetable0Growable",
+    "name": "Eggplant"
+  },
+  {
+    "gId": "Vegetable1Seed",
+    "name": "Squash seeds"
+  },
+  {
+    "gId": "Vegetable1Growable",
+    "name": "Squash"
+  },
+  {
+    "gId": "Vegetable2Seed",
+    "name": "Bean seeds"
+  },
+  {
+    "gId": "Vegetable2Growable",
+    "name": "Beans"
+  },
+  {
+    "gId": "Vegetable3Seed",
+    "name": "Mushroom seeds"
+  },
+  {
+    "gId": "Vegetable3Growable",
+    "name": "Mushroom"
+  },
+  {
+    "gId": "Bacteria1",
+    "name": "Bacteria Sample"
+  },
+  {
+    "gId": "WaterCollector1",
+    "name": "Atmospheric Water Collector"
+  },
+  {
+    "gId": "Fertilizer1",
+    "name": "Fertilizer"
+  },
+  {
+    "gId": "Algae1Seed",
+    "name": "Algae"
+  },
+  {
+    "gId": "WaterCollector2",
+    "name": "Lake Water Collector"
+  },
+  {
+    "gId": "Bioplastic1",
+    "name": "Bioplastic nugget"
+  },
+  {
+    "gId": "AlgaeGenerator1",
+    "name": "T1 Algae Generator"
+  },
+  {
+    "gId": "Biolab",
+    "name": "Biolab"
+  },
+  {
+    "gId": "AlgaeGenerator2",
+    "name": "T2 Algae Generator"
+  },
+  {
+    "gId": "WaterFilter",
+    "name": "Water Filter"
+  },
+  {
+    "gId": "Biodome2",
+    "name": "T2 Biodome"
+  },
+  {
+    "gId": "OreExtractor1",
+    "name": "Ore Extractor"
+  },
+  {
+    "gId": "Osmium",
+    "name": "Osmium"
+  },
+  {
+    "gId": "GoldenEffigie2",
+    "name": "Golden effigy"
+  },
+  {
+    "gId": "Sulfur",
+    "name": "Sulfur"
+  },
+  {
+    "gId": "EnergyGenerator5",
+    "name": "T2 Nuclear Reactor"
+  },
+  {
+    "gId": "HudCompass",
+    "name": "Microchip - Compass"
+  },
+  {
+    "gId": "FusionEnergyCell",
+    "name": "Fusion Energy Cell"
+  },
+  {
+    "gId": "FusionGenerator1",
+    "name": "Fusion reactor"
+  },
+  {
+    "gId": "WreckFusionGenerator",
+    "name": "Fusion reactor"
+  },
+  {
+    "gId": "wallplain",
+    "name": "Plain wall"
+  },
+  {
+    "gId": "RecyclingMachine",
+    "name": "Recycling machine"
+  },
+  {
+    "gId": "Destructor1",
+    "name": "Shredder machine"
+  },
+  {
+    "gId": "Jetpack1",
+    "name": "T1 Jetpack"
+  },
+  {
+    "gId": "Jetpack2",
+    "name": "T2 Jetpack"
+  },
+  {
+    "gId": "Jetpack3",
+    "name": "T3 Jetpack"
+  },
+  {
+    "gId": "RocketMap1",
+    "name": "T1 GPS Satellite"
+  },
+  {
+    "gId": "RocketMap2",
+    "name": "T2 GPS Satellite"
+  },
+  {
+    "gId": "RocketMap3",
+    "name": "T3 GPS Satellite"
+  },
+  {
+    "gId": "ScreenMap1",
+    "name": "Screen - Mapping"
+  },
+  {
+    "gId": "BlueprintT1",
+    "name": "Blueprint microchip"
+  },
+  {
+    "gId": "RedPowder1",
+    "name": "Explosive powder"
+  },
+  {
+    "gId": "GeneticManipulator1",
+    "name": "DNA Manipulator"
+  },
+  {
+    "gId": "Zeolite",
+    "name": "Zeolite"
+  },
+  {
+    "gId": "Drill3",
+    "name": "T4 Drill"
+  },
+  {
+    "gId": "Heater4",
+    "name": "t4 Heater"
+  },
+  {
+    "gId": "GrassSpreader1",
+    "name": "Grass Spreader"
+  },
+  {
+    "gId": "SeedSpreader2",
+    "name": "T2 Flower Spreader"
+  },
+  {
+    "gId": "TreeSpreader0",
+    "name": "Tree Spreader"
+  },
+  {
+    "gId": "TreeSpreader1",
+    "name": "T2 Tree Spreader"
+  },
+  {
+    "gId": "TreeSpreader2",
+    "name": "T3 Tree Spreader"
+  },
+  {
+    "gId": "GasExtractor1",
+    "name": "Gas Extractor"
+  },
+  {
+    "gId": "RocketBiomass1",
+    "name": "Plant Rocket"
+  },
+  {
+    "gId": "TreeRoot",
+    "name": "Tree bark"
+  },
+  {
+    "gId": "Fertilizer2",
+    "name": "T2 Fertilizer"
+  },
+  {
+    "gId": "podAngle",
+    "name": "Living compartment corner"
+  },
+  {
+    "gId": "Sign",
+    "name": "Sign"
+  },
+  {
+    "gId": "FlowerPot1",
+    "name": "Flower Pot"
+  },
+  {
+    "gId": "MethanCapsule1",
+    "name": "Methane cartridge"
+  },
+  {
+    "gId": "PulsarQuartz",
+    "name": "Pulsar Quartz"
+  },
+  {
+    "gId": "Mutagen1",
+    "name": "Mutagen"
+  },
+  {
+    "gId": "Tree0Seed",
+    "name": "Iterra tree seed"
+  },
+  {
+    "gId": "Tree1Seed",
+    "name": "Linifolia tree seed"
+  },
+  {
+    "gId": "Tree2Seed",
+    "name": "Aleatus tree seed"
+  },
+  {
+    "gId": "Tree3Seed",
+    "name": "Cernea tree seed"
+  },
+  {
+    "gId": "Tree4Seed",
+    "name": "Elegea tree seed"
+  },
+  {
+    "gId": "Tree5Seed",
+    "name": "Humelora tree seed"
+  },
+  {
+    "gId": "Tree6Seed",
+    "name": "Aemora tree seed"
+  },
+  {
+    "gId": "Tree7Seed",
+    "name": "Pleom tree seed"
+  },
+  {
+    "gId": "Tree8Seed",
+    "name": "Soleus tree seed"
+  },
+  {
+    "gId": "MultiToolMineSpeed4",
+    "name": "Microchip - T4 Mining Speed"
+  },
+  {
+    "gId": "Backpack5",
+    "name": "T5 Backpack"
+  },
+  {
+    "gId": "EnergyGenerator6",
+    "name": "Nuclear Fusion generator"
+  },
+  {
+    "gId": "InsideLamp1",
+    "name": "Area Lamp"
+  },
+  {
+    "gId": "Pod4x",
+    "name": "Big living compartment"
+  },
+  {
+    "gId": "Seed5Growable",
+    "name": ""
+  },
+  {
+    "gId": "Seed6Growable",
+    "name": ""
+  },
+  {
+    "gId": "Seed5",
+    "name": "Orema plant"
+  },
+  {
+    "gId": "Seed6",
+    "name": "Volnus plant"
+  },
+  {
+    "gId": "VegetableGrower2",
+    "name": "T2 Food Grower"
+  },
+  {
+    "gId": "DisplayCase",
+    "name": "Display case"
+  },
+  {
+    "gId": "OreExtractor2",
+    "name": "T2 Ore Extractor"
+  },
+  {
+    "gId": "GoldenEffigie3",
+    "name": "Golden effigy"
+  },
+  {
+    "gId": "Rod-alloy",
+    "name": "Super Alloy Rod"
+  },
+  {
+    "gId": "MultiToolLight2",
+    "name": "Microchip – T2 Torch"
+  },
+  {
+    "gId": "RocketInformations1",
+    "name": "Map information rocket"
+  },
+  {
+    "gId": "PulsarShard",
+    "name": "Pulsar Quartz Shard"
+  },
+  {
+    "gId": "Teleporter1",
+    "name": "Teleporter"
+  },
+  {
+    "gId": "ScreenRockets",
+    "name": "Screen – Orbital information"
+  },
+  {
+    "gId": "Incubator1",
+    "name": "Incubator"
+  },
+  {
+    "gId": "LarvaeBase1",
+    "name": "Common larva"
+  },
+  {
+    "gId": "ScreenBiomass",
+    "name": "Biomass screen"
+  },
+  {
+    "gId": "SpaceMultiplierPlants",
+    "name": ""
+  },
+  {
+    "gId": "SpaceMultiplierInsects",
+    "name": ""
+  },
+  {
+    "gId": "SpaceMultiplierAnimals",
+    "name": ""
+  },
+  {
+    "gId": "Butterfly1Larvae",
+    "name": "Azurae butterfly larva"
+  },
+  {
+    "gId": "Bee1Larvae",
+    "name": "Bee larva"
+  },
+  {
+    "gId": "Bee1Hatched",
+    "name": ""
+  },
+  {
+    "gId": "Butterfly1Hatched",
+    "name": ""
+  },
+  {
+    "gId": "Butterfly2Larvae",
+    "name": "Leani butterfly larva"
+  },
+  {
+    "gId": "Butterfly2Hatched",
+    "name": ""
+  },
+  {
+    "gId": "Firefly1Hatched",
+    "name": "Firefly larva"
+  },
+  {
+    "gId": "Beehive1",
+    "name": "Beehive"
+  },
+  {
+    "gId": "Butterfly3Hatched",
+    "name": ""
+  },
+  {
+    "gId": "Butterfly3Larvae",
+    "name": "Fensea butterfly larva"
+  },
+  {
+    "gId": "Butterfly4Larvae",
+    "name": "Galaxe butterfly larva"
+  },
+  {
+    "gId": "Butterfly4Hatched",
+    "name": ""
+  },
+  {
+    "gId": "Butterfly9Larvae",
+    "name": "Aemel butterfly larva"
+  },
+  {
+    "gId": "Butterfly7Larvae",
+    "name": "Penga butterfly larva"
+  },
+  {
+    "gId": "Butterfly8Larvae",
+    "name": "Chevrone butterfly larva"
+  },
+  {
+    "gId": "Butterfly6Larvae",
+    "name": "Empalio butterfly larva"
+  },
+  {
+    "gId": "Butterfly5Larvae",
+    "name": "Abstreus butterfly larva"
+  },
+  {
+    "gId": "Butterfly10Larvae",
+    "name": "Liux butterfly larva"
+  },
+  {
+    "gId": "Butterfly6Hatched",
+    "name": ""
+  },
+  {
+    "gId": "Butterfly7Hatched",
+    "name": ""
+  },
+  {
+    "gId": "Butterfly5Hatched",
+    "name": ""
+  },
+  {
+    "gId": "Butterfly9Hatched",
+    "name": ""
+  },
+  {
+    "gId": "Butterfly10Hatched",
+    "name": ""
+  },
+  {
+    "gId": "Butterfly8Hatched",
+    "name": ""
+  },
+  {
+    "gId": "LarvaeBase2",
+    "name": "Uncommon larva"
+  },
+  {
+    "gId": "GoldenEffigie4",
+    "name": "Golden effigy"
+  },
+  {
+    "gId": "Farm1",
+    "name": "Outdoor farm"
+  },
+  {
+    "gId": "honey",
+    "name": "Honey"
+  },
+  {
+    "gId": "astrofood2",
+    "name": "High quality food"
+  },
+  {
+    "gId": "SilkGenerator",
+    "name": "Silk generator"
+  },
+  {
+    "gId": "Silk",
+    "name": "Silk"
+  },
+  {
+    "gId": "Fence",
+    "name": "Fence"
+  },
+  {
+    "gId": "ButterflyFarm1",
+    "name": "Butterfly farm"
+  },
+  {
+    "gId": "SilkWorm",
+    "name": "Silkworm"
+  },
+  {
+    "gId": "ButterflyDome1",
+    "name": "Butterfly dome"
+  },
+  {
+    "gId": "LarvaeBase3",
+    "name": "Rare larva"
+  },
+  {
+    "gId": "Butterfly11Hatched",
+    "name": ""
+  },
+  {
+    "gId": "Butterfly12Hatched",
+    "name": ""
+  },
+  {
+    "gId": "Butterfly13Hatched",
+    "name": "Constela butterfly larva"
+  },
+  {
+    "gId": "Butterfly14Hatched",
+    "name": ""
+  },
+  {
+    "gId": "Butterfly15Hatched",
+    "name": ""
+  },
+  {
+    "gId": "Butterfly11Larvae",
+    "name": "Nere butterfly larva"
+  },
+  {
+    "gId": "Butterfly12Larvae",
+    "name": "Lorpen butterfly larva"
+  },
+  {
+    "gId": "Butterfly13Larvae",
+    "name": "Fiorente butterfly larva"
+  },
+  {
+    "gId": "Butterfly14Larvae",
+    "name": "Alben butterfly larva"
+  },
+  {
+    "gId": "Butterfly15Larvae",
+    "name": "Futura butterfly larva"
+  },
+  {
+    "gId": "ButterflyDisplayer1",
+    "name": "Butterfly display box"
+  },
+  {
+    "gId": "Butterfly16Larvae",
+    "name": "Imeo butterfly larva"
+  },
+  {
+    "gId": "Butterfly17Larvae",
+    "name": "Serena butterfly larva"
+  },
+  {
+    "gId": "Butterfly18Larvae",
+    "name": "Golden butterfly larva"
+  },
+  {
+    "gId": "AirFilter1",
+    "name": "Air filter"
+  },
+  {
+    "gId": "OreExtractor3",
+    "name": "T3 Ore Extractor"
+  },
+  {
+    "gId": "Mutagen2",
+    "name": "T2 Mutagen"
+  },
+  {
+    "gId": "Rod-osmium",
+    "name": "Osmium Rod"
+  },
+  {
+    "gId": "EquipmentIncrease3",
+    "name": "T3 Exoskeleton"
+  },
+  {
+    "gId": "WardenKey",
+    "name": "Warden's key"
+  },
+  {
+    "gId": "WardenAustel",
+    "name": "Warden's altar"
+  },
+  {
+    "gId": "AutoCrafter1",
+    "name": "Auto-Crafter"
+  },
+  {
+    "gId": "Tree9Seed",
+    "name": "Shreox tree seed"
+  },
+  {
+    "gId": "Drill4",
+    "name": "T5 Drill"
+  },
+  {
+    "gId": "Heater5",
+    "name": "T5 Heater"
+  },
+  {
+    "gId": "GoldenEffigie5",
+    "name": "Golden effigy"
+  },
+  {
+    "gId": "RocketInsects1",
+    "name": "Insect spreader rocket"
+  },
+  {
+    "gId": "ButterflyFarm2",
+    "name": "T2 Butterfly Farm"
+  },
+  {
+    "gId": "Beehive2",
+    "name": "T2 Beehive"
+  },
+  {
+    "gId": "HudChipCleanConstruction",
+    "name": "Microchip – Construction menu filter"
+  },
+  {
+    "gId": "MultiToolDeconstruct2",
+    "name": "Microchip – T2 Deconstruction"
+  },
+  {
+    "gId": "NitrogenCapsule1",
+    "name": "Nitrogen cartridge"
+  },
+  {
+    "gId": "Mutagen3",
+    "name": "T3 Mutagen"
+  },
+  {
+    "gId": "DroneStation1",
+    "name": "Drone station"
+  },
+  {
+    "gId": "WaterLifeCollector1",
+    "name": "Water life collector"
+  },
+  {
+    "gId": "Phytoplankton1",
+    "name": "Phytoplankton A"
+  },
+  {
+    "gId": "Phytoplankton2",
+    "name": "Phytoplankton B"
+  },
+  {
+    "gId": "Phytoplankton3",
+    "name": "Phytoplankton C"
+  },
+  {
+    "gId": "Phytoplankton4",
+    "name": "Phytoplankton D"
+  },
+  {
+    "gId": "FishDisplayer1",
+    "name": "Fish display"
+  },
+  {
+    "gId": "FishFarm1",
+    "name": "Fish farm"
+  },
+  {
+    "gId": "CircuitBoard1",
+    "name": "Circuit board"
+  },
+  {
+    "gId": "WreckServer",
+    "name": "Technical debris"
+  },
+  {
+    "gId": "Drone1",
+    "name": "T1 Drone"
+  },
+  {
+    "gId": "RocketDrones1",
+    "name": "Drone visualization rocket"
+  },
+  {
+    "gId": "Aquarium1",
+    "name": "T1 Aquarium"
+  },
+  {
+    "gId": "Aquarium2",
+    "name": "T2 Aquarium"
+  },
+  {
+    "gId": "GoldenEffigie6",
+    "name": "Golden effigy"
+  },
+  {
+    "gId": "GasExtractor2",
+    "name": "T2 Gas Extractor"
+  },
+  {
+    "gId": "RocketMap4",
+    "name": "T4 GPS Satellite"
+  },
+  {
+    "gId": "Fish1Eggs",
+    "name": "Provios fish eggs"
+  },
+  {
+    "gId": "Fish2Eggs",
+    "name": "Vilnus fish eggs"
+  },
+  {
+    "gId": "Fish3Eggs",
+    "name": "Gerrero fish eggs"
+  },
+  {
+    "gId": "Fish4Eggs",
+    "name": "Khrom fish eggs"
+  },
+  {
+    "gId": "Fish5Eggs",
+    "name": "Ulani fish eggs"
+  },
+  {
+    "gId": "Fish6Eggs",
+    "name": "Aelera fish eggs"
+  },
+  {
+    "gId": "Fish7Eggs",
+    "name": "Tegede fish eggs"
+  },
+  {
+    "gId": "Fish8Eggs",
+    "name": "Ecaru fish eggs"
+  },
+  {
+    "gId": "Fish9Eggs",
+    "name": "Buyu fish eggs"
+  },
+  {
+    "gId": "Fish10Eggs",
+    "name": "Tiloo fish eggs"
+  },
+  {
+    "gId": "Fish11Eggs",
+    "name": "Golden fish eggs"
+  },
+  {
+    "gId": "CookCocoaSeed",
+    "name": "Cocoa seed"
+  },
+  {
+    "gId": "CookCocoaGrowable",
+    "name": "Cocoa"
+  },
+  {
+    "gId": "CookWheatGrowable",
+    "name": "Wheat"
+  },
+  {
+    "gId": "CookWheatSeed",
+    "name": "Wheat seeds"
+  },
+  {
+    "gId": "CookChocolate",
+    "name": "Chocolate"
+  },
+  {
+    "gId": "CookFlour",
+    "name": "Flour"
+  },
+  {
+    "gId": "CookCroissant",
+    "name": "Croissant"
+  },
+  {
+    "gId": "CookCookie1",
+    "name": "Cookie"
+  },
+  {
+    "gId": "CookCake1",
+    "name": "Birthday cake"
+  },
+  {
+    "gId": "AmphibiansFarm1",
+    "name": "Amphibian farm"
+  },
+  {
+    "gId": "Frog1Eggs",
+    "name": "Generic frog eggs"
+  },
+  {
+    "gId": "FrogGoldEggs",
+    "name": "Golden frog eggs"
+  },
+  {
+    "gId": "Frog2Eggs",
+    "name": "Huli frog eggs"
+  },
+  {
+    "gId": "Frog10Eggs",
+    "name": "Kenjoss frog eggs"
+  },
+  {
+    "gId": "Frog9Eggs",
+    "name": "Amedo frog eggs"
+  },
+  {
+    "gId": "Frog8Eggs",
+    "name": "Cillus frog eggs"
+  },
+  {
+    "gId": "Frog7Eggs",
+    "name": "Afae frog eggs"
+  },
+  {
+    "gId": "Frog6Eggs",
+    "name": "Aiolus frog eggs"
+  },
+  {
+    "gId": "Frog5Eggs",
+    "name": "Trajuu frog eggs"
+  },
+  {
+    "gId": "Frog4Eggs",
+    "name": "Strabo frog eggs"
+  },
+  {
+    "gId": "Frog3Eggs",
+    "name": "Felicianna frog eggs"
+  },
+  {
+    "gId": "TradePlatform1",
+    "name": "Trade space rocket"
+  },
+  {
+    "gId": "SofaColored",
+    "name": "Customizable sofa"
+  },
+  {
+    "gId": "CookingStation1",
+    "name": "Cooking station"
+  },
+  {
+    "gId": "SmartFabric",
+    "name": "Smart fabric"
+  },
+  {
+    "gId": "BedDoubleColored",
+    "name": "Customizable bed"
+  },
+  {
+    "gId": "Fish12Eggs",
+    "name": "Velkia fish eggs"
+  },
+  {
+    "gId": "Butterfly19Larvae",
+    "name": "Faleria butterfly larva"
+  },
+  {
+    "gId": "FrogDisplayer1",
+    "name": "Frog displayer"
+  },
+  {
+    "gId": "Container3",
+    "name": "T2 Locker Storage"
+  },
+  {
+    "gId": "Pod9xA",
+    "name": "Rounded living compartment"
+  },
+  {
+    "gId": "Pod9xB",
+    "name": "Living compartment with dome"
+  },
+  {
+    "gId": "Mutagen4",
+    "name": "T4 Mutagen"
+  },
+  {
+    "gId": "DebrisContainer1",
+    "name": "Container from space"
+  },
+
+  {
+    "gId": "TerraTokens100",
+    "name": "Terra Tokens",
+    "value": "100"
+  },
+  {
+    "gId": "TerraTokens500",
+    "name": "Terra Tokens",
+    "value": "500"
+  },
+  {
+    "gId": "TerraTokens1000",
+    "name": "Terra Tokens",
+    "value": "1000"
+  },
+  {
+    "gId": "TerraTokens5000",
+    "name": "Terra Tokens",
+    "value": "5000"
+  },
+
+  {
+    "gId": "CookStew1",
+    "name": "Honey cooked beans"
+  },
+  {
+    "gId": "CookStewFish1",
+    "name": "Fish soup"
+  },
+  {
+    "gId": "Drone2",
+    "name": "T2 Drone"
+  },
+  {
+    "gId": "Pod9xC",
+    "name": "3x3 Living compartment"
+  },
+  {
+    "gId": "Tree10Seed",
+    "name": "Rosea tree seed"
+  },
+  {
+    "gId": "FusePlants1",
+    "name": "Plant multiplier fuse"
+  },
+  {
+    "gId": "FuseOxygen1",
+    "name": "Oxygen multiplier fuse"
+  },
+  {
+    "gId": "FuseHeat1",
+    "name": "Heat multiplier fuse"
+  },
+  {
+    "gId": "FusePressure1",
+    "name": "Pressure multiplier fuse"
+  },
+  {
+    "gId": "FuseEnergy1",
+    "name": "Energy multiplier fuse"
+  },
+  {
+    "gId": "FuseProduction1",
+    "name": "Production multiplier fuse"
+  },
+  {
+    "gId": "Optimizer1",
+    "name": "Machine optimizer"
+  },
+  {
+    "gId": "WreckSafe",
+    "name": "Big safe"
+  },
+  {
+    "gId": "ProceduralWreckSafe",
+    "name": "Big safe"
+  },
+  {
+    "gId": "WallInside",
+    "name": "Interior wall"
+  },
+  {
+    "gId": "MapChip",
+    "name": "Microchip – Map"
+  },
+  {
+    "gId": "Optimizer2",
+    "name": "T2 Machine Optimizer"
+  },
+  {
+    "gId": "Obsidian",
+    "name": "Obsidian"
+  },
+  {
+    "gId": "Fish13Eggs",
+    "name": "Galbea fish eggs"
+  },
+  {
+    "gId": "Frog11Eggs",
+    "name": "Lavaum frog eggs"
+  },
+  {
+    "gId": "GoldenEffigie7",
+    "name": "Golden effigy"
+  },
+  {
+    "gId": "PinChip1",
+    "name": "Microchip – T1 Blueprint Pinning"
+  },
+  {
+    "gId": "PinChip2",
+    "name": "Microchip – T2 Blueprint pinning"
+  },
+  {
+    "gId": "KeyCard1",
+    "name": "Access card"
+  },
+  {
+    "gId": "SolarQuartz",
+    "name": "Solar Quartz"
+  },
+  {
+    "gId": "MagnetarQuartz",
+    "name": "Magnetar Quartz"
+  },
+  {
+    "gId": "BalzarQuartz",
+    "name": "Blazar Quartz"
+  },
+  {
+    "gId": "QuasarQuartz",
+    "name": "Quasar Quartz"
+  },
+  {
+    "gId": "LightBoxMedium",
+    "name": "Light Box"
+  },
+  {
+    "gId": "FountainBig",
+    "name": "Fountain"
+  },
+  {
+    "gId": "TreePlanter",
+    "name": "Tree pot"
+  },
+  {
+    "gId": "Tree11Seed",
+    "name": "Lillia tree seed"
+  },
+  {
+    "gId": "Tree12Seed",
+    "name": "Prunea tree seed"
+  },
+  {
+    "gId": "Frog13Eggs",
+    "name": "Jumi frog eggs"
+  },
+  {
+    "gId": "Frog12Eggs",
+    "name": "Leglus frog eggs"
+  },
+  {
+    "gId": "GoldenEffigie8",
+    "name": "Golden effigy"
+  },
+  {
+    "gId": "HologramGenerator",
+    "name": "Hologram projector"
+  },
+  {
+    "gId": "ProceduralWreckContainer1",
+    "name": "Storage crate"
+  },
+  {
+    "gId": "ProceduralWreckContainer2",
+    "name": "Storage crate"
+  },
+  {
+    "gId": "WreckEntryLocked1",
+    "name": "Access Console"
+  },
+  {
+    "gId": "WreckEntryLocked2",
+    "name": "Access Console"
+  },
+  {
+    "gId": "WreckEntryLocked3",
+    "name": "Access Console"
+  },
+  {
+    "gId": "WreckEntryLocked4",
+    "name": "Access Console"
+  },
+  {
+    "gId": "WreckEntryLocked5",
+    "name": "Access Console"
+  },
+  {
+    "gId": "Keycard1",
+    "name": "Access card"
+  },
+  {
+    "gId": "Fireplace",
+    "name": "Fireplace"
+  },
+  {
+    "gId": "Flare",
+    "name": "Flare"
+  },
+  {
+    "gId": "PortalGenerator1",
+    "name": "Portal generator"
+  },
+  {
+    "gId": "FuseTradeRocketsSpeed1",
+    "name": "Trade rocket multiplier fuse"
+  },
+  {
+    "gId": "GeneticTrait",
+    "name": "Genetic trait"
+  },
+  {
+    "gId": "canister",
+    "name": "Canister"
+  },
+  {
+    "gId": "AnimalShelter1",
+    "name": "Animal shelter"
+  },
+  {
+    "gId": "GeneticExtractor1",
+    "name": "Genetic extractor"
+  },
+  {
+    "gId": "GeneticSynthetizer1",
+    "name": "Genetic synthesizer"
+  },
+  {
+    "gId": "DNASequence",
+    "name": "Creature DNA"
+  },
+  {
+    "gId": "AnimalFeeder1",
+    "name": "Animal feeder"
+  },
+  {
+    "gId": "DeparturePlatform",
+    "name": "Extraction platform"
+  },
+  {
+    "gId": "WardensChip",
+    "name": "Warden key detector"
+  },
+  {
+    "gId": "EndingExplosives",
+    "name": "Large explosive device"
+  },
+  {
+    "gId": "PinChip3",
+    "name": "Microchip – T3 Blueprint pinning"
+  },
+  {
+    "gId": "Backpack6",
+    "name": "T6 Backpack"
+  },
+  {
+    "gId": "Jetpack4",
+    "name": "T4 Jetpack"
+  },
+  {
+    "gId": "MultiToolDeconstruct3",
+    "name": "Microchip – T3 Deconstruction"
+  },
+  {
+    "gId": "MultiToolLight3",
+    "name": "Microchip – T3 Torch"
+  },
+  {
+    "gId": "RocketAnimals1",
+    "name": "Animals spreader rocket"
+  },
+  {
+    "gId": "Explosive",
+    "name": "Explosive"
+  },
+  {
+    "gId": "Ecosystem1",
+    "name": "Ecosystem"
+  },
+  {
+    "gId": "Skin-01",
+    "name": "Spacesuit Comto"
+  },
+  {
+    "gId": "Skin-02",
+    "name": "Spacesuit Blasto"
+  },
+  {
+    "gId": "Skin-03",
+    "name": "Spacesuit Primo"
+  },
+  {
+    "gId": "Skin-04",
+    "name": "Spacesuit Goldeo"
+  },
+  {
+    "gId": "Skin-05",
+    "name": "Spacesuit Scifo"
+  },
+  {
+    "gId": "Skin-06",
+    "name": "Spacesuit Cipto"
+  },
+  {
+    "gId": "Skin-07",
+    "name": "Spacesuit Beteo"
+  },
+  {
+    "gId": "Skin-08",
+    "name": "Spacesuit Tureo"
+  },
+  {
+    "gId": "Skin-09",
+    "name": "Spacesuit Fablo"
+  },
+  {
+    "gId": "Skin-10",
+    "name": "Spacesuit Tubio"
+  },
+  {
+    "gId": "Skin-11",
+    "name": "Spacesuit Vateo"
+  },
+  {
+    "gId": "Skin-12",
+    "name": "Spacesuit Widio"
+  },
+  {
+    "gId": "WreckWardrobe",
+    "name": "Spacesuits locker"
+  },
+  {
+    "gId": "Skin-13",
+    "name": "Spacesuit Mekio"
+  },
+  {
+    "gId": "Skin-14",
+    "name": "Spacesuit Abyso"
+  },
+  {
+    "gId": "Skin-15",
+    "name": "Spacesuit Ettio"
+  },
+  {
+    "gId": "Skin-16",
+    "name": "Spacesuit Plesao"
+  },
+  {
+    "gId": "Skin-17",
+    "name": "Spacesuit Rorao"
+  },
+  {
+    "gId": "SkinDisplayer",
+    "name": "Spacesuit Displayer"
+  },
+  {
+    "gId": "EquipmentIncrease4",
+    "name": "T4 Exoskeleton"
+  },
+  {
+    "gId": "Tree13Seed",
+    "name": "Ruberu tree seed"
+  },
+  {
+    "gId": "AnimalFood1",
+    "name": "T1 Animal food"
+  },
+  {
+    "gId": "AnimalFood2",
+    "name": "T2 Animal food"
+  }
+]

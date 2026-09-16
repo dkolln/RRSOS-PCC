@@ -1,0 +1,159 @@
+﻿@using RRSOS_PCC.Services
+@using RRSOS_PCC.Classes
+@using System.Diagnostics
+@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
+@inject SaveService SaveSvc
+@inject PCLauncherService Launcher
+
+@rendermode InteractiveServer
+
+<div class="rrs-shell">
+
+    <nav class="rrs-tabs">
+        <div class="rrs-status" @onclick="@(() => TabSelected("/"))">Home</div>
+        <div class="rrs-status" @onclick="@(() => TabSelected("/rawJson"))">Raw JSON</div>
+        <div class="rrs-status" @onclick="@(() => TabSelected("/missinggId"))">Missing gIds</div>
+    </nav>
+
+    <div class="rrs-header-row">
+
+        <div class="rrs-col">
+            <label>FILE LOCATION</label>
+            <div class="rrs-status clickable" @onclick="OpenSaveFolder">
+                ⬒ OPEN SAVE FILE LOCATION
+            </div>
+        </div>
+
+        <div class="rrs-col">
+            <label>GAME LAUNCHER</label>
+            <button class="rrs-status" @onclick="HandleLaunchClick">
+                @ButtonText
+            </button>
+        </div>
+
+        <div class="rrs-col">
+            <label>SAVE SLOT</label>
+            <select @onchange="OnSaveSelected" class="save-dropdown">
+                @foreach (var file in Directory.GetFiles(PathResolver.SavePath, "*.json")
+                                               .Select(Path.GetFileName))
+                {
+                    <option value="@file" selected="@(file == SaveSvc.SelectedSaveFile)">
+                        @file
+                    </option>
+                }
+            </select>
+        </div>
+
+    </div>
+
+    <main class="rrs-panel">
+        @Body
+    </main>
+
+    <footer class="rrs-footer">
+        PROPERTY OF RRS // AUTHORIZED PERSONNEL ONLY
+    </footer>
+
+</div>
+
+@code {
+
+    private System.Timers.Timer? _countdownTimer;
+    private Func<Task>? _layoutChangeHandler;
+
+    private string ButtonText => Launcher.IsRunning() ? "RELAUNCH PC" : "LAUNCH PC";
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Subscribe to SaveService change events
+        _layoutChangeHandler = async () =>
+        {
+            HandleStateChange();
+            await Task.CompletedTask;
+        };
+
+        SaveSvc.OnChange += _layoutChangeHandler;
+
+        // Start auto-refresh
+        await SaveSvc.StartAutoRefresh();
+
+        // Initial load
+        await SaveSvc.Load();
+
+        StartCountdown();
+    }
+
+    private void HandleStateChange()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        if (_layoutChangeHandler != null)
+            SaveSvc.OnChange -= _layoutChangeHandler;
+
+        _countdownTimer?.Stop();
+        _countdownTimer?.Dispose();
+    }
+
+    bool IsActive(string route)
+    {
+        var current = NavigationManager.ToBaseRelativePath(NavigationManager.Uri)
+                                       .TrimEnd('/');
+
+        if (route == "/" && string.IsNullOrEmpty(current))
+            return true;
+
+        var target = route.TrimStart('/').TrimEnd('/');
+
+        return string.Equals(current, target, StringComparison.OrdinalIgnoreCase);
+    }
+
+    void TabSelected(string route)
+    {
+        NavigationManager.NavigateTo(route, true);
+    }
+
+    public void OpenSaveFolder()
+    {
+        SaveSvc.OpenSaveFolder();
+    }
+
+    private async Task HandleLaunchClick()
+    {
+        if (Launcher.IsRunning())
+            await Launcher.ForceRelaunch();
+        else
+            Launcher.Launch();
+
+        StateHasChanged();
+    }
+
+    private async Task OnSaveSelected(ChangeEventArgs e)
+    {
+        var file = e.Value?.ToString() ?? "Standard-1.json";
+
+        SaveSvc.SelectedSaveFile = file;
+        PathResolver.SelectedSaveFile = file;
+
+        await SaveSvc.Load();
+
+        StateHasChanged();
+    }
+
+    private void StartCountdown()
+    {
+        _countdownTimer = new System.Timers.Timer(1000);
+        _countdownTimer.Elapsed += (_, __) =>
+        {
+            if (!SaveSvc.AutoRefreshEnabled)
+                return;
+
+            InvokeAsync(StateHasChanged);
+        };
+        _countdownTimer.AutoReset = true;
+        _countdownTimer.Start();
+    }
+}

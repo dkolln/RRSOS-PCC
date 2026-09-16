@@ -1,0 +1,35 @@
+﻿@using RRSOS_PCC.Classes
+@using RRSOS_PCC.ViewModels
+@using RRSOS_PCC.Services
+
+<div class="pcc-readout">
+
+    <div class="readout-header">PLANET SUMMARY (@Data?.PlanetId)</div>
+
+    @if (Data is null)
+    {
+        <div class="readout-line">No planet data loaded.</div>
+    }
+    else
+    {
+        <div class="readout-section">
+            <div class="readout-header">TI Breakdown</div>
+
+            @foreach (var row in Data.Breakdown)
+            {
+                <div class="readout-line ti-row">
+                    <span class="label">» @row.Name</span>
+                    <span class="value ti-abs">@PCMath.MultiplierAbbreviation(@row.Value)</span>
+                    <span class="value ti-pct">@row.Percent.ToString("P2")</span>
+                </div>
+            }
+        </div>
+
+        <div class="readout-section">
+            <div class="readout-line">
+                <span class="label">» Total TI</span>
+                <span class="value">@Data.TotalTI.ToString("N0")</span>
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,13 @@
+﻿.ti-row {
+    display: grid;
+    grid-template-columns: 140px 120px 80px; /* adjust to taste */
+    column-gap: 12px;
+}
+
+.ti-abs {
+    text-align: right;
+}
+
+.ti-pct {
+    text-align: right;
+}

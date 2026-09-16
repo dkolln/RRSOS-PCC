@@ -1,0 +1,21 @@
+﻿@using RRSOS_PCC.Classes
+@using RRSOS_PCC.Models
+@using RRSOS_PCC.Services
+@inject SaveService SaveSvc
+
+<div class="pcc-readout">
+
+    <div class="readout-header">
+        BASE SUMMARY
+    </div>
+
+    @foreach (var b in DisplayList) 
+    {
+        <div class="readout-section">
+
+            <div class="readout-line">
+                <span class="base-title">@b.Name @b.DisplayDistance @b.DisplayPosition @b.Direction</span>
+            </div>
+        </div>
+    }
+</div>

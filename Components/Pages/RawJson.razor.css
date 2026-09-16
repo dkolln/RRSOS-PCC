@@ -1,0 +1,15 @@
+﻿.rawjson-container {
+    height: 100%;
+    overflow: auto;
+    background: #0d0d0d;
+    padding: 1rem;
+    border: 1px solid #333;
+}
+
+.rawjson-block {
+    font-family: Consolas, monospace;
+    font-size: 0.9rem;
+    color: #9ef;
+    white-space: pre-wrap;
+    line-height: 1.4;
+}

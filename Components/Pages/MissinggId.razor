@@ -1,0 +1,44 @@
+﻿@using RRSOS_PCC.Services
+@using RRSOS_PCC.Classes
+@page "/missinggId"
+@inject SaveService SaveSvc
+
+<div class="pcc-readout">
+    <div class="readout-header">MISSING gIds</div>
+
+    @if (Missing == null)
+    {
+        <div class="empty">No scan performed yet.</div>
+    }
+    else if (Missing.Count == 0)
+    {
+        <div class="empty">No missing gIds. All good.</div>
+    }
+    else
+    {
+        <div class="extractor-scroll">
+            <div class="extractor-list">
+                @foreach (var gid in Missing)
+                {
+                    <div class="readout-section">
+                        <div class="header">
+                            <span class="tier">@gid</span>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    public List<string>? Missing { get; set; }
+
+    protected override void OnInitialized()
+    {
+        var savePath = PathResolver.FullSavePath;
+        var metaPath = PathResolver.WorldObjectDataPath;
+
+        Missing = SaveSvc.GetMissingGids(savePath, metaPath);
+    }
+}

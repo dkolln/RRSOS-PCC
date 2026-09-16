@@ -1,0 +1,8 @@
+﻿/* Status colors */
+.warn {
+    color: #ffd86b;
+}
+
+.crit {
+    color: #ff6b6b;
+}

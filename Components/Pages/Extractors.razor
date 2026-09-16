@@ -1,0 +1,99 @@
+﻿@using RRSOS_PCC.Enums
+@using RRSOS_PCC.ViewModels
+<div class="pcc-readout">
+
+    <div class="readout-header">EXTRACTORS</div>
+
+    @if (ExtractorGroups == null || ExtractorGroups.Count == 0)
+    {
+        <div class="empty">No extractors found.</div>
+    }
+    else
+    {
+        <div class="extractor-scroll">
+            <div class="extractor-list">
+
+                @foreach (var group in ExtractorGroups)
+                {
+                    var groupOpen = groupExpanded.ContainsKey(group.Type) && groupExpanded[group.Type];
+
+                    <div class="group-row" @onclick="() => ToggleGroup(group)">
+                        <span>@group.DisplayName</span>
+                        <span>@group.TotalItems items</span>
+                        <span>@group.FullExtractors/@group.TotalExtractors full</span>
+                    </div>
+
+                    @if (groupOpen)
+                    {
+                        <div class="group-details">
+
+                            @if (group.SubGroups != null)
+                            {
+                                <!-- ORE: show subcategories -->
+                                @foreach (var sub in group.SubGroups)
+                                {
+                                    var subOpen = subExpanded.ContainsKey(sub.ProductGroup) && subExpanded[sub.ProductGroup];
+
+                                    <div class="subcategory-row" @onclick="() => ToggleSub(sub)">
+                                        <span class="subcategory-name">@sub.ProductGroup</span>
+                                        <span class="subcategory-total">@sub.TotalItems items</span>
+                                        <span class="subcategory-full">@sub.FullExtractors/@sub.TotalExtractors full</span>
+                                    </div>
+
+                                    @if (subOpen)
+                                    {
+                                        <div class="extractor-list-detail">
+                                            @foreach (var ex in sub.Extractors)
+                                            {
+                                                @RenderExtractor(ex)
+                                            }
+                                        </div>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                <!-- WATER LIFE, ALGAE, WATER, LARVA: no subcategories -->
+                                <div class="extractor-list-detail">
+                                    @foreach (var ex in group.Extractors)
+                                    {
+                                        @RenderExtractor(ex)
+                                    }
+                                </div>
+                            }
+
+                        </div>
+                    }
+                }
+
+
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    RenderFragment RenderExtractor(ExtractorSummaryVM ex) => __builder =>
+{
+    <div class="extractor-detail">
+        <div class="header">
+            <span>@ex.Position2D</span>
+            <span>@ex.Distance.ToString("F0")</span>
+            <span>@ex.Direction</span>
+        </div>
+
+        @if (ex.GroupedContents != null && ex.GroupedContents.Count > 0)
+        {
+            @foreach (var item in ex.GroupedContents)
+            {
+                <div class="content-line">@item.Key: @item.Value</div>
+            }
+        }
+        else
+        {
+            <div class="empty">No contents</div>
+        }
+    </div>
+;
+};
+}

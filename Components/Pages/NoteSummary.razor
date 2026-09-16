@@ -1,0 +1,43 @@
+﻿@using RRSOS_PCC.Services;
+@inject NotebookService NotebookService;
+
+<div class="pcc-readout">
+
+    <div class="readout-header">
+        NOTES
+        <button class="add-note-btn" @onclick="ShowAddNote">Add</button>
+
+        <button class="add-note-btn" @onclick="TryAddWardenKeys">Add Warden Keys</button>
+
+        @if (ConfirmAddWardenKeys)
+        {
+            <div class="confirm-box">
+                <span>Warden Key notes already exist. Add them again?</span>
+                <button class="note-save-btn" @onclick="AddWardenKeys">Yes</button>
+                <button class="note-cancel-btn" @onclick="() => ConfirmAddWardenKeys = false">No</button>
+            </div>
+        }
+    </div>
+
+    @if (isAddingNote)
+    {
+        <div class="readout-section">
+            <div class="readout-line">
+                <input class="note-input" @bind="newNoteText" placeholder="Write a note..." />
+                <button class="note-save-btn" @onclick="AddNote">Save</button>
+                <button class="note-cancel-btn" @onclick="() => isAddingNote = false">Cancel</button>
+            </div>
+        </div>
+    }
+
+    @foreach (var n in Notes)
+    {
+        <div class="readout-line">
+            <span>@n.Text</span>
+            <button class="note-btn" @onclick="() => MoveUp(n)">▲</button>
+            <button class="note-btn" @onclick="() => MoveDown(n)">▼</button>
+            <button class="note-del-btn" @onclick="() => DeleteNote(n)">✖</button>
+        </div>
+    }
+
+</div>

@@ -1,0 +1,61 @@
+﻿@using RRSOS_PCC.Models;
+
+@page "/rawJson"
+@using RRSOS_PCC.Services
+@inject SaveService SaveSvc
+@using System.Text.Json
+@layout MainLayout
+
+<div class="rawjson-search">
+    <input type="text"
+           placeholder="search..."
+           @bind="SearchTerm"
+           @bind:event="oninput" />
+</div>
+
+<div class="rawjson-list">
+    @foreach (var item in Filtered)
+    {
+        <div class="rawjson-entry">
+            <pre>@Format(item)</pre>
+        </div>
+    }
+</div>
+
+@code {
+    private List<string> Items = new();
+    private string SearchTerm = "";
+    private bool loaded = false;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (!loaded && SaveSvc.CurrentState is not null)
+        {
+            Items = SaveSvc.CurrentState.RawJson;
+            loaded = true;
+            StateHasChanged();
+        }
+    }
+
+    private IEnumerable<string> Filtered =>
+        string.IsNullOrWhiteSpace(SearchTerm)
+            ? Items
+            : Items.Where(i => i.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase));
+
+    private string Format(string json)
+    {
+        try
+        {
+            using var doc = JsonDocument.Parse(json);
+            return JsonSerializer.Serialize(doc.RootElement, new JsonSerializerOptions
+            {
+                WriteIndented = true
+            });
+        }
+        catch
+        {
+            return json;
+        }
+    }
+}
+

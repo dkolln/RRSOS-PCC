@@ -1,0 +1,267 @@
+{
+  "208918068": {
+    "name": "Iridium",
+    "manual": true,
+    "type": "Base"
+  },
+  "201392353": {
+    "name": "Mountain Wreck",
+    "manual": true,
+    "type": "Base"
+  },
+  "201345105": {
+    "name": "Desert Waypoint",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "208141540": {
+    "name": "Main",
+    "manual": true,
+    "type": "Base"
+  },
+  "206145187": {
+    "name": "Desert Wreck",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "201169741": {
+    "name": "Sulfur",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "207779969": {
+    "name": "Uranium Cave",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "203887956": {
+    "name": "Sandy Falls",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "202955354": {
+    "name": "Space Gate",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "208034899": {
+    "name": "Underwater Cave",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "201960657": {
+    "name": "Iridium Cave 2",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "205890100": {
+    "name": "Boom Wreck",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "202157815": {
+    "name": "Red Cave",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "202056974": {
+    "name": "Steam Pits",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "205180919": {
+    "name": "Crater Lookout",
+    "manual": true,
+    "type": "Base"
+  },
+  "209047190": {
+    "name": "Zeolite Mine",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "206051504": {
+    "name": "Osmium \u0026 Pulsar",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "208762042": {
+    "name": "Mushroom Village",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "208637362": {
+    "name": "Survivor Cave",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "206946706": {
+    "name": "Waterfall Waypoint",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "204245970": {
+    "name": "Obsidian",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "205171324": {
+    "name": "Volcano",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "207985117": {
+    "name": "Steam Pits",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "205397042": {
+    "name": "Main",
+    "manual": true,
+    "type": "Base"
+  },
+  "209320185": {
+    "name": "Desert Wreck",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "202195117": {
+    "name": "Iridium Cave",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "204619493": {
+    "name": "Mushroom Village 002",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "205265281": {
+    "name": "Mountain Wreck",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "204027461": {
+    "name": "Osmium Cave",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "207207046": {
+    "name": "Quartz Caves",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "209778503": {
+    "name": "Mushroom Village 001",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "202426714": {
+    "name": "Aluminum Hill",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "201861907": {
+    "name": "Crater Overlook",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "205734135": {
+    "name": "Main",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "201308576": {
+    "name": "Iridium Cave",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "205118496": {
+    "name": "The Valley",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "207570622": {
+    "name": "Mountain Wreck",
+    "manual": true,
+    "type": "Base"
+  },
+  "207607299": {
+    "name": "Aluminum Hills",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "204266353": {
+    "name": "Main",
+    "manual": true,
+    "type": "Base"
+  },
+  "207479161": {
+    "name": "Waterfall Canyon",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "205867622": {
+    "name": "Volcano",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "207458549": {
+    "name": "Iridium Canyon",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "204176849": {
+    "name": "Warp Gate",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "201735465": {
+    "name": "Zeolite Cave",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "207850292": {
+    "name": "Desert Wreck",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "208153664": {
+    "name": "Super Alloy Cave",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "203408703": {
+    "name": "Uranium Cave",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "209307338": {
+    "name": "Osmium Cave",
+    "manual": true,
+    "type": "Outpost"
+  },
+  "206374995": {
+    "name": "Echo",
+    "manual": false,
+    "type": "Outpost"
+  },
+  "208306368": {
+    "name": "Delta",
+    "manual": false,
+    "type": "Outpost"
+  },
+  "207083907": {
+    "name": "Charlie",
+    "manual": false,
+    "type": "Outpost"
+  },
+  "201940964": {
+    "name": "Bravo",
+    "manual": false,
+    "type": "Outpost"
+  },
+  "205699109": {
+    "name": "Alpha",
+    "manual": false,
+    "type": "Outpost"
+  }
+}
