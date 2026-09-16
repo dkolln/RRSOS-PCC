@@ -8,9 +8,7 @@
     <AssemblyName>$(AssemblyName.Replace(' ', '_'))</AssemblyName>
     <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
 
-	  <NoWarn>CS8619</NoWarn>
-	  <NoWarn>CS8618</NoWarn>
-	  <NoWarn>CS8601</NoWarn>
+	  <NoWarn>CS8619;CS8618;CS8601</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
