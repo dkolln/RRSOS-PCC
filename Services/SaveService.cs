@@ -74,54 +74,70 @@ public class SaveService
         await NotifyStateChanged();
     }
 
+    public string? LastLoadError { get; private set; }
+
     public async Task Load()
     {
         string sourceFile = PathResolver.FullSavePath;
         string secondaryfile = PathResolver.SecondarySavePath;
 
         string workingFile = PathResolver.WorkingFilePath;
-        bool IsLoading = false;
 
         string path = File.Exists(sourceFile) ? sourceFile : secondaryfile;
 
-        if (File.Exists(path))
+        if (!File.Exists(path))
+            return;
+
+        var srcInfo = new FileInfo(path);
+        var dstInfo = new FileInfo(workingFile);
+
+        bool firstLoad = CurrentState == null;
+        bool workingMissing = !dstInfo.Exists;
+        bool sourceIsNewer = srcInfo.LastWriteTimeUtc > dstInfo.LastWriteTimeUtc;
+
+        bool fileChanged = _lastLoadedFile != path;
+
+        if (!(firstLoad || workingMissing || sourceIsNewer || fileChanged))
+            return;
+
+        await NotifyStateChanged();
+
+        try
         {
-            var srcInfo = new FileInfo(path);
-            var dstInfo = new FileInfo(workingFile);
+            File.Copy(path, workingFile, overwrite: true);
 
-            bool firstLoad = CurrentState == null;
-            bool workingMissing = !dstInfo.Exists;
-            bool sourceIsNewer = srcInfo.LastWriteTimeUtc > dstInfo.LastWriteTimeUtc;
+            var raw = GetRawData(workingFile);
 
-            bool fileChanged = _lastLoadedFile != path;
+            var processor = new SaveProcessor(this, _naming, _objectService);
+            var state = processor.Process(raw);
 
-            if (firstLoad || workingMissing || sourceIsNewer || fileChanged)
-            {
-                IsLoading = true;
-                await NotifyStateChanged();
+            state.SavePath = workingFile;
+            state.LoadedAt = DateTime.Now;
 
-                File.Copy(path, workingFile, overwrite: true);
+            CurrentState = state;
+            _lastLoadedFile = path;
+            LastLoadError = null;
 
-                var raw = GetRawData(workingFile);
-
-                var processor = new SaveProcessor(this, _naming, _objectService);
-                var state = processor.Process(raw);
-
-                state.SavePath = workingFile;
-                state.LoadedAt = DateTime.Now;
-
-                CurrentState = state;
-
-                // immersion delay only when a new file was actually loaded
-                await Task.Delay(500);
-
-                IsLoading = false;
-                await NotifyStateChanged();   // UI shows updated data
-
-                _lastLoadedFile = path;
-            }
+            // immersion delay only when a new file was actually loaded
+            await Task.Delay(500);
         }
-
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or JsonException)
+        {
+            // The game may still be mid-autosave (file locked or briefly truncated).
+            // Keep the last good CurrentState and just retry on the next timer tick
+            // instead of surfacing a broken/partial state or crashing the refresh loop.
+            LastLoadError = $"Save file busy or unreadable, will retry: {ex.Message}";
+            Console.Error.WriteLine($"[SaveService] Load failed for '{path}': {ex}");
+        }
+        catch (Exception ex)
+        {
+            LastLoadError = $"Unexpected error loading save: {ex.Message}";
+            Console.Error.WriteLine($"[SaveService] Unexpected error loading '{path}': {ex}");
+        }
+        finally
+        {
+            await NotifyStateChanged();   // UI refreshes even if the load failed
+        }
     }
 
     public List<string> ExtractGidsFromSave(string saveFilePath)
