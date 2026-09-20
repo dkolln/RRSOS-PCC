@@ -28,18 +28,25 @@ namespace RRSOS_PCC.ViewModels
 
         public float OxygenPct => (float)((_player.playerGaugeOxygen ?? 0) / _oxygenstat);
 
+        // Status thresholds, shared with the dials so their colour zones always match the warnings.
+        // Oxygen, health and thirst are bad when low; toxicity is bad when high.
+        public const float LowWarnBelow = 0.50f;
+        public const float LowCritBelow = 0.20f;
+        public const float HighWarnAbove = 0.50f;
+        public const float HighCritAbove = 0.80f;
+
         // Health / Thirst / Toxic status
-        public bool HealthWarning => HealthPct < 0.50f;
-        public bool HealthCritical => HealthPct < 0.20f;
+        public bool HealthWarning => HealthPct < LowWarnBelow;
+        public bool HealthCritical => HealthPct < LowCritBelow;
 
-        public bool ThirstWarning => ThirstPct < 0.50f;
-        public bool ThirstCritical => ThirstPct < 0.20f;
+        public bool ThirstWarning => ThirstPct < LowWarnBelow;
+        public bool ThirstCritical => ThirstPct < LowCritBelow;
 
-        public bool ToxicWarning => ToxicPct > 0.50f;
-        public bool ToxicCritical => ToxicPct > 0.80f;
+        public bool ToxicWarning => ToxicPct > HighWarnAbove;
+        public bool ToxicCritical => ToxicPct > HighCritAbove;
 
         //Oxygen status
-        public bool OxygenWarning => OxygenPct < 0.50f;
-        public bool OxygenCritical => OxygenPct < 0.20f;
+        public bool OxygenWarning => OxygenPct < LowWarnBelow;
+        public bool OxygenCritical => OxygenPct < LowCritBelow;
     }
 }

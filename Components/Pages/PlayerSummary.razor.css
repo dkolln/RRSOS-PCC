@@ -6,3 +6,10 @@
 .crit {
     color: #ff6b6b;
 }
+
+.gauge-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+    gap: 10px 6px;
+    padding: 6px 0 2px;
+}

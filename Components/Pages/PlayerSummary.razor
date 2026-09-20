@@ -1,4 +1,6 @@
-﻿<div class="pcc-readout">
+﻿@using RRSOS_PCC.ViewModels
+
+<div class="pcc-readout">
 
     <div class="readout-header">PLAYER SUMMARY</div>
     <div>@DateTime.Now</div>
@@ -33,32 +35,15 @@
         <div class="readout-section">
             <div class="readout-header">Vitals</div>
 
-            <div class="readout-line">
-                <span class="label">» Health</span>
-                <span class="value @(Data.Vitals.HealthCritical ? "crit" : Data.Vitals.HealthWarning ? "warn" : "")">
-                    @(Data.Vitals.HealthPct.ToString("P0"))
-                </span>
-            </div>
-
-            <div class="readout-line">
-                <span class="label">» Oxygen</span>
-                <span class="value @(Data.Vitals.OxygenCritical ? "crit" : Data.Vitals.OxygenWarning ? "warn" : "")">
-                    @(Data.Vitals.OxygenPct.ToString("P0"))
-                </span>
-            </div>
-
-            <div class="readout-line">
-                <span class="label">» Thirst</span>
-                <span class="value @(Data.Vitals.ThirstCritical ? "crit" : Data.Vitals.ThirstWarning ? "warn" : "")">
-                    @(Data.Vitals.ThirstPct.ToString("P0"))
-                </span>
-            </div>
-
-            <div class="readout-line">
-                <span class="label">» Toxicity</span>
-                <span class="value @(Data.Vitals.ToxicCritical ? "crit" : Data.Vitals.ToxicWarning ? "warn" : "")">
-                    @(Data.Vitals.ToxicPct.ToString("P0"))
-                </span>
+            <div class="gauge-row">
+                <Gauge Label="Oxygen" Value="@Data.Vitals.OxygenPct"
+                       WarnAt="@VitalsViewModel.LowWarnBelow" CritAt="@VitalsViewModel.LowCritBelow" />
+                <Gauge Label="Health" Value="@Data.Vitals.HealthPct"
+                       WarnAt="@VitalsViewModel.LowWarnBelow" CritAt="@VitalsViewModel.LowCritBelow" />
+                <Gauge Label="Thirst" Value="@Data.Vitals.ThirstPct"
+                       WarnAt="@VitalsViewModel.LowWarnBelow" CritAt="@VitalsViewModel.LowCritBelow" />
+                <Gauge Label="Toxicity" Value="@Data.Vitals.ToxicPct"
+                       HigherIsWorse="true" WarnAt="@VitalsViewModel.HighWarnAbove" CritAt="@VitalsViewModel.HighCritAbove" />
             </div>
         </div>
 
