@@ -1,14 +1,21 @@
-﻿using RRSOS_PCC.Classes;
+using RRSOS_PCC.Classes;
 using RRSOS_PCC.Enums;
 using RRSOS_PCC.Models;
+using System.Collections.Concurrent;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 
 namespace RRSOS_PCC.Services
 {
     public class WorldObjectClassifierService
     {
+        private static readonly Regex TrailingDigits = new(@"\d+$", RegexOptions.Compiled);
+
         private readonly Dictionary<string, WorldObjectDefinition> _definitions = new();
+
+        // A save has thousands of objects but only a few hundred distinct gIds.
+        private readonly ConcurrentDictionary<string, WorldObjectDefinition> _resolved = new();
 
         public WorldObjectClassifierService()
         {
@@ -21,13 +28,12 @@ namespace RRSOS_PCC.Services
             {
                 var options = new JsonSerializerOptions
                 {
-                    // This is the magic line that allows "Machine" -> BaseType.Machine
+                    // Allows "Machine" -> BaseType.Machine
                     Converters = { new JsonStringEnumConverter() },
                     PropertyNameCaseInsensitive = true
                 };
 
-                // Assuming the JSON is in your assets folder
-                string path = Path.Combine(PathResolver.AssetPath, "worldobjectdata.json");
+                string path = PathResolver.WorldObjectDataPath;
 
                 if (File.Exists(path))
                 {
@@ -42,17 +48,21 @@ namespace RRSOS_PCC.Services
                         }
                     }
                 }
+                else
+                {
+                    Console.Error.WriteLine($"[WorldObjectClassifier] {path} not found; every object will be Unknown.");
+                }
             }
             catch (Exception ex)
             {
-                // Fallback or log error: You don't want the app to crash if the JSON is malformed
-                Console.WriteLine($"Error loading worldobjectdata.json: {ex.Message}");
+                // Don't crash the app if the JSON is malformed
+                Console.Error.WriteLine($"[WorldObjectClassifier] Error loading worldobjectdata.json: {ex.Message}");
             }
         }
 
         /// <summary>
-        /// Retrieves the metadata for a given gId. 
-        /// Handles stripping trailing numbers (e.g., 'Iron1' -> 'Iron') 
+        /// Retrieves the metadata for a given gId.
+        /// Handles stripping trailing numbers (e.g., 'Iron1' -> 'Iron')
         /// if an exact match isn't found.
         /// </summary>
         public WorldObjectDefinition GetDefinition(string gId)
@@ -60,12 +70,17 @@ namespace RRSOS_PCC.Services
             if (string.IsNullOrEmpty(gId))
                 return CreateUnknown(gId);
 
-            // 1. Try exact match (e.g., "VegetableGrower1")
+            return _resolved.GetOrAdd(gId, Resolve);
+        }
+
+        private WorldObjectDefinition Resolve(string gId)
+        {
+            // 1. Exact match (e.g., "VegetableGrower1")
             if (_definitions.TryGetValue(gId, out var exactMatch))
                 return exactMatch;
 
-            // 2. Try base name match (strip trailing numbers)
-            string baseId = System.Text.RegularExpressions.Regex.Replace(gId, @"\d+$", "");
+            // 2. Base name match (strip trailing numbers)
+            string baseId = TrailingDigits.Replace(gId, "");
             if (_definitions.TryGetValue(baseId, out var baseMatch))
                 return baseMatch;
 
@@ -79,7 +94,7 @@ namespace RRSOS_PCC.Services
         /// </summary>
         public bool IsKnownGid(string gId) => GetDefinition(gId).Type != WorldObjectType.Unknown;
 
-        private WorldObjectDefinition CreateUnknown(string gId)
+        private static WorldObjectDefinition CreateUnknown(string gId)
         {
             return new WorldObjectDefinition
             {

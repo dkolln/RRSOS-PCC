@@ -1,0 +1,9 @@
+.save-status {
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+}
+
+.save-status-error {
+    color: #e6a23c;
+}

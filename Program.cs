@@ -16,14 +16,13 @@ builder.Services.Configure<SaveSettings>(
 
 builder.Services.AddSingleton<RRSOS_PCC.Services.SaveService>();
 builder.Services.AddScoped<RRSOS_PCC.Services.GameMathService>();
-builder.Services.AddScoped<RRSOS_PCC.Services.CardRendererService>();
 builder.Services.AddSingleton<RRSOS_PCC.Services.BaseNamingService>();
 builder.Services.AddSingleton<RRSOS_PCC.Services.WorldObjectClassifierService>();
 builder.Services.AddSingleton<PCLauncherService>();
 builder.Services.AddSingleton<NotebookService>();
 
 
-PathResolver.Initialize(builder.Configuration);
+PathResolver.Initialize(builder.Configuration, builder.Environment.ContentRootPath);
 
 var app = builder.Build();
 

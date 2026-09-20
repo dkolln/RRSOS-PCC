@@ -12,8 +12,8 @@ namespace RRSOS_PCC.Models
         public string rot { get; set; }
         public int planet { get; set; }
 
-        public Position Position { get; set; }
-        public Rotation Rotation { get; set; }
+        public Position Position { get; set; } = new Position("0,0,0");
+        public Rotation Rotation { get; set; } = new Rotation("0,0,0,1");
 
         public List<WorldObject> Items { get; set; } = new();
 
@@ -37,8 +37,8 @@ namespace RRSOS_PCC.Models
         public string rot { get; set; }
         public int planet { get; set; }
 
-        public Position Position { get; set; }
-        public Rotation Rotation { get; set; }
+        public Position Position { get; set; } = new Position("0,0,0");
+        public Rotation Rotation { get; set; } = new Rotation("0,0,0,1");
 
         public List<WorldObject> Items { get; set; } = new();
 
@@ -63,8 +63,8 @@ namespace RRSOS_PCC.Models
         public string rot { get; set; }
         public int planet { get; set; }
 
-        public Position Position { get; set; }
-        public Rotation Rotation { get; set; }
+        public Position Position { get; set; } = new Position("0,0,0");
+        public Rotation Rotation { get; set; } = new Rotation("0,0,0,1");
 
         public List<WorldObject> Items { get; set; } = new();
 

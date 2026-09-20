@@ -6,9 +6,12 @@ using System.Diagnostics;
 
 namespace RRSOS_PCC.Components.Pages
 {
-    public partial class Extractors : ComponentBase, IDisposable
+    public partial class Extractors : ComponentBase
     {
-        [Inject] public SaveService SaveSvc { get; set; }
+        /// <summary>Extractors nearest first; Home refreshes this after every new save.</summary>
+        [Parameter]
+        public List<ExtractorSummaryVM>? Data { get; set; }
+
         public ExtractorGroupVM? ActiveGroup { get; set; }
         private Dictionary<ExtractorType, bool> groupExpanded = new();
         private Dictionary<string, bool> subExpanded = new();
@@ -17,31 +20,11 @@ namespace RRSOS_PCC.Components.Pages
         public List<ExtractorSummaryVM> ExtractorList { get; set; } = new();
         private Dictionary<long, bool> expanded = new();
 
-        private Func<Task>? _onChangeHandler;
-
-        protected override void OnInitialized()
-        {
-            LoadExtractors();
-
-            _onChangeHandler = RefreshContentsAsync;
-            SaveSvc.OnChange += _onChangeHandler;
-        }
-
-        private async Task RefreshContentsAsync()
-        {
-            LoadExtractors();
-            await InvokeAsync(StateHasChanged);
-        }
+        protected override void OnParametersSet() => LoadExtractors();
 
         private void LoadExtractors()
         {
-            ExtractorList = SaveSvc.CurrentState?.Extractors != null
-                ? new List<ExtractorSummaryVM>(SaveSvc.CurrentState.Extractors)
-                : new List<ExtractorSummaryVM>();
-
-            ExtractorList = ExtractorList
-                .OrderBy(x => x.Distance)
-                .ToList();
+            ExtractorList = Data ?? new List<ExtractorSummaryVM>();
 
             // NEW: build grouped extractors
             ExtractorGroups = ExtractorList
@@ -101,13 +84,6 @@ namespace RRSOS_PCC.Components.Pages
                 subExpanded[sub.ProductGroup] = true;
             else
                 subExpanded[sub.ProductGroup] = !subExpanded[sub.ProductGroup];
-        }
-
-
-        public void Dispose()
-        {
-            if (_onChangeHandler != null)
-                SaveSvc.OnChange -= _onChangeHandler;
         }
     }
 }

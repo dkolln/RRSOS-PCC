@@ -1,12 +1,11 @@
-﻿@using RRSOS_PCC.Services
+@using RRSOS_PCC.Services
 @using RRSOS_PCC.Classes
-@using System.Diagnostics
 @inherits LayoutComponentBase
+@implements IDisposable
 @inject NavigationManager NavigationManager
 @inject SaveService SaveSvc
 @inject PCLauncherService Launcher
-
-@rendermode InteractiveServer
+@inject IJSRuntime JS
 
 <div class="rrs-shell">
 
@@ -35,8 +34,7 @@
         <div class="rrs-col">
             <label>SAVE SLOT</label>
             <select @onchange="OnSaveSelected" class="save-dropdown">
-                @foreach (var file in Directory.GetFiles(PathResolver.SavePath, "*.json")
-                                               .Select(Path.GetFileName))
+                @foreach (var file in _saveFiles)
                 {
                     <option value="@file" selected="@(file == SaveSvc.SelectedSaveFile)">
                         @file
@@ -52,6 +50,7 @@
     </main>
 
     <footer class="rrs-footer">
+        <SaveStatus />
         PROPERTY OF RRS // AUTHORIZED PERSONNEL ONLY
     </footer>
 
@@ -59,61 +58,59 @@
 
 @code {
 
-    private System.Timers.Timer? _countdownTimer;
-    private Func<Task>? _layoutChangeHandler;
+    private Func<Task>? _changeHandler;
+    private System.Threading.Timer? _launcherTimer;
 
-    private string ButtonText => Launcher.IsRunning() ? "RELAUNCH PC" : "LAUNCH PC";
+    private IReadOnlyList<string> _saveFiles = Array.Empty<string>();
+    private bool _gameRunning;
+
+    private string ButtonText => _gameRunning ? "RELAUNCH PC" : "LAUNCH PC";
 
     protected override async Task OnInitializedAsync()
     {
-        // Subscribe to SaveService change events
-        _layoutChangeHandler = async () =>
+        _saveFiles = PathResolver.ListSaveFiles();
+        _gameRunning = Launcher.IsRunning();
+
+        // The layout only redraws when a new save arrives (or its load status changes).
+        _changeHandler = () =>
         {
-            HandleStateChange();
-            await Task.CompletedTask;
+            _saveFiles = PathResolver.ListSaveFiles();
+            return InvokeAsync(StateHasChanged);
         };
+        SaveSvc.OnChange += _changeHandler;
 
-        SaveSvc.OnChange += _layoutChangeHandler;
+        // Is the game running? Ask a few times a minute and only redraw if the answer changed,
+        // instead of scanning every process on every render.
+        _launcherTimer = new System.Threading.Timer(
+            _ => CheckGameRunning(), null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5));
 
-        // Start auto-refresh
+        // Starts the background watcher (idempotent) and loads the current save if needed.
         await SaveSvc.StartAutoRefresh();
-
-        // Initial load
-        await SaveSvc.Load();
-
-        StartCountdown();
     }
 
-    private void HandleStateChange()
+    private void CheckGameRunning()
     {
-        InvokeAsync(StateHasChanged);
+        var running = Launcher.IsRunning();
+        if (running == _gameRunning)
+            return;
+
+        _gameRunning = running;
+
+        try { _ = InvokeAsync(StateHasChanged); }
+        catch (ObjectDisposedException) { /* circuit already gone */ }
     }
 
     public void Dispose()
     {
-        if (_layoutChangeHandler != null)
-            SaveSvc.OnChange -= _layoutChangeHandler;
+        if (_changeHandler != null)
+            SaveSvc.OnChange -= _changeHandler;
 
-        _countdownTimer?.Stop();
-        _countdownTimer?.Dispose();
-    }
-
-    bool IsActive(string route)
-    {
-        var current = NavigationManager.ToBaseRelativePath(NavigationManager.Uri)
-                                       .TrimEnd('/');
-
-        if (route == "/" && string.IsNullOrEmpty(current))
-            return true;
-
-        var target = route.TrimStart('/').TrimEnd('/');
-
-        return string.Equals(current, target, StringComparison.OrdinalIgnoreCase);
+        _launcherTimer?.Dispose();
     }
 
     void TabSelected(string route)
     {
-        NavigationManager.NavigateTo(route, true);
+        NavigationManager.NavigateTo(route);
     }
 
     public void OpenSaveFolder()
@@ -123,37 +120,33 @@
 
     private async Task HandleLaunchClick()
     {
-        if (Launcher.IsRunning())
-            await Launcher.ForceRelaunch();
-        else
-            Launcher.Launch();
+        if (Launcher.CheckNow())
+        {
+            var confirmed = await JS.InvokeAsync<bool>(
+                "confirm",
+                "Planet Crafter is running. Relaunching closes it immediately and any unsaved progress is lost. Continue?");
 
-        StateHasChanged();
+            if (!confirmed)
+                return;
+
+            await Launcher.ForceRelaunch();
+        }
+        else
+        {
+            Launcher.Launch();
+        }
+
+        _gameRunning = Launcher.CheckNow();
     }
 
     private async Task OnSaveSelected(ChangeEventArgs e)
     {
-        var file = e.Value?.ToString() ?? "Standard-1.json";
+        var file = e.Value?.ToString();
+
+        if (string.IsNullOrWhiteSpace(file))
+            return;
 
         SaveSvc.SelectedSaveFile = file;
-        PathResolver.SelectedSaveFile = file;
-
         await SaveSvc.Load();
-
-        StateHasChanged();
-    }
-
-    private void StartCountdown()
-    {
-        _countdownTimer = new System.Timers.Timer(1000);
-        _countdownTimer.Elapsed += (_, __) =>
-        {
-            if (!SaveSvc.AutoRefreshEnabled)
-                return;
-
-            InvokeAsync(StateHasChanged);
-        };
-        _countdownTimer.AutoReset = true;
-        _countdownTimer.Start();
     }
 }

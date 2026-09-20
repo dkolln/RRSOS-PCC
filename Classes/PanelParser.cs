@@ -12,9 +12,10 @@ namespace RRSOS_PCC.Classes
             if (string.IsNullOrWhiteSpace(pnls))
                 return panels;
 
+            // A bad value must not fail the whole save; treat it as an empty panel.
             var rawValues = pnls
                 .Split(',', StringSplitOptions.RemoveEmptyEntries)
-                .Select(int.Parse)
+                .Select(s => int.TryParse(s, out var v) ? v : 0)
                 .ToArray();
 
             for (int i = 0; i < rawValues.Length; i++)

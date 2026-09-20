@@ -1,168 +1,199 @@
-﻿using RRSOS_PCC.Enums;
+using RRSOS_PCC.Classes;
+using RRSOS_PCC.Enums;
 using RRSOS_PCC.Models;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace RRSOS_PCC.Services
 {
+    /// <summary>
+    /// Names bases and outposts. Priority: sign text > saved name (basedata.json) > next name
+    /// from the procedural pool. Procedural names are saved so they stay put between loads.
+    /// Thread-safe; the file is only written when something actually changed (FlushIfDirty).
+    /// </summary>
     public class BaseNamingService
     {
-        private readonly string _dataFilePath;
-        private readonly string _baseNamesPath;
-        private readonly string _outpostNamesPath;
+        private static readonly JsonSerializerOptions WriteOptions = new()
+        {
+            WriteIndented = true,
+            // Shows the BaseType enum as "Base"/"Outpost" in the JSON
+            Converters = { new JsonStringEnumConverter() }
+        };
 
-        // The high-priority manual overrides from basedata.json
-        private Dictionary<string, BaseDataEntry> _manualEntries = new(StringComparer.OrdinalIgnoreCase);
+        private readonly object _lock = new();
+
+        // Saved names: manual ones (from signs) and procedural ones (Manual = false)
+        private Dictionary<string, BaseDataEntry> _entries = new(StringComparer.OrdinalIgnoreCase);
 
         // Procedural pools from JSON
         private List<string> _basePool = new();
         private List<string> _outpostPool = new();
 
-        // Keeps procedural assignments consistent during a session
+        // Names handed out this session
         private readonly Dictionary<long, string> _sessionAssignments = new();
 
-        public BaseNamingService(IConfiguration config)
-        {
-            var assetPath = config["SaveSettings:AssetPath"] ?? "Assets";
-            _dataFilePath = Path.Combine(assetPath, "basedata.json");
-            _baseNamesPath = Path.Combine(assetPath, "basenames.json");
-            _outpostNamesPath = Path.Combine(assetPath, "outpostnames.json");
+        private bool _dirty;
 
+        public BaseNamingService()
+        {
             LoadMetadata();
         }
 
         private void LoadMetadata()
         {
-            // Load Manual Overrides
-            if (File.Exists(_dataFilePath))
+            _entries = ReadJson<Dictionary<string, BaseDataEntry>>(PathResolver.BaseDataPath, keepCorruptCopy: true)
+                       ?? new(StringComparer.OrdinalIgnoreCase);
+
+            // Case-insensitive lookups regardless of how the file was written
+            _entries = new Dictionary<string, BaseDataEntry>(_entries, StringComparer.OrdinalIgnoreCase);
+
+            _basePool = ReadJson<List<string>>(PathResolver.BaseNamesPath) ?? new();
+            _outpostPool = ReadJson<List<string>>(PathResolver.OutpostNamesPath) ?? new();
+        }
+
+        private static T? ReadJson<T>(string path, bool keepCorruptCopy = false) where T : class
+        {
+            if (!File.Exists(path))
+                return null;
+
+            try
             {
-                var json = File.ReadAllText(_dataFilePath);
-                _manualEntries = JsonSerializer.Deserialize<Dictionary<string, BaseDataEntry>>(json) ?? new();
+                return JsonSerializer.Deserialize<T>(File.ReadAllText(path));
             }
+            catch (JsonException ex)
+            {
+                Console.Error.WriteLine($"[BaseNamingService] {Path.GetFileName(path)} is malformed: {ex.Message}");
 
-            // Load Procedural Lists
-            if (File.Exists(_baseNamesPath))
-                _basePool = JsonSerializer.Deserialize<List<string>>(File.ReadAllText(_baseNamesPath)) ?? new();
+                // Never let a later save silently overwrite the user's names.
+                if (keepCorruptCopy)
+                    File.Copy(path, path + ".corrupt", overwrite: true);
 
-            if (File.Exists(_outpostNamesPath))
-                _outpostPool = JsonSerializer.Deserialize<List<string>>(File.ReadAllText(_outpostNamesPath)) ?? new();
+                return null;
+            }
         }
 
         public string GetBaseName(Base b, string? signText = null)
         {
-            string idString = b.id.ToString();
-
-            // TIER 1: The Sign (The Registration Tool)
-            if (!string.IsNullOrWhiteSpace(signText))
+            lock (_lock)
             {
-                // Renamed 'existing' to 'manualEntry' to avoid CS0136
-                if (!_manualEntries.TryGetValue(idString, out var manualEntry) || manualEntry.Name != signText)
+                string idString = b.id.ToString();
+
+                // TIER 1: The sign (the registration tool)
+                if (!string.IsNullOrWhiteSpace(signText))
                 {
-                    _manualEntries[idString] = new BaseDataEntry
+                    if (!_entries.TryGetValue(idString, out var manualEntry)
+                        || manualEntry.Name != signText
+                        || !manualEntry.Manual)
                     {
-                        Name = signText,
-                        Manual = true,
-                        Type = b.Type
-                    };
-                    Save();
+                        _entries[idString] = new BaseDataEntry
+                        {
+                            Name = signText,
+                            Manual = true,
+                            Type = b.Type
+                        };
+                        _dirty = true;
+                    }
+                    return signText;
                 }
-                return signText;
+
+                // TIER 2: Saved record (matches even if the sign is gone)
+                if (_entries.TryGetValue(idString, out var persistentEntry))
+                    return persistentEntry.Name;
+
+                // TIER 3: Assigned earlier this session
+                if (_sessionAssignments.TryGetValue(b.id, out var sessionName))
+                    return sessionName;
+
+                // TIER 4: New procedural name, saved so it survives restarts
+                string newName = AssignProceduralName(b);
+                _sessionAssignments[b.id] = newName;
+
+                _entries[idString] = new BaseDataEntry
+                {
+                    Name = newName,
+                    Manual = false,   // so it can be cleaned up if the base disappears
+                    Type = b.Type
+                };
+                _dirty = true;
+
+                return newName;
             }
-
-            // TIER 2: Persistent Record (Matches even if the sign is gone)
-            if (_manualEntries.TryGetValue(idString, out var persistentEntry))
-            {
-                return persistentEntry.Name;
-            }
-
-            // TIER 3: Session-Persistent Procedural Naming
-            // Renamed 'existing' to 'sessionName' to avoid conflict
-            if (_sessionAssignments.TryGetValue(b.id, out var sessionName))
-            {
-                return sessionName;
-            }
-
-            // TIER 4: New Procedural Assignment + Persistence
-            string newName = AssignProceduralName(b);
-            _sessionAssignments[b.id] = newName;
-
-            // Option A: Promote to JSON as well (Manual = false so it can be cleaned up)
-            _manualEntries[idString] = new BaseDataEntry
-            {
-                Name = newName,
-                Manual = false,
-                Type = b.Type
-            };
-
-            Save();
-
-            return newName;
         }
 
         private string AssignProceduralName(Base b)
         {
             var pool = (b.Type == BaseType.Base) ? _basePool : _outpostPool;
-            //var prefix = (b.Type == BaseType.Base) ? "Base" : "Outpost";
 
-            // Find the first name in the pool not already assigned this session
-            var unusedName = pool.FirstOrDefault(name => !_sessionAssignments.Values.Contains(name));
+            // A name is taken if it was handed out this session OR is already saved for any
+            // base (saved names are not in the session map after a restart).
+            var taken = new HashSet<string>(_entries.Values.Select(e => e.Name), StringComparer.OrdinalIgnoreCase);
+            taken.UnionWith(_sessionAssignments.Values);
 
-            //return unusedName ?? $"{prefix} {b.id.ToString().AsSpan(^4)}"; // Use last 4 digits of ID if pool empty
-            return unusedName ?? $"{b.id.ToString().AsSpan(^4)}"; // Use last 4 digits of ID if pool empty
+            var unusedName = pool.FirstOrDefault(name => !taken.Contains(name));
+            if (unusedName != null)
+                return unusedName;
+
+            // Pool exhausted: fall back to the last 4 digits of the id
+            var id = b.id.ToString();
+            return id.Length > 4 ? id[^4..] : id;
         }
 
-        private void Save()
-        {
-            try
-            {
-                var options = new JsonSerializerOptions
-                {
-                    WriteIndented = true
-                };
-                // Ensures the BaseType enum shows as "Base"/"Outpost" in the JSON
-                options.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
-
-                var json = JsonSerializer.Serialize(_manualEntries, options);
-                File.WriteAllText(_dataFilePath, json);
-            }
-            catch (Exception ex)
-            {
-                // Log it so you know if there's a file lock issue during the 60s sync
-                System.Diagnostics.Debug.WriteLine($"NamingService Save Error: {ex.Message}");
-            }
-        }
-
+        /// <summary>
+        /// Drops saved procedural names for bases that no longer exist. Manual names are kept.
+        /// Does nothing when the current save has no bases (a stub or empty save must not wipe names).
+        /// </summary>
         public void CleanupOrphanedEntries(List<Base> activeBases)
         {
-            if (activeBases == null) return;
+            if (activeBases == null || activeBases.Count == 0)
+                return;
 
-            // Use a HashSet for O(1) lookups during the filter
-            var activeIds = activeBases.Select(b => b.id.ToString()).ToHashSet();
-            bool needsSave = false;
-
-            // 1. Identify "Ghost" records: 
-            // They are in our dictionary but NOT in the game world, and they weren't manually named.
-            var keysToRemove = _manualEntries
-                .Where(kvp => !activeIds.Contains(kvp.Key) && !kvp.Value.Manual)
-                .Select(kvp => kvp.Key)
-                .ToList();
-
-            foreach (var key in keysToRemove)
+            lock (_lock)
             {
-                _manualEntries.Remove(key);
+                var activeIds = activeBases.Select(b => b.id.ToString()).ToHashSet();
 
-                // 2. Also free it from the session memory so the name can be reused immediately
-                if (long.TryParse(key, out long numericId))
+                var keysToRemove = _entries
+                    .Where(kvp => !activeIds.Contains(kvp.Key) && !kvp.Value.Manual)
+                    .Select(kvp => kvp.Key)
+                    .ToList();
+
+                foreach (var key in keysToRemove)
                 {
-                    _sessionAssignments.Remove(numericId);
+                    _entries.Remove(key);
+
+                    // Free the name for reuse right away
+                    if (long.TryParse(key, out long numericId))
+                        _sessionAssignments.Remove(numericId);
+
+                    _dirty = true;
                 }
-
-                needsSave = true;
             }
+        }
 
-            // 3. Only hit the disk if we actually changed something
-            if (needsSave)
+        /// <summary>Writes basedata.json if (and only if) something changed since the last write.</summary>
+        public void FlushIfDirty()
+        {
+            lock (_lock)
             {
-                Save();
+                if (!_dirty)
+                    return;
+
+                try
+                {
+                    var path = PathResolver.BaseDataPath;
+                    Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+
+                    // Write-then-move so a crash mid-write cannot leave a truncated file.
+                    var temp = path + ".tmp";
+                    File.WriteAllText(temp, JsonSerializer.Serialize(_entries, WriteOptions));
+                    File.Move(temp, path, overwrite: true);
+
+                    _dirty = false;
+                }
+                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+                {
+                    // Stays dirty; the next load tries again.
+                    Console.Error.WriteLine($"[BaseNamingService] Could not save basedata.json: {ex.Message}");
+                }
             }
         }
     }

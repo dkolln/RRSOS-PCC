@@ -36,8 +36,6 @@
 
     protected override void OnInitialized()
     {
-        var savePath = PathResolver.FullSavePath;
-
-        Missing = SaveSvc.GetMissingGids(savePath);
+        Missing = SaveSvc.GetMissingGids();
     }
 }

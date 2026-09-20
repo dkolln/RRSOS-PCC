@@ -1,18 +1,21 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Mvc.Razor.Internal;
+using Microsoft.AspNetCore.Components;
+using RRSOS_PCC.Classes;
 using RRSOS_PCC.Models;
 using RRSOS_PCC.Services;
 using RRSOS_PCC.ViewModels;
-using System.Net.ServerSentEvents;
-using System.Numerics;
-using System.Resources;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace RRSOS_PCC.Components.Pages
 {
+    /// <summary>
+    /// The one place that listens for new saves and turns them into view models. The child
+    /// panels only render what they are handed, so they can never disagree with each other
+    /// or show a half-updated state.
+    /// </summary>
     public partial class Home : ComponentBase, IDisposable
     {
+        // How much closer another base must be before the contents panel switches to it.
+        private const float BaseSwitchThreshold = 15f;
+
         private bool IsLoading = true;
         private Func<Task>? _onChangeHandler;
         private PlayerViewModel? PlayerVM;
@@ -21,11 +24,12 @@ namespace RRSOS_PCC.Components.Pages
         private BaseSummaryViewModel? BaseVMs;
         private List<NoteViewModel> NotebookVMs = new();
         private Notebook Notebook = new();
+        private List<ExtractorSummaryVM> ExtractorVMs = new();
 
-        public BaseViewModel? ClosestBase => BaseVMs?.Bases.OrderBy(b => b.Distance).FirstOrDefault();
-        private List<ExtractorSummaryVM>? ExtractorVMs;
-        // private List<ContainerViewModel>? ContainerVMs;
+        private long? _selectedBaseId;
 
+        /// <summary>The base shown in the contents panel (sticky, see <see cref="BaseSelector"/>).</summary>
+        public BaseViewModel? SelectedBase { get; private set; }
 
         //add collapsibles
         private bool ShowPlayer = true;
@@ -36,32 +40,31 @@ namespace RRSOS_PCC.Components.Pages
         private bool ShowExtractors = true;
         private bool ShowNotebook = true;
 
-        [Inject] public SaveService SaveSvc { get; set; }
-        [Inject] public NotebookService NotebookSvc { get; set; }
-        [Inject] public GameMathService GameMathSvc { get; set; }
+        [Inject] public SaveService SaveSvc { get; set; } = default!;
+        [Inject] public NotebookService NotebookSvc { get; set; } = default!;
 
         protected override async Task OnInitializedAsync()
         {
-            _onChangeHandler = async () => await HandleStateChanged();
+            _onChangeHandler = HandleStateChanged;
             SaveSvc.OnChange += _onChangeHandler;
 
+            // No-op if the save is already loaded, in which case no change event will fire,
+            // so build from whatever is current instead of waiting for one.
             await SaveSvc.Load();
-
-            Notebook = await NotebookSvc.LoadAsync();
-            NotebookVMs = Notebook.Notes
-                .OrderBy(n => n.Priority)
-                .Select(n => new NoteViewModel(n))
-                .ToList();
+            await RebuildAsync();
 
             IsLoading = false;
         }
 
-
-        protected override void OnAfterRender(bool firstRender)
+        // Change events arrive on a background thread; hop onto the renderer's context so the
+        // fields are never touched from two threads at once.
+        private Task HandleStateChanged() => InvokeAsync(async () =>
         {
-        }
+            await RebuildAsync();
+            StateHasChanged();
+        });
 
-        private async Task HandleStateChanged()
+        private async Task RebuildAsync()
         {
             var s = SaveSvc.CurrentState;
 
@@ -69,24 +72,18 @@ namespace RRSOS_PCC.Components.Pages
             PlanetVM = s?.PlanetInfo != null ? new PlanetViewModel(s.PlanetInfo) : null;
             VehicleVM = s?.Vehicle != null ? new VehicleViewModel(s.Vehicle) : null;
 
-            BaseVMs = s?.Bases != null && s?.Player != null
+            BaseVMs = s?.Bases != null && s.Player != null
                 ? new BaseSummaryViewModel(s.Bases, s.Player)
                 : null;
 
+            _selectedBaseId = BaseSelector.Choose(BaseVMs?.Bases, _selectedBaseId, BaseSwitchThreshold);
+            SelectedBase = BaseVMs?.Bases.FirstOrDefault(b => b.Id == _selectedBaseId);
+
             ExtractorVMs = s?.Extractors != null
-                ? new List<ExtractorSummaryVM>(s.Extractors)
+                ? s.Extractors.OrderBy(e => e.Distance).ToList()
                 : new List<ExtractorSummaryVM>();
 
-            Notebook = await NotebookSvc.LoadAsync();
-            NotebookVMs = Notebook.Notes
-                .OrderBy(n => n.Priority)
-                .ThenByDescending(n => n.Created)
-                .Select(n => new NoteViewModel(n))
-                .ToList();
-
-
-            InvokeAsync(StateHasChanged);
-
+            await ReloadNotebook();
         }
 
         private async Task ReloadNotebook()
@@ -94,24 +91,15 @@ namespace RRSOS_PCC.Components.Pages
             Notebook = await NotebookSvc.LoadAsync();
             NotebookVMs = Notebook.Notes
                 .OrderBy(n => n.Priority)
-                .ThenBy(n => n.Created)
+                .ThenByDescending(n => n.Created)
                 .Select(n => new NoteViewModel(n))
                 .ToList();
-
-            StateHasChanged();
         }
 
         public void Dispose()
         {
-            if (_onChangeHandler != null) SaveSvc.OnChange -= _onChangeHandler;
+            if (_onChangeHandler != null)
+                SaveSvc.OnChange -= _onChangeHandler;
         }
-
-
-
-        //protected override void OnParametersSet()
-        //{
-        //    HandleStateChanged();
-        //}
-
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace RRSOS_PCC.Models
+using RRSOS_PCC.Classes;
+
+namespace RRSOS_PCC.Models
 {
     public class JsonBlock
     {
@@ -6,21 +8,17 @@
         {
             Raw = raw.Trim();
 
-            if (IsMultiEntry)
-            {
-                Entries = raw
-                    .Split('|', StringSplitOptions.RemoveEmptyEntries)
-                    .Select(e => e.Trim())
-                    .ToList();
-            }
-            else
-            {
-                Entries = new List<string>();
-            }
+            // Only a '|' outside a JSON string separates entries; sign/note/player text may contain one.
+            var parts = SaveSplitter.Split(Raw, '|', out var sawSeparator);
+
+            IsMultiEntry = sawSeparator;
+            Entries = sawSeparator
+                ? parts.Select(e => e.Trim()).Where(e => e.Length > 0).ToList()
+                : new List<string>();
         }
 
         public string Raw { get; }
-        public bool IsMultiEntry => Raw.Contains('|');
+        public bool IsMultiEntry { get; }
         public List<string> Entries { get; }
     }
 

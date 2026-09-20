@@ -1,7 +1,5 @@
-﻿using RRSOS_PCC.Models;
+using RRSOS_PCC.Models;
 using RRSOS_PCC.Services;
-using System.Reflection.Metadata.Ecma335;
-using System.Threading.Tasks.Dataflow;
 
 namespace RRSOS_PCC.Classes
 {
@@ -22,14 +20,10 @@ namespace RRSOS_PCC.Classes
         {
             var state = new SaveState();
 
-            var blocks = jsonString
-                .Split('@', StringSplitOptions.RemoveEmptyEntries)
-                .Select(b => new JsonBlock(b))
-                .ToList();
-
-            foreach (var block in blocks)
+            // '@' separates blocks, but only outside JSON strings.
+            foreach (var part in SaveSplitter.Split(jsonString, '@'))
             {
-                _save.ProcessBlock(block, state);
+                _save.ProcessBlock(new JsonBlock(part), state);
             }
 
             _save.BindBlocks(state, _naming, _objectService);

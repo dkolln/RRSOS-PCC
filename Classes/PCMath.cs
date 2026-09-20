@@ -122,7 +122,11 @@ namespace RRSOS_PCC.Classes
             return n.ToString("N0");
         }
 
-        public static Base FindNearestBase(WorldObject wo, SaveState state, float maxDistance = 100f)
+        public static Base FindNearestBase(
+            WorldObject wo,
+            SaveState state,
+            IReadOnlyDictionary<long, Container> containerById,
+            float maxDistance = 100f)
         {
             var bases = state.Bases;
 
@@ -136,10 +140,7 @@ namespace RRSOS_PCC.Classes
             //
             if (wo.Owner.Type == WorldObjectOwnerType.Container && wo.Owner.Id.HasValue)
             {
-                var container = state.Containers
-                    .FirstOrDefault(c => c.id == wo.Owner.Id.Value);
-
-                if (container != null)
+                if (containerById.TryGetValue(wo.Owner.Id.Value, out var container))
                 {
                     effectivePos = container.Position.Flat;
                 }

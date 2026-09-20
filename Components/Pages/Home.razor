@@ -53,7 +53,7 @@
         </div>
         @if (ShowBaseContents)
         {
-            <BaseContents SelectedBase="@ClosestBase" />
+            <BaseContents SelectedBase="@SelectedBase" />
         }
     </div>
 
@@ -63,7 +63,7 @@
         </div>
         @if (ShowExtractors)
         {
-            <Extractors />
+            <Extractors Data="@ExtractorVMs" />
         }
     </div>
 

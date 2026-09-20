@@ -7,7 +7,7 @@ using System.Numerics;
 
 namespace RRSOS_PCC.Components.Pages
 {
-    public partial class BaseContents : ComponentBase, IDisposable
+    public partial class BaseContents : ComponentBase
     {
         [Parameter]
         public BaseViewModel? SelectedBase { get; set; }
@@ -17,29 +17,12 @@ namespace RRSOS_PCC.Components.Pages
         public List<(string Name, int Count)> GrowerItems { get; set; } = new();
         public List<(string Name, int Count)> GrowerItemsView { get; set; } = new();
 
-        private Func<Task>? _onChangeHandler;
-
         private GroupMode CurrentGroup = GroupMode.Category;
 
-        protected override void OnInitialized()
-        {
-            _onChangeHandler = RefreshContentsAsync;
-            SaveSvc.OnChange += _onChangeHandler;
-        }
-
-        private async Task RefreshContentsAsync()
-        {
-            if (SelectedBase != null)
-            {
-                Processed = BuildContentsForBase(SelectedBase);
-                await InvokeAsync(StateHasChanged);
-            }
-        }
-
+        // Home re-renders this panel with a fresh SelectedBase after every new save.
         protected override void OnParametersSet()
         {
-            if (SelectedBase != null)
-                Processed = BuildContentsForBase(SelectedBase);
+            Processed = SelectedBase != null ? BuildContentsForBase(SelectedBase) : null;
         }
 
         private ProcessedBaseContents BuildContentsForBase(BaseViewModel baseVM)
@@ -160,7 +143,7 @@ namespace RRSOS_PCC.Components.Pages
         private string SearchText = "";
 
         private IEnumerable<WorldObject> FilteredWorldObjects =>
-            string.IsNullOrWhiteSpace(SearchText)
+            string.IsNullOrWhiteSpace(SearchText) || SaveSvc.CurrentState == null
                 ? Enumerable.Empty<WorldObject>()
                 : SaveSvc.CurrentState.WorldObjects
                     .Where(wo => wo.gId.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
@@ -169,7 +152,7 @@ namespace RRSOS_PCC.Components.Pages
         {
             get
             {
-                var player = SaveSvc.CurrentState.Player;
+                var player = SaveSvc.CurrentState?.Player;
 
                 return FilteredWorldObjects
                     .Select(wo =>
@@ -191,7 +174,9 @@ namespace RRSOS_PCC.Components.Pages
                                     wo.Position.Flat,
                                     player.Position.Flat)
                                 : 0,
-                            Direction = PCMath.GetCompassDirection(player.Position.Flat, wo.Position.Flat)
+                            Direction = player != null
+                                ? PCMath.GetCompassDirection(player.Position.Flat, wo.Position.Flat)
+                                : ""
                         };
                     })
                     .OrderBy(x => x.Distance)
@@ -238,14 +223,6 @@ namespace RRSOS_PCC.Components.Pages
                 Processed = BuildContentsForBase(SelectedBase);
 
             StateHasChanged();
-        }
-
-
-
-        public void Dispose()
-        {
-            if (_onChangeHandler != null)
-                SaveSvc.OnChange -= _onChangeHandler;
         }
     }
 }

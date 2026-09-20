@@ -21,8 +21,9 @@ namespace RRSOS_PCC.Classes
             if (state.WorldObjects == null || state.ContainerDetails == null)
                 return;
 
-            var worldById = state.WorldObjects.ToDictionary(wo => wo.id);
-            var detailById = state.ContainerDetails.ToDictionary(cd => cd.id);
+            // First record wins if the save ever contains a duplicate id, rather than failing the whole load.
+            var worldById = BuildLookup(state.WorldObjects, wo => wo.id);
+            var detailById = BuildLookup(state.ContainerDetails, cd => cd.id);
 
             // 1. Bind all world containers
             foreach (var container in state.Containers)
@@ -45,6 +46,16 @@ namespace RRSOS_PCC.Classes
             BindExtractors(state, detailById, worldById, classifier);
         }
 
+        private static Dictionary<long, T> BuildLookup<T>(IEnumerable<T> items, Func<T, long> key)
+        {
+            var lookup = new Dictionary<long, T>();
+
+            foreach (var item in items)
+                lookup.TryAdd(key(item), item);
+
+            return lookup;
+        }
+
         private static void BindSingleContainer(
             Container container,
             Dictionary<long, ContainerDetail> detailById,
@@ -53,10 +64,13 @@ namespace RRSOS_PCC.Classes
             container.PrimaryItems.Clear();
             container.SecondaryItems.Clear();
 
+            // Always hydrate: a container with no detail record must still have a real position,
+            // otherwise it sits at (0,0) and can be claimed by whichever base is nearest the origin.
+            container.Hydrate();
+
             // Primary
             if (detailById.TryGetValue((int)container.liId, out var primary))
             {
-                container.Hydrate();
                 container.Capacity = primary.size ?? 0;
 
                 foreach (var id in primary.ItemIds)
@@ -461,8 +475,6 @@ namespace RRSOS_PCC.Classes
 
         public static void BindBases(SaveState state, BaseNamingService naming)
         {
-            naming.CleanupOrphanedEntries(state.Bases);
-
             if (state.Pods == null || state.Pods.Count == 0)
                 return;
 
@@ -494,6 +506,11 @@ namespace RRSOS_PCC.Classes
                 // TIER 1: Sign Text > TIER 2: JSON > TIER 3: Procedural
                 b.Name = naming.GetBaseName(b, nearbySignText);
             }
+
+            // Only now do we know which bases exist, so only now can we tell which saved names
+            // are orphaned. Then write basedata.json once, and only if something changed.
+            naming.CleanupOrphanedEntries(state.Bases);
+            naming.FlushIfDirty();
         }
 
 
@@ -543,7 +560,8 @@ namespace RRSOS_PCC.Classes
             vehicle.ModuleItems.Clear();
 
             // siIds is now an int (single module detail ID)
-            if (vehicle.siIds != null && Int64.Parse(vehicle.siIds) > 0 && detailById.TryGetValue(Int64.Parse(vehicle.siIds), out var moduleDetail))
+            if (Int64.TryParse(vehicle.siIds, out var moduleDetailId) && moduleDetailId > 0
+                && detailById.TryGetValue(moduleDetailId, out var moduleDetail))
             {
                 foreach (var id in moduleDetail.ItemIds)
                 {
@@ -570,6 +588,8 @@ namespace RRSOS_PCC.Classes
         //Always build last.
         public static void BindWorldObjects(SaveState state, WorldObjectClassifierService classifier)
         {
+            var containerById = BuildLookup(state.Containers, c => c.id);
+
             foreach (var wo in state.WorldObjects)
             {
                 wo.Hydrate();
@@ -584,13 +604,8 @@ namespace RRSOS_PCC.Classes
                 wo.Name = !string.IsNullOrWhiteSpace(wo.text) ? wo.text : def.Name;
                 wo.Tier = def.Tier;
 
-                if(wo.pos != null)
-                {
-                    bool t = true;
-                }    
-
                 // 3. LINK
-                var owner = PCMath.FindNearestBase(wo, state);
+                var owner = PCMath.FindNearestBase(wo, state, containerById);
 
                 if (owner == null) continue;
 
@@ -604,6 +619,8 @@ namespace RRSOS_PCC.Classes
 
         public static void BindContainerOwner(SaveState state)
         {
+            var containerById = BuildLookup(state.Containers, c => c.id);
+
             foreach (var container in state.Containers)
             {
                 if(container.PrimaryItems.Count > 0)
@@ -616,7 +633,7 @@ namespace RRSOS_PCC.Classes
                 }
                 else
                 {
-                    var nearestBase = PCMath.FindNearestBase(container, state);
+                    var nearestBase = PCMath.FindNearestBase(container, state, containerById);
                     if (nearestBase != null)
                         container.OwningBase = nearestBase;
                 }
