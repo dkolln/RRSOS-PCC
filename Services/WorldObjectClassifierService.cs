@@ -73,6 +73,23 @@ namespace RRSOS_PCC.Services
             return _resolved.GetOrAdd(gId, Resolve);
         }
 
+        /// <summary>
+        /// The entry for exactly this gId, with none of <see cref="GetDefinition"/>'s trailing-digit
+        /// fallback. Use this for values that differ by tier (like power), where borrowing
+        /// another tier's entry would give a wrong answer instead of an honest "unknown".
+        /// </summary>
+        public bool TryGetExactDefinition(string gId, out WorldObjectDefinition definition)
+        {
+            if (!string.IsNullOrEmpty(gId) && _definitions.TryGetValue(gId, out var found))
+            {
+                definition = found;
+                return true;
+            }
+
+            definition = null!;
+            return false;
+        }
+
         private WorldObjectDefinition Resolve(string gId)
         {
             // 1. Exact match (e.g., "VegetableGrower1")

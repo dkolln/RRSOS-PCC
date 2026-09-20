@@ -18,6 +18,7 @@ builder.Services.AddSingleton<RRSOS_PCC.Services.SaveService>();
 builder.Services.AddScoped<RRSOS_PCC.Services.GameMathService>();
 builder.Services.AddSingleton<RRSOS_PCC.Services.BaseNamingService>();
 builder.Services.AddSingleton<RRSOS_PCC.Services.WorldObjectClassifierService>();
+builder.Services.AddSingleton<PowerService>();
 builder.Services.AddSingleton<PCLauncherService>();
 builder.Services.AddSingleton<NotebookService>();
 

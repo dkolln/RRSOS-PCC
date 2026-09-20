@@ -8,6 +8,12 @@ namespace RRSOS_PCC.Models
         public string Name { get; set; } = string.Empty;
         public string Tier { get; set; } = "T1";
 
+        /// <summary>
+        /// Power per machine in kW: positive makes power, negative uses it, absent means unknown
+        /// (not "zero"). Tiers differ, so this is only ever read from an exact gId entry.
+        /// </summary>
+        public decimal? PowerKw { get; set; }
+
         public WorldObjectType Type { get; set; }
 
         public WorldObjectCategory Category { get; set; }

@@ -1,0 +1,68 @@
+@using RRSOS_PCC.ViewModels
+
+<div class="readout-section">
+    <div class="readout-header">Power</div>
+
+    @if (Data is null || !Data.HasAnyMachines)
+    {
+        <div class="readout-line">No power machines placed.</div>
+    }
+    else
+    {
+        <div class="power-body">
+            <div class="power-dial">
+                <Gauge Label="Power load"
+                       Value="@Data.Load"
+                       Unknown="@(!Data.HasUsageData)"
+                       DisplayText="@Kw(Data.Required)"
+                       MaxLabel="@Data.Capacity.ToString("0.#")"
+                       HigherIsWorse="true"
+                       WarnAt="@PowerSummaryViewModel.LoadWarnAt"
+                       CritAt="@PowerSummaryViewModel.LoadCritAt" />
+            </div>
+
+            <div class="power-figures">
+                <div class="readout-line">
+                    <span class="label">» Capacity</span>
+                    <span class="value">@Kw(Data.Capacity)</span>
+                </div>
+
+                @foreach (var line in Data.Generation)
+                {
+                    <div class="readout-line power-sub">
+                        <span class="label">@line.Name x@(line.Count)</span>
+                        <span class="value">@Kw(line.KwTotal)</span>
+                    </div>
+                }
+
+                @foreach (var line in Data.Unrated)
+                {
+                    <div class="readout-line power-sub warn">
+                        <span class="label">@line.Name x@(line.Count)</span>
+                        <span class="value">no rate</span>
+                    </div>
+                }
+
+                <div class="readout-line">
+                    <span class="label">» Required</span>
+                    <span class="value">@(Data.HasUsageData ? Kw(Data.Required) : "unknown")</span>
+                </div>
+
+                @if (Data.HasUsageData)
+                {
+                    <div class="readout-line">
+                        <span class="label">» @(Data.Spare < 0 ? "Shortfall" : "Spare")</span>
+                        <span class="value @(Data.Spare < 0 ? "crit" : "")">@Kw(Math.Abs(Data.Spare))</span>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public PowerSummaryViewModel? Data { get; set; }
+
+    private static string Kw(decimal value) => $"{value:0.0#} kW";
+}

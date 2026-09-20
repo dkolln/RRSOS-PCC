@@ -3,6 +3,7 @@
     "BaseId": "VegetableGrower",
     "Name": "Vegetable Grower",
     "Tier": "T1",
+    "PowerKw": -15,
     "Type": 5510
   },
   "VegetableGrower2": {
@@ -819,6 +820,7 @@
     "BaseId": "CraftStation",
     "Name": "Craft Station",
     "Tier": "T1",
+    "PowerKw": -0.5,
     "Type": 6810
   },
   "CraftStation2": {
@@ -852,6 +854,7 @@
     "BaseId": "Drill0",
     "Name": "Drill",
     "Tier": "T1",
+    "PowerKw": -0.5,
     "Type": 5110
   },
   "Drill1": {
@@ -888,14 +891,16 @@
 
   "EnergyGenerator1": {
     "BaseId": "EnergyGenerator1",
-    "Name": "Energy Generator",
+    "Name": "Wind Turbine",
     "Tier": "T1",
+    "PowerKw": 1.2,
     "Type": 6920
   },
   "EnergyGenerator2": {
     "BaseId": "EnergyGenerator2",
-    "Name": "Energy Generator",
-    "Tier": "T2",
+    "Name": "Solar Panel",
+    "Tier": "T1",
+    "PowerKw": 6.5,
     "Type": 6920
   },
   "EnergyGenerator3": {
@@ -1074,12 +1079,14 @@
     "BaseId": "Heater",
     "Name": "Heater",
     "Tier": "T1",
+    "PowerKw": -1,
     "Type": 5210
   },
   "Heater2": {
     "BaseId": "Heater",
     "Name": "Heater",
     "Tier": "T2",
+    "PowerKw": -3.5,
     "Type": 5210
   },
   "Heater3": {
@@ -1137,12 +1144,14 @@
     "BaseId": "ScreenEnergy",
     "Name": "Energy Screen",
     "Tier": "",
+    "PowerKw": -0.4,
     "Type": 1310
   },
   "ScreenTerraformation": {
     "BaseId": "ScreenTerraformation",
     "Name": "Terraformation Screen",
     "Tier": "",
+    "PowerKw": -0.4,
     "Type": 1310
   },
   "ScreenTerraStage": {
@@ -1155,6 +1164,7 @@
     "BaseId": "ScreenUnlockables",
     "Name": "Blueprint Screen",
     "Tier": "",
+    "PowerKw": -0.2,
     "Type": 1310
   },
 
@@ -2100,10 +2110,19 @@
     "Type": 5310
   },
 
+  "Vegetube1": {
+    "BaseId": "Vegetube",
+    "Name": "Vegetube",
+    "Tier": "T1",
+    "PowerKw": -0.35,
+    "Type": 6820
+  },
+
   "Vegetube2": {
     "BaseId": "Vegetube",
     "Name": "Vegetube",
     "Tier": "T2",
+    "PowerKw": -1.25,
     "Type": 6820
   },
 

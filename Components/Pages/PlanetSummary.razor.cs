@@ -10,6 +10,9 @@ namespace RRSOS_PCC.Components.Pages
         [Parameter] 
         public PlanetViewModel? Data { get; set; }
 
+        [Parameter]
+        public PowerSummaryViewModel? Power { get; set; }
+
         [Inject]
         public SaveService SaveSvc { get; set; }
 

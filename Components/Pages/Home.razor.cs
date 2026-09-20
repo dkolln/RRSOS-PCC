@@ -21,6 +21,7 @@ namespace RRSOS_PCC.Components.Pages
         private PlayerViewModel? PlayerVM;
         private PlanetViewModel? PlanetVM;
         private VehicleViewModel? VehicleVM;
+        private PowerSummaryViewModel? PowerVM;
         private BaseSummaryViewModel? BaseVMs;
         private List<NoteViewModel> NotebookVMs = new();
         private Notebook Notebook = new();
@@ -42,6 +43,7 @@ namespace RRSOS_PCC.Components.Pages
 
         [Inject] public SaveService SaveSvc { get; set; } = default!;
         [Inject] public NotebookService NotebookSvc { get; set; } = default!;
+        [Inject] public PowerService PowerSvc { get; set; } = default!;
 
         protected override async Task OnInitializedAsync()
         {
@@ -71,6 +73,7 @@ namespace RRSOS_PCC.Components.Pages
             PlayerVM = s?.Player != null ? new PlayerViewModel(s.Player) : null;
             PlanetVM = s?.PlanetInfo != null ? new PlanetViewModel(s.PlanetInfo) : null;
             VehicleVM = s?.Vehicle != null ? new VehicleViewModel(s.Vehicle) : null;
+            PowerVM = PowerSvc.Summarize(s);
 
             BaseVMs = s?.Bases != null && s.Player != null
                 ? new BaseSummaryViewModel(s.Bases, s.Player)
