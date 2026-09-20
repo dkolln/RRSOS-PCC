@@ -9,7 +9,6 @@ namespace RRSOS_PCC.Services;
 
 public class SaveService
 {
-    private readonly IConfiguration _config;
     private string? _lastLoadedFile;
 
     public SaveState? CurrentState { get; private set; }
@@ -50,11 +49,42 @@ public class SaveService
         _autoRefreshTimer.Elapsed += (_, __) => AutoReload();
         _autoRefreshTimer.AutoReset = true;
 
-        var json = File.ReadAllText(UserSettingsPath);
-        var root = JsonSerializer.Deserialize<Dictionary<string, UserSettings>>(json);
-        Settings = root["Settings"];
-
+        Settings = LoadOrCreateUserSettings();
         PathResolver.SelectedSaveFile = Settings.SelectedSaveFile;
+    }
+
+    private static UserSettings LoadOrCreateUserSettings()
+    {
+        if (File.Exists(UserSettingsPath))
+        {
+            try
+            {
+                var json = File.ReadAllText(UserSettingsPath);
+                var root = JsonSerializer.Deserialize<Dictionary<string, UserSettings>>(json);
+
+                if (root != null && root.TryGetValue("Settings", out var settings))
+                    return settings;
+
+                Console.Error.WriteLine("[SaveService] usersettings.json is missing the 'Settings' key, recreating defaults.");
+            }
+            catch (JsonException ex)
+            {
+                Console.Error.WriteLine($"[SaveService] usersettings.json is malformed, recreating defaults: {ex.Message}");
+            }
+        }
+
+        var defaults = new UserSettings();
+        WriteUserSettings(defaults);
+        return defaults;
+    }
+
+    private static void WriteUserSettings(UserSettings settings)
+    {
+        var root = new Dictionary<string, UserSettings> { ["Settings"] = settings };
+        var json = JsonSerializer.Serialize(root, new JsonSerializerOptions { WriteIndented = true });
+
+        Directory.CreateDirectory(Path.GetDirectoryName(UserSettingsPath)!);
+        File.WriteAllText(UserSettingsPath, json);
     }
 
     private async Task AutoReload()
@@ -106,7 +136,7 @@ public class SaveService
         {
             File.Copy(path, workingFile, overwrite: true);
 
-            var raw = GetRawData(workingFile);
+            var raw = File.ReadAllText(workingFile);
 
             var processor = new SaveProcessor(this, _naming, _objectService);
             var state = processor.Process(raw);
@@ -191,13 +221,6 @@ public class SaveService
 
 
 
-    public string GetRawData(string path)
-    {
-        string tempPath = Path.Combine(Path.GetTempPath(), "rrs_check.json");
-        File.Copy(path, tempPath, true);
-        return File.ReadAllText(tempPath);
-    }
-
     public List<string> ParseSave(string rawData)
     {
         return rawData.Split('|', StringSplitOptions.RemoveEmptyEntries).ToList();
@@ -266,20 +289,7 @@ public class SaveService
         return changed;
     }
 
-    public void SaveUserSettings()
-    {
-        var root = new Dictionary<string, UserSettings>
-        {
-            ["Settings"] = Settings
-        };
-
-        var json = JsonSerializer.Serialize(root, new JsonSerializerOptions
-        {
-            WriteIndented = true
-        });
-
-        File.WriteAllText(UserSettingsPath, json);
-    }
+    public void SaveUserSettings() => WriteUserSettings(Settings);
 
     public void OpenSaveFolder()
     {
