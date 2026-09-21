@@ -36,7 +36,9 @@
             <div class="readout-header">Vitals</div>
 
             <div class="gauge-row">
+                @* Oxygen is the one vital with a real amount, so its scale ends at the tank size instead of 100. *@
                 <Gauge Label="Oxygen" Value="@Data.Vitals.OxygenPct"
+                       MaxLabel="@(Data.Vitals.OxygenCapacity > 0 ? Data.Vitals.OxygenCapacity.ToString("0.#") : "100")"
                        WarnAt="@VitalsViewModel.LowWarnBelow" CritAt="@VitalsViewModel.LowCritBelow" />
                 <Gauge Label="Health" Value="@Data.Vitals.HealthPct"
                        WarnAt="@VitalsViewModel.LowWarnBelow" CritAt="@VitalsViewModel.LowCritBelow" />

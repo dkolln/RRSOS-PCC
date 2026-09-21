@@ -15,6 +15,12 @@ namespace RRSOS_PCC.Models
         /// </summary>
         public decimal? PowerKw { get; set; }
 
+        /// <summary>
+        /// Name of the little picture used for this machine in the power card ("windmill", "sun",
+        /// "sun-large", "atom", "atoms", "starburst"). Absent means the plain default.
+        /// </summary>
+        public string? Icon { get; set; }
+
         public WorldObjectType Type { get; set; }
 
         public WorldObjectCategory Category { get; set; }

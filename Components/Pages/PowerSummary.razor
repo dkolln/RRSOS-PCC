@@ -23,17 +23,33 @@
                        CritAt="@PowerSummaryViewModel.LoadCritAt" />
             </button>
 
+            @* One figure: what is left while there is any, what is missing once there is not. *@
             <div class="power-values">
-                <div class="power-value @(Short ? "power-need" : "power-left")">
+                <div class="power-value @ValueClass">
                     <span class="num">@(Data.HasUsageData ? Kw(Math.Abs(Data.Spare)) : "--")</span>
                     <span class="lbl">@(Short ? "Short" : "Left")</span>
                 </div>
-
-                <div class="power-value power-need">
-                    <span class="num">@(Data.HasUsageData ? Kw(Data.Required) : "--")</span>
-                    <span class="lbl">Needed</span>
-                </div>
             </div>
+
+            @* One little picture per generator on the grid. *@
+            @if (Groups.Count > 0)
+            {
+                <div class="power-generators">
+                    @foreach (var group in Groups)
+                    {
+                        <div class="power-gen-group" title="@group.Title" role="img" aria-label="@group.Label">
+                            @for (var i = 0; i < Math.Min(group.Count, MaxIconsPerGroup); i++)
+                            {
+                                <PowerIcon Kind="@group.Icon" Index="@i" Dim="@group.Dim" />
+                            }
+                            @if (group.Count > MaxIconsPerGroup)
+                            {
+                                <span class="power-gen-more">+@(group.Count - MaxIconsPerGroup)</span>
+                            }
+                        </div>
+                    }
+                </div>
+            }
 
             @if (Data.Unrated.Count > 0)
             {
@@ -90,7 +106,49 @@
     [Parameter]
     public PowerSummaryViewModel? Data { get; set; }
 
+    // A base with dozens of one kind would otherwise push everything else off the card.
+    private const int MaxIconsPerGroup = 40;
+
+    private sealed record GeneratorGroup(string? Icon, int Count, bool Dim, string Title, string Label);
+
+    /// <summary>Generators of one type together, however many different boosts they run at, then the ones with no known output.</summary>
+    private IReadOnlyList<GeneratorGroup> Groups
+    {
+        get
+        {
+            if (Data is null)
+                return Array.Empty<GeneratorGroup>();
+
+            var groups = new List<GeneratorGroup>();
+
+            foreach (var type in Data.Generation.GroupBy(l => l.GId))
+            {
+                var count = type.Sum(l => l.Count);
+                var title = string.Join("\n", type.Select(l => $"{l.Name} ×{l.Count}: {Kw(l.KwTotal)}"));
+                groups.Add(new GeneratorGroup(type.First().Icon, count, false, title, $"{count} {BaseName(type.First().Name)}"));
+            }
+
+            foreach (var line in Data.Unrated)
+                groups.Add(new GeneratorGroup(line.Icon, line.Count, true, $"{line.Name} ×{line.Count}: no rate yet", $"{line.Count} {line.Name}, output unknown"));
+
+            return groups;
+        }
+    }
+
+    // "Fusion Generator T6 (6×)" -> "Fusion Generator T6"
+    private static string BaseName(string name)
+    {
+        var at = name.LastIndexOf(" (", StringComparison.Ordinal);
+        return at > 0 && name.EndsWith("×)") ? name[..at] : name;
+    }
+
     private bool Short => Data is { HasUsageData: true, Spare: < 0 };
+
+    // Matches the dial: green while comfortable, then yellow and red as load climbs. A shortfall is always red.
+    private string ValueClass => Data is null || !Data.HasUsageData ? "power-idle"
+        : Short || Data.Load >= PowerSummaryViewModel.LoadCritAt ? "power-need"
+        : Data.Load >= PowerSummaryViewModel.LoadWarnAt ? "power-warn"
+        : "power-left";
 
     private string LoadText => Data is { HasUsageData: true } ? $"{(int)Math.Round(Data.Load * 100)}%" : "--";
 

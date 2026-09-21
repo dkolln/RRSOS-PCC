@@ -1,0 +1,71 @@
+@using RRSOS_PCC.Classes
+@using RRSOS_PCC.Services
+@inject ResupplyService Resupply
+@inject ToastService Toasts
+@inject IJSRuntime JS
+
+<div class="resupply">
+    <button type="button" class="resupply-btn" @onclick="Run" disabled="@_busy"
+            title="Fill every container labelled @Labels">
+        @(_busy ? "RESUPPLYING..." : "RESUPPLY")
+    </button>
+</div>
+
+@code {
+    // Toasts cascade in one after the other.
+    private static readonly TimeSpan Stagger = TimeSpan.FromMilliseconds(350);
+
+    private bool _busy;
+
+    private static string Labels => string.Join(", ", ResupplyService.Targets.Select(t => t.Label));
+
+    private async Task Run()
+    {
+        if (_busy)
+            return;
+
+        // The game keeps its world in memory and rewrites the save itself, so an edit only sticks
+        // while it is at the main menu or closed. Always ask; nothing runs unless the answer is yes.
+        var confirmed = await JS.InvokeAsync<bool>(
+            "confirm",
+            "Have you exited to the Main Menu?\n\nRESUPPLY edits your save file. If a world is still loaded, the game will overwrite the change at its next autosave.");
+
+        if (!confirmed)
+            return;
+
+        _busy = true;
+
+        try
+        {
+            ShowToasts(await Resupply.ResupplyAsync());
+        }
+        finally
+        {
+            _busy = false;
+        }
+    }
+
+    private void ShowToasts(ResupplyReport report)
+    {
+        if (!report.Success)
+        {
+            Toasts.Show("Resupply failed. " + report.Error, ToastKind.Error, TimeSpan.FromSeconds(9));
+            return;
+        }
+
+        var order = 0;
+
+        foreach (var line in report.Lines)
+        {
+            var delay = Stagger * order++;
+            var name = ResupplyService.DisplayName(line.Label);
+
+            if (line.Containers == 0)
+                Toasts.Show($"No container labelled \"{line.Label}\"", ToastKind.Warning, delay: delay);
+            else if (line.Added > 0)
+                Toasts.Show($"+{line.Added} {name} added", ToastKind.Success, delay: delay);
+            else
+                Toasts.Show($"{name} already full", ToastKind.Error, delay: delay);
+        }
+    }
+}

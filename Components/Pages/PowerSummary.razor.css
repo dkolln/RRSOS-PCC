@@ -41,6 +41,7 @@
 }
 
 .power-left { --value-color: #4fd18b; }
+.power-warn { --value-color: #ffd86b; }
 .power-need { --value-color: #ff6b6b; }
 
 .power-value .num,
@@ -144,4 +145,30 @@
     gap: 20px;
     padding: 12px 14px 16px;
     overflow-y: auto;
+}
+
+/* One icon per generator */
+.power-generators {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 6px 16px;
+    max-width: 100%;
+    padding-top: 2px;
+}
+
+.power-gen-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 3px;
+    cursor: default;
+}
+
+.power-gen-more {
+    align-self: center;
+    font-size: 0.75rem;
+    color: #7a8ea6;
 }

@@ -55,6 +55,9 @@ namespace RRSOS_PCC.Enums
         [Description("Gas Canister")]
         GasCanister = 2210,
 
+        [Description("Nitrogen Capsule")]
+        NitrogenCapsule = 2220,
+
         //Fluid (2300)
         [Description("Fluid Canister")]
         FluidCanister = 2310,
@@ -96,6 +99,9 @@ namespace RRSOS_PCC.Enums
 
             [Description("DNA")]
             DNA = 3230,
+
+            [Description("Genetic Trait")]
+            GeneticTrait = 3240,
 
         //Larva (3300)
         [Description("Common Larva")]
@@ -188,6 +194,10 @@ namespace RRSOS_PCC.Enums
         [Description("Water Bottle")]
         WaterBottle = 4310,
 
+        //-- Consumable 4000 -- Oxygen Capsule 4400 --
+        [Description("Oxygen Capsule")]
+        OxygenCapsule = 4410,
+
         //-- Consumable 4000 -- Blueprint 4500 --
         [Description("Blueprint")]
         Blueprint = 4510,
@@ -210,6 +220,9 @@ namespace RRSOS_PCC.Enums
 
         [Description("Grass Spreader")]
         GrassSpreader = 5330,
+
+        [Description("Algae Generator")]
+        AlgaeGenerator = 5340,
 
         [Description("FluidExtractor")]
         FluidExtractor = 5410,
@@ -371,8 +384,9 @@ namespace RRSOS_PCC.Enums
         [Description("Fuse")]
         Fuse = 8010,
 
+        //-- Enhancer 8200 --
         [Description("Optimizer")]
-        Optimizer = 8030,
+        Optimizer = 8210,
 
         [Description("Rocket")]
         Rocket = 8310,
@@ -396,6 +410,13 @@ namespace RRSOS_PCC.Enums
 
         [Description("Explosive")]
         Explosive = 9410,
+
+        //-- World Marker 10000 --
+        [Description("Beacon")]
+        Beacon = 10110,
+
+        [Description("Sign")]
+        Sign = 10210,
 
         //-- Utility 11000 --
         [Description("Drone")]

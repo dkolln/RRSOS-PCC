@@ -28,6 +28,9 @@ namespace RRSOS_PCC.ViewModels
 
         public float OxygenPct => (float)((_player.playerGaugeOxygen ?? 0) / _oxygenstat);
 
+        /// <summary>What a full tank holds, in the game's own oxygen units; 0 if the equipped tank is not in the table.</summary>
+        public float OxygenCapacity => _oxygenstat;
+
         // Status thresholds, shared with the dials so their colour zones always match the warnings.
         // Oxygen, health and thirst are bad when low; toxicity is bad when high.
         public const float LowWarnBelow = 0.50f;

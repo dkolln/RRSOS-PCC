@@ -8,58 +8,160 @@ using System.Text.RegularExpressions;
 
 namespace RRSOS_PCC.Services
 {
-    public class WorldObjectClassifierService
+    /// <summary>
+    /// Looks up what a gId is (name, tier, type, power rate) from worldobjectdata.json.
+    ///
+    /// The file is watched: save it and the new definitions are live within a moment, no restart
+    /// needed. A file that is malformed (say, caught mid-edit) is ignored and the previous
+    /// good definitions stay in use. <see cref="DefinitionsChanged"/> fires after a successful
+    /// reload so the owner of parsed data can rebuild it, since names, tiers and power rates are
+    /// copied onto objects when a save is parsed.
+    /// </summary>
+    public class WorldObjectClassifierService : IDisposable
     {
         private static readonly Regex TrailingDigits = new(@"\d+$", RegexOptions.Compiled);
 
-        // The game is not consistent about gId casing ("Biodome2" in a save, "biodome2" in the data file).
-        private readonly Dictionary<string, WorldObjectDefinition> _definitions = new(StringComparer.OrdinalIgnoreCase);
+        private static readonly JsonSerializerOptions ReadOptions = new()
+        {
+            // Allows "Machine" -> BaseType.Machine
+            Converters = { new JsonStringEnumConverter() },
+            PropertyNameCaseInsensitive = true
+        };
 
-        // A save has thousands of objects but only a few hundred distinct gIds.
-        private readonly ConcurrentDictionary<string, WorldObjectDefinition> _resolved = new();
+        // Editors write a file in several steps and can briefly hold it open; wait for the dust to settle.
+        private static readonly TimeSpan Debounce = TimeSpan.FromMilliseconds(400);
+        private const int ReadAttempts = 4;
+        private static readonly TimeSpan ReadRetryDelay = TimeSpan.FromMilliseconds(250);
+
+        /// <summary>
+        /// One immutable generation of the data. It is replaced whole on reload, so a reader that
+        /// grabbed it keeps a consistent view, and the per-gId cache goes away with it.
+        /// </summary>
+        private sealed class Snapshot
+        {
+            // The game is not consistent about gId casing ("Biodome2" in a save, "biodome2" in the data file).
+            public Dictionary<string, WorldObjectDefinition> Definitions { get; }
+
+            // A save has thousands of objects but only a few hundred distinct gIds.
+            public ConcurrentDictionary<string, WorldObjectDefinition> Resolved { get; } = new();
+
+            public Snapshot(Dictionary<string, WorldObjectDefinition> definitions) => Definitions = definitions;
+        }
+
+        private volatile Snapshot _snapshot = new(new(StringComparer.OrdinalIgnoreCase));
+
+        private readonly object _reloadLock = new();
+        private FileSystemWatcher? _watcher;
+        private Timer? _debounceTimer;
+
+        /// <summary>Raised (on a background thread) after worldobjectdata.json was reloaded with new content.</summary>
+        public event Action? DefinitionsChanged;
 
         public WorldObjectClassifierService()
         {
-            LoadDefinitions();
+            var path = PathResolver.WorldObjectDataPath;
+
+            if (!File.Exists(path))
+                Console.Error.WriteLine($"[WorldObjectClassifier] {path} not found; every object will be Unknown until it exists.");
+            else
+                TryReload(path);
+
+            StartWatching(path);
         }
 
-        private void LoadDefinitions()
+        // ------------------------------------------------------------------
+        // Loading and watching
+        // ------------------------------------------------------------------
+
+        /// <returns>True if a valid file was read and the definitions were replaced.</returns>
+        private bool TryReload(string path)
+        {
+            lock (_reloadLock)
+            {
+                Dictionary<string, WorldObjectDefinition>? data = null;
+                Exception? failure = null;
+
+                for (var attempt = 1; attempt <= ReadAttempts; attempt++)
+                {
+                    try
+                    {
+                        using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+                        data = JsonSerializer.Deserialize<Dictionary<string, WorldObjectDefinition>>(stream, ReadOptions);
+                        failure = null;
+                        break;
+                    }
+                    catch (Exception ex) when (ex is IOException or JsonException or UnauthorizedAccessException)
+                    {
+                        // Locked by the editor, or only half written so far: try again shortly.
+                        failure = ex;
+                        if (attempt < ReadAttempts)
+                            Thread.Sleep(ReadRetryDelay);
+                    }
+                }
+
+                if (data == null)
+                {
+                    Console.Error.WriteLine(failure == null
+                        ? "[WorldObjectClassifier] worldobjectdata.json is empty; keeping the previous definitions."
+                        : $"[WorldObjectClassifier] Could not read worldobjectdata.json, keeping the previous definitions: {failure.Message}");
+                    return false;
+                }
+
+                var definitions = new Dictionary<string, WorldObjectDefinition>(data, StringComparer.OrdinalIgnoreCase);
+                _snapshot = new Snapshot(definitions);
+
+                Console.WriteLine($"[WorldObjectClassifier] Loaded {definitions.Count} definitions from worldobjectdata.json.");
+                return true;
+            }
+        }
+
+        private void StartWatching(string path)
+        {
+            var directory = Path.GetDirectoryName(path);
+            if (string.IsNullOrEmpty(directory) || !Directory.Exists(directory))
+                return;
+
+            _debounceTimer = new Timer(_ => OnFileSettled(path), null, Timeout.Infinite, Timeout.Infinite);
+
+            _watcher = new FileSystemWatcher(directory, Path.GetFileName(path))
+            {
+                NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size | NotifyFilters.FileName | NotifyFilters.CreationTime
+            };
+
+            // Saving often means "write a temp file, then rename it over the original".
+            _watcher.Changed += (_, _) => ScheduleReload();
+            _watcher.Created += (_, _) => ScheduleReload();
+            _watcher.Renamed += (_, _) => ScheduleReload();
+            _watcher.Error += (_, e) => Console.Error.WriteLine($"[WorldObjectClassifier] File watcher error: {e.GetException().Message}");
+
+            _watcher.EnableRaisingEvents = true;
+        }
+
+        // Restarting the timer on every event turns a burst of them into one reload.
+        private void ScheduleReload() => _debounceTimer?.Change(Debounce, Timeout.InfiniteTimeSpan);
+
+        private void OnFileSettled(string path)
         {
             try
             {
-                var options = new JsonSerializerOptions
-                {
-                    // Allows "Machine" -> BaseType.Machine
-                    Converters = { new JsonStringEnumConverter() },
-                    PropertyNameCaseInsensitive = true
-                };
-
-                string path = PathResolver.WorldObjectDataPath;
-
-                if (File.Exists(path))
-                {
-                    string json = File.ReadAllText(path);
-                    var data = JsonSerializer.Deserialize<Dictionary<string, WorldObjectDefinition>>(json, options);
-
-                    if (data != null)
-                    {
-                        foreach (var kvp in data)
-                        {
-                            _definitions[kvp.Key] = kvp.Value;
-                        }
-                    }
-                }
-                else
-                {
-                    Console.Error.WriteLine($"[WorldObjectClassifier] {path} not found; every object will be Unknown.");
-                }
+                if (File.Exists(path) && TryReload(path))
+                    DefinitionsChanged?.Invoke();
             }
             catch (Exception ex)
             {
-                // Don't crash the app if the JSON is malformed
-                Console.Error.WriteLine($"[WorldObjectClassifier] Error loading worldobjectdata.json: {ex.Message}");
+                Console.Error.WriteLine($"[WorldObjectClassifier] Reload failed: {ex.Message}");
             }
         }
+
+        public void Dispose()
+        {
+            _watcher?.Dispose();
+            _debounceTimer?.Dispose();
+        }
+
+        // ------------------------------------------------------------------
+        // Lookups
+        // ------------------------------------------------------------------
 
         /// <summary>
         /// Retrieves the metadata for a given gId.
@@ -71,7 +173,8 @@ namespace RRSOS_PCC.Services
             if (string.IsNullOrEmpty(gId))
                 return CreateUnknown(gId);
 
-            return _resolved.GetOrAdd(gId, Resolve);
+            var snapshot = _snapshot;
+            return snapshot.Resolved.GetOrAdd(gId, static (id, s) => Resolve(s, id), snapshot);
         }
 
         /// <summary>
@@ -81,7 +184,7 @@ namespace RRSOS_PCC.Services
         /// </summary>
         public bool TryGetExactDefinition(string gId, out WorldObjectDefinition definition)
         {
-            if (!string.IsNullOrEmpty(gId) && _definitions.TryGetValue(gId, out var found))
+            if (!string.IsNullOrEmpty(gId) && _snapshot.Definitions.TryGetValue(gId, out var found))
             {
                 definition = found;
                 return true;
@@ -91,15 +194,15 @@ namespace RRSOS_PCC.Services
             return false;
         }
 
-        private WorldObjectDefinition Resolve(string gId)
+        private static WorldObjectDefinition Resolve(Snapshot snapshot, string gId)
         {
             // 1. Exact match (e.g., "VegetableGrower1")
-            if (_definitions.TryGetValue(gId, out var exactMatch))
+            if (snapshot.Definitions.TryGetValue(gId, out var exactMatch))
                 return exactMatch;
 
             // 2. Base name match (strip trailing numbers)
             string baseId = TrailingDigits.Replace(gId, "");
-            if (_definitions.TryGetValue(baseId, out var baseMatch))
+            if (snapshot.Definitions.TryGetValue(baseId, out var baseMatch))
                 return baseMatch;
 
             // 3. Absolute fallback

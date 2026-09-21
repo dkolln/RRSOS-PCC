@@ -1,0 +1,29 @@
+.resupply {
+    padding: 6px 8px;
+    font-family: 'Consolas', 'Courier New', monospace;
+}
+
+.resupply-btn {
+    padding: 4px 14px;
+    background: rgba(79, 209, 139, 0.12);
+    color: #4fd18b;
+    border: 1px solid rgba(79, 209, 139, 0.45);
+    border-radius: 4px;
+    font: inherit;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: background 150ms ease, box-shadow 150ms ease;
+}
+
+.resupply-btn:hover:not(:disabled),
+.resupply-btn:focus-visible {
+    background: rgba(79, 209, 139, 0.24);
+    box-shadow: 0 0 8px rgba(79, 209, 139, 0.35);
+    outline: none;
+}
+
+.resupply-btn:disabled {
+    opacity: 0.6;
+    cursor: progress;
+}

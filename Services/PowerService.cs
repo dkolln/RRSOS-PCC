@@ -146,7 +146,7 @@ namespace RRSOS_PCC.Services
                     if (kw >= 0)
                     {
                         var label = boost == 1m ? name : $"{name} ({boost:0.##}×)";
-                        generation.Add(new PowerLine(gId, label, count, kw * boost));
+                        generation.Add(new PowerLine(gId, label, count, kw * boost, definition.Icon));
                     }
                     else
                     {
@@ -156,7 +156,7 @@ namespace RRSOS_PCC.Services
                 else if (GeneratorGId.IsMatch(gId))
                 {
                     // We can see it is a generator but do not know its output, so the capacity would be short.
-                    unrated.Add(new PowerLine(gId, name, count, 0m));
+                    unrated.Add(new PowerLine(gId, name, count, 0m, known ? definition.Icon : null));
                 }
             }
 

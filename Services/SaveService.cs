@@ -81,6 +81,19 @@ public class SaveService : IDisposable
 
         Settings.SelectedSaveFile = ResolveSelectedSave(Settings.SelectedSaveFile);
         PathResolver.SelectedSaveFile = Settings.SelectedSaveFile;
+
+        _objectService.DefinitionsChanged += OnDefinitionsChanged;
+    }
+
+    // Names, tiers and power rates are copied onto objects while a save is parsed, so after the
+    // data file changes the current save has to be parsed again for the screen to pick them up.
+    private void OnDefinitionsChanged()
+    {
+        _ = Task.Run(async () =>
+        {
+            try { await Load(force: true); }
+            catch (Exception ex) { Console.Error.WriteLine($"[SaveService] Reload after data change failed: {ex.Message}"); }
+        });
     }
 
     // ------------------------------------------------------------------
@@ -363,6 +376,7 @@ public class SaveService : IDisposable
 
     public void Dispose()
     {
+        _objectService.DefinitionsChanged -= OnDefinitionsChanged;
         StopAutoRefresh();
     }
 

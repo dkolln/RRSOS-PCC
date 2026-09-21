@@ -1,7 +1,7 @@
 namespace RRSOS_PCC.ViewModels
 {
     /// <summary>One kind of machine and how much power all of them together make or use.</summary>
-    public sealed record PowerLine(string GId, string Name, int Count, decimal KwEach)
+    public sealed record PowerLine(string GId, string Name, int Count, decimal KwEach, string? Icon = null)
     {
         public decimal KwTotal => Count * KwEach;
     }

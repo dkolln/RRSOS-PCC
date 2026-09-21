@@ -418,14 +418,14 @@
     "BaseId": "OxygenCapsule",
     "Name": "Oxygen Capsule",
     "Tier": "T1",
-    "Type": 4400
+    "Type": 4410
   },
 
   "NitrogenCapsule1": {
     "BaseId": "NitrogenCapsule",
     "Name": "Nitrogen Capsule",
     "Tier": "T1",
-    "Type": 2200
+    "Type": 2220
   },
 
   "RocketReactor": {
@@ -795,14 +795,16 @@
     "BaseId": "AlgaeGenerator",
     "Name": "Algae Generator",
     "Tier": "T1",
-    "PowerKw": -13
+    "PowerKw": -13,
+    "Type": 5340
   },
 
   "AlgaeGenerator2": {
     "BaseId": "AlgaeGenerator",
     "Name": "Algae Generator",
     "Tier": "T2",
-    "PowerKw": -27
+    "PowerKw": -27,
+    "Type": 5340
   },
 
   "biodome": {
@@ -884,6 +886,7 @@
     "BaseId": "Drill1",
     "Name": "Drill",
     "Tier": "T2",
+    "PowerKw": -5,
     "Type": 5110
   },
   "Drill2": {
@@ -919,6 +922,7 @@
     "Name": "Wind Turbine",
     "Tier": "T1",
     "PowerKw": 1.2,
+    "Icon": "windmill",
     "Type": 6920
   },
   "EnergyGenerator2": {
@@ -926,24 +930,29 @@
     "Name": "Solar Panel",
     "Tier": "T1",
     "PowerKw": 6.5,
+    "Icon": "sun",
     "Type": 6920
   },
   "EnergyGenerator3": {
     "BaseId": "EnergyGenerator3",
-    "Name": "Energy Generator",
-    "Tier": "T3",
+    "Name": "Solar Panel",
+    "Tier": "T2",
+    "PowerKw": 19.5,
+    "Icon": "sun-large",
     "Type": 6920
   },
   "EnergyGenerator4": {
     "BaseId": "EnergyGenerator4",
     "Name": "Energy Generator",
     "Tier": "T4",
+    "Icon": "atom",
     "Type": 6920
   },
   "EnergyGenerator5": {
     "BaseId": "EnergyGenerator5",
     "Name": "Energy Generator T5",
     "Tier": "T5",
+    "Icon": "atoms",
     "Type": 6920
   },
   "EnergyGenerator6": {
@@ -951,6 +960,7 @@
     "Name": "Fusion Generator",
     "Tier": "T6",
     "PowerKw": 1485,
+    "Icon": "starburst",
     "Type": 6920
   },
 
@@ -1294,7 +1304,7 @@
     "BaseId": "GeneticTrait",
     "Name": "Genetic Trait",
     "Tier": "",
-    "Type": 2330
+    "Type": 3240
   },
 
   "Aquarium1": {
@@ -1558,6 +1568,14 @@
     "Name": "Chair",
     "Tier": "T2",
     "Type": 6410
+  },
+
+  "Beacon": {
+    "BaseId": "Beacon",
+    "Name": "Beacon",
+    "Tier": "",
+    "PowerKw": -0.25,
+    "Type": 10110
   },
 
   "ComAntenna": {
@@ -1868,14 +1886,14 @@
     "Name": "Machine Optimizer",
     "Tier": "T1",
     "PowerKw": -50,
-    "Type": 8030
+    "Type": 8210
   },
   "Optimizer2": {
     "BaseId": "Optimizer",
     "Name": "Machine Optimizer",
     "Tier": "T2",
     "PowerKw": -150,
-    "Type": 8030
+    "Type": 8210
   },
   "OreExtractor1": {
     "BaseId": "OreExtractor",
@@ -2110,7 +2128,7 @@
     "BaseId": "Sign",
     "Name": "Sign",
     "Tier": "",
-    "Type": 10200
+    "Type": 10210
   },
 
   "TerraTokens100": {

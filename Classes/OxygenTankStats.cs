@@ -6,7 +6,7 @@
         {
             { "OxygenTank1", 145f },
             { "OxygenTank2", 200f },
-            { "OxygenTank3", 300f },
+            { "OxygenTank3", 280f },
             { "OxygenTank4", 370f },
             { "OxygenTank5", 450f }
         };
