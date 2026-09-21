@@ -1,11 +1,19 @@
-﻿.readout-section.selected {
-    border-left: 4px solid var(--rrs-accent-color);
-    background: rgba(var(--rrs-accent-rgb), 0.1);
-    transition: all 0.2s ease-in-out;
+.base-row {
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.base-row:hover {
+    background: rgba(122, 184, 255, 0.08);
+}
+
+/* The base the contents panel is showing */
+.readout-section.selected {
+    border-left: 4px solid #7ab8ff;
+    background: rgba(122, 184, 255, 0.12);
 }
 
 .lock-indicator {
     font-size: 0.7rem;
-    color: var(--rrs-warning-orange);
-    float: right;
+    color: #ffd86b;
 }

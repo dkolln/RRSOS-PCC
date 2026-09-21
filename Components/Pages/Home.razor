@@ -85,7 +85,7 @@
         </div>
         @if (ShowBases)
         {
-            <BaseSummary Data="@BaseVMs" />
+            <BaseSummary Data="@BaseVMs" SelectedId="@_selectedBaseId" PinnedId="@_pinnedBaseId" OnSelect="TogglePin" />
         }
     </div>
 
@@ -95,7 +95,7 @@
         </div>
         @if (ShowBaseContents)
         {
-            <BaseContents SelectedBase="@SelectedBase" />
+            <BaseContents SelectedBase="@SelectedBase" IsPinned="@(_pinnedBaseId is not null)" OnFollowNearest="Unpin" />
         }
     </div>
 

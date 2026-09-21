@@ -4,8 +4,6 @@ namespace RRSOS_PCC.Models
 {
     public class Base
     {
-        public Dictionary<WorldObjectCategory, Dictionary<string, int>> Inventory { get; } = new();
-
         public Base()
         {
             Pods = new List<Pod>();
@@ -34,20 +32,6 @@ namespace RRSOS_PCC.Models
         {
             if (EntrancePod != null)
                 Position = EntrancePod.Position;
-        }
-
-        public void AddToContents(WorldObject wo)
-        {
-            if (!Inventory.TryGetValue(wo.Category, out var items))
-            {
-                items = new Dictionary<string, int>();
-                Inventory[wo.Category] = items;
-            }
-
-            if (!items.ContainsKey(wo.Name))
-                items[wo.Name] = 0;
-
-            items[wo.Name]++;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿@using RRSOS_PCC.Enums
+@using RRSOS_PCC.Enums
 @using RRSOS_PCC.Classes
 @using RRSOS_PCC.Models
 @using RRSOS_PCC.Services
@@ -6,102 +6,43 @@
 @inject BaseNamingService BaseNamingSvc
 
 <div class="pcc-readout">
-    <div class="readout-header">BASE CONTENTS</div>
-
-    <div class="group-controls">
-        <span>Group by:</span>
-
-        <button class="group-btn" @onclick="() => SetGroup(GroupMode.Name)">Name</button>
-        <button class="group-btn" @onclick="() => SetGroup(GroupMode.Type)">Type</button>
-        <button class="group-btn" @onclick="() => SetGroup(GroupMode.Category)">Category</button>
-    </div>
-
 
     @if (SelectedBase is null)
     {
-        <div class="row warning">Select a base from the summary.</div>
+        <div class="row warning">No bases found.</div>
     }
     else if (Processed is null)
     {
-        <div class="row warning">No containers found.</div>
+        <div class="row warning">No contents found.</div>
     }
     else
     {
-        <div class="manifest-group resource">
-            <div class="category-header">-- Resource --</div>
-        <div class="readout-section">
-            @foreach (var cat in Processed.CategorizedItems)
+        <div class="base-title-row">
+            <span class="base-name">@SelectedBase.Name</span>
+            <span class="base-meta">@SelectedBase.DisplayDistance @SelectedBase.Direction</span>
+
+            @if (IsPinned)
             {
-                <div class="two-col">
-                    <div class="col-left">
-                        @foreach (var item in cat.Left)
-                        {
-                            <div class="row">
-                                <span>@item.Name @item.Count</span>
-                            </div>
-                        }
-                    </div>
-
-                    <div class="col-right">
-                        @foreach (var item in cat.Right)
-                        {
-                            <div class="row">
-                                <span>@item.Name @item.Count</span>
-                            </div>
-                        }
-                    </div>
-                </div>
+                <button class="follow-btn" @onclick="OnFollowNearest" title="Go back to showing the nearest base">🔒 Follow nearest</button>
             }
-            </div>
-            </div>
-
-        @if (GrowerItemsView.Any())
-        {
-            <div class="manifest-group boneyard">
-                <div class="category-header">-- Grower Items --</div>
-                <div class="readout-section">
-                    <div class="two-col">
-                        <div class="col-left">
-                            @foreach (var b in GrowerItemsView)
-                            {
-                                <div class="row">
-                                    <span>@b.Name @b.Count</span>
-                                </div>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
-
-            @if (Processed.Boneyard.Any())
+            else
             {
-                <div class="manifest-group boneyard">
-                    <div class="category-header">-- Boneyard (Loose) --</div>
-                    <div class="readout-section">
-                    <div class="two-col">
-                        <div class="col-left">
-                            @foreach (var b in Processed.BoneyardLeft)
-                            {
-                                <div class="row">
-                                    <span>@b.Name @b.Count</span>
-                                </div>
-                            }
-                        </div>
-
-                        <div class="col-right">
-                            @foreach (var b in Processed.BoneyardRight)
-                            {
-                                <div class="row">
-                                    <span>@b.Name @b.Count</span>
-                                </div>
-                            }
-                        </div>
-                    </div>
-                    </div>
-                </div>
+                <span class="base-meta">nearest</span>
             }
-        
+        </div>
+
+        <div class="group-controls">
+            <span>Group by:</span>
+
+            @foreach (var (mode, label) in Modes)
+            {
+                <button class="group-btn @(CurrentGroup == mode ? "active" : "")" @onclick="() => SetGroup(mode)">@label</button>
+            }
+        </div>
+
+        @ItemGroup(GroupTitle, "resource", Processed.Stored)
+        @ItemGroup("Ready to harvest", "boneyard", Processed.ReadyToHarvest)
+        @ItemGroup("Boneyard (loose)", "boneyard", Processed.Boneyard)
 
         <div class="readout-section">
             <input class="search-box"
@@ -133,10 +74,42 @@
 
                         <br />
                     }
-
                 </div>
             }
         </div>
-
     }
 </div>
+
+@code {
+    private static readonly (GroupMode Mode, string Label)[] Modes =
+    {
+        (GroupMode.Name, "Name"),
+        (GroupMode.Type, "Type"),
+        (GroupMode.Category, "Category")
+    };
+
+    // One boxed list of counted items in two columns. Nothing is drawn when the list is empty.
+    private RenderFragment ItemGroup(string title, string kind, ItemList items) => @<text>
+        @if (items.Any)
+        {
+            <div class="manifest-group @kind">
+                <div class="category-header">@title</div>
+                <div class="two-col">
+                    <div class="col-left">
+                        @foreach (var item in items.Left)
+                        {
+                            <div class="row"><span>@item.Name</span><span class="count">@item.Count</span></div>
+                        }
+                    </div>
+
+                    <div class="col-right">
+                        @foreach (var item in items.Right)
+                        {
+                            <div class="row"><span>@item.Name</span><span class="count">@item.Count</span></div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </text>;
+}

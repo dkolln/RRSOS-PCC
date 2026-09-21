@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using RRSOS_PCC.Classes;
 using RRSOS_PCC.Enums;
 using RRSOS_PCC.Models;
@@ -12,141 +12,50 @@ namespace RRSOS_PCC.Components.Pages
         [Parameter]
         public BaseViewModel? SelectedBase { get; set; }
 
-        public ProcessedBaseContents? Processed { get; set; }
+        /// <summary>True when the base was picked by hand, false when it is simply the nearest one.</summary>
+        [Parameter]
+        public bool IsPinned { get; set; }
 
-        public List<(string Name, int Count)> GrowerItems { get; set; } = new();
-        public List<(string Name, int Count)> GrowerItemsView { get; set; } = new();
+        /// <summary>Raised when the user drops a pinned base and goes back to following the nearest.</summary>
+        [Parameter]
+        public EventCallback OnFollowNearest { get; set; }
+
+        private ProcessedBaseContents? Processed;
 
         private GroupMode CurrentGroup = GroupMode.Category;
 
-        // Home re-renders this panel with a fresh SelectedBase after every new save.
-        protected override void OnParametersSet()
-        {
-            Processed = SelectedBase != null ? BuildContentsForBase(SelectedBase) : null;
-        }
-
-        private ProcessedBaseContents BuildContentsForBase(BaseViewModel baseVM)
-        {
-            var state = SaveSvc.CurrentState;
-            if (state == null) return new ProcessedBaseContents();
-
-            var baseObj = state.Bases.FirstOrDefault(b => b.id == baseVM.Id);
-            if (baseObj == null) return new ProcessedBaseContents();
-
-            List<(string Name, int Count)> items;
-
-            // All world objects that belong to this base
-            var allRelevantObjects = state.WorldObjects
-                .Where(wo => wo.OwningBase?.id == baseObj.id)
-                .ToList();
-
-            allRelevantObjects.RemoveAll(x => x.Category == WorldObjectCategory.Machine);
-            allRelevantObjects.RemoveAll(x => x.Category == WorldObjectCategory.BasePart);
-
-            switch (CurrentGroup)
-            {
-                case GroupMode.Name:
-                    items = allRelevantObjects
-                        .Where(wo => wo.Owner.Type == WorldObjectOwnerType.Container)
-                        .GroupBy(wo => wo.Name)
-                        .Select(g => (Name: g.Key, Count: g.Count()))
-                        .OrderBy(x => x.Name)
-                        .ToList();
-                    break;
-
-                case GroupMode.Type:
-                    items = allRelevantObjects
-                        .Where(wo => wo.Owner.Type == WorldObjectOwnerType.Container)
-                        .GroupBy(wo => wo.Type.ToString())   // or wo.Type if you have one
-                        .Select(g => (Name: g.Key, Count: g.Count()))
-                        .OrderBy(x => x.Name)
-                        .ToList();
-                    break;
-
-                default: // Category
-                    items = allRelevantObjects
-                        .Where(wo => wo.Owner.Type == WorldObjectOwnerType.Container)
-                        .GroupBy(wo => wo.Category.ToString())
-                        .Select(g => (Name: g.Key, Count: g.Count()))
-                        .OrderBy(x => x.Name)
-                        .ToList();
-                    break;
-            }
-
-            var containers = state.Containers
-                .Where(c => c.OwningBase?.id == baseObj.id)
-                .ToList();
-
-            // -------------------------------
-            // SAFE GROWER ITEM COLLECTION
-            // -------------------------------
-            var growerList = new List<(string Name, int Count)>();
-
-            foreach (var c in containers)
-            {
-                if (c.SecondaryItems != null &&
-                    (c.gId.Contains("VegetableGrower") || c.gId.Contains("Farm1")) &&
-                    c.OwningBase == baseObj)
-                {
-                    foreach (var item in c.SecondaryItems)
-                    {
-                        if (item.grwth == 100)
-                            growerList.Add((item.Name, 1));
-                    }
-                }
-            }
-
-            growerList = growerList
-                .GroupBy(x => x.Name)
-                .Select(g => (Name: g.Key, Count: g.Count()))
-                .OrderBy(x => x.Name)
-                .ToList();
-
-            GrowerItems = growerList;
-            GrowerItemsView = growerList.ToList();
-
-            // -------------------------------
-            // MAIN ITEM GROUPING
-            // -------------------------------
-            var (left, right) = GroupingHelper.SplitOnly(items);
-
-            var categorized = new List<CategoryGroupViewModel>
-            {
-                new CategoryGroupViewModel
-                {
-                    CategoryName = CurrentGroup.ToString(),
-                    Items = items,
-                    Left = left,
-                    Right = right
-                }
-            };
-
-            // Boneyard (loose items)
-            var boneyard = allRelevantObjects
-                .Where(wo => wo.Owner.Type == WorldObjectOwnerType.World)
-                .GroupBy(wo => wo.gId)
-                .Select(g => (Name: g.First().Name, Count: g.Count()))
-                .OrderBy(x => x.Name)
-                .ToList();
-
-            var (bLeft, bRight) = GroupingHelper.SplitOnly(boneyard);
-
-            return new ProcessedBaseContents
-            {
-                CategorizedItems = categorized,
-                Boneyard = boneyard,
-                BoneyardLeft = bLeft,
-                BoneyardRight = bRight
-            };
-        }
-
         private string SearchText = "";
 
+        // Home re-renders this panel with a fresh SelectedBase after every new save.
+        protected override void OnParametersSet() => Rebuild();
+
+        private void Rebuild()
+        {
+            Processed = SelectedBase is null
+                ? null
+                : BaseContentsBuilder.Build(SaveSvc.CurrentState, SelectedBase.Id, CurrentGroup);
+        }
+
+        private void SetGroup(GroupMode mode)
+        {
+            CurrentGroup = mode;
+            Rebuild();
+        }
+
+        private string GroupTitle => CurrentGroup switch
+        {
+            GroupMode.Name => "Stored, by name",
+            GroupMode.Type => "Stored, by type",
+            _ => "Stored, by category"
+        };
+
+        // Matches what the card shows (the item's name) as well as its raw id.
         private IEnumerable<WorldObject> FilteredWorldObjects =>
             string.IsNullOrWhiteSpace(SearchText) || SaveSvc.CurrentState == null
                 ? Enumerable.Empty<WorldObject>()
                 : SaveSvc.CurrentState.WorldObjects
-                    .Where(wo => wo.gId.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
+                    .Where(wo => wo.gId.Contains(SearchText, StringComparison.OrdinalIgnoreCase)
+                                 || (wo.Name?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ?? false));
 
         private IEnumerable<ItemSearchResult> SearchResults
         {
@@ -161,7 +70,7 @@ namespace RRSOS_PCC.Components.Pages
 
                         return new ItemSearchResult
                         {
-                            ItemName = wo.gId,
+                            ItemName = string.IsNullOrWhiteSpace(wo.Name) ? wo.gId : wo.Name,
                             ItemID = wo.id,
                             BaseName = baseObj != null
                                 ? $"{BaseNamingSvc.GetBaseName(baseObj)} ({baseObj.id})"
@@ -184,45 +93,28 @@ namespace RRSOS_PCC.Components.Pages
             }
         }
 
-        private IEnumerable<GroupedSearchResult> GroupedResults
-        {
-            get
-            {
-                var raw = SearchResults; // your existing property
-
-                return raw
-                    .GroupBy(r => r.ItemName)
-                    .Select(g => new GroupedSearchResult
-                    {
-                        ItemName = g.Key,
-                        Locations = g
-                            .GroupBy(r => r.BaseName)
-                            .Select(loc => new LocationGroup
-                            {
-                                LocationName = loc.Key,
-                                Count = loc.Count(),
-                                NearestDistance = loc.Min(x => x.Distance),
-                                Direction = loc
-                                    .OrderBy(x => x.Distance)
-                                    .First().Direction,
-                                BasePos = loc.First().BasePos
-                            })
-                            .OrderBy(l => l.NearestDistance)
-                            .ToList()
-                    })
-                    .OrderBy(g => g.ItemName)
-                    .ToList();
-            }
-        }
-
-        private void SetGroup(GroupMode mode)
-        {
-            CurrentGroup = mode;
-
-            if (SelectedBase != null)
-                Processed = BuildContentsForBase(SelectedBase);
-
-            StateHasChanged();
-        }
+        private IEnumerable<GroupedSearchResult> GroupedResults =>
+            SearchResults
+                .GroupBy(r => r.ItemName)
+                .Select(g => new GroupedSearchResult
+                {
+                    ItemName = g.Key,
+                    Locations = g
+                        .GroupBy(r => r.BaseName)
+                        .Select(loc => new LocationGroup
+                        {
+                            LocationName = loc.Key,
+                            Count = loc.Count(),
+                            NearestDistance = loc.Min(x => x.Distance),
+                            Direction = loc
+                                .OrderBy(x => x.Distance)
+                                .First().Direction,
+                            BasePos = loc.First().BasePos
+                        })
+                        .OrderBy(l => l.NearestDistance)
+                        .ToList()
+                })
+                .OrderBy(g => g.ItemName)
+                .ToList();
     }
 }

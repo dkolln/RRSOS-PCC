@@ -610,10 +610,6 @@ namespace RRSOS_PCC.Classes
                 if (owner == null) continue;
 
                 wo.OwningBase = owner;
-
-                // 4. ROUTE (The Resolved Logic)
-                // No more static helper! The Base handles its own rolling up.
-                owner.AddToContents(wo);
             }
         }
 

@@ -26,9 +26,6 @@ namespace RRSOS_PCC.ViewModels
             _model = b ?? throw new ArgumentNullException(nameof(b));
             _playerPos = playerPos ?? throw new ArgumentNullException(nameof(playerPos));
         }
-
-        public IEnumerable<InventoryGroup> Groups => _model.Inventory
-            .Select(kvp => new InventoryGroup(kvp.Key, kvp.Value));
     }
 
 }

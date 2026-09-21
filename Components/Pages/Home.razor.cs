@@ -29,6 +29,9 @@ namespace RRSOS_PCC.Components.Pages
 
         private long? _selectedBaseId;
 
+        // Set by clicking a base; null means "show the nearest". Lasts until the page is reloaded.
+        private long? _pinnedBaseId;
+
         /// <summary>The base shown in the contents panel (sticky, see <see cref="BaseSelector"/>).</summary>
         public BaseViewModel? SelectedBase { get; private set; }
 
@@ -86,14 +89,38 @@ namespace RRSOS_PCC.Components.Pages
                 ? new BaseSummaryViewModel(s.Bases, s.Player)
                 : null;
 
-            _selectedBaseId = BaseSelector.Choose(BaseVMs?.Bases, _selectedBaseId, BaseSwitchThreshold);
-            SelectedBase = BaseVMs?.Bases.FirstOrDefault(b => b.Id == _selectedBaseId);
+            UpdateSelection();
 
             ExtractorVMs = s?.Extractors != null
                 ? s.Extractors.OrderBy(e => e.Distance).ToList()
                 : new List<ExtractorSummaryVM>();
 
             await ReloadNotebook();
+        }
+
+        // A base picked by hand wins; otherwise the contents follow the nearest one (see BaseSelector).
+        private void UpdateSelection()
+        {
+            if (_pinnedBaseId is long pin && BaseVMs?.Bases.Any(b => b.Id == pin) != true)
+                _pinnedBaseId = null; // the pinned base is gone (other save, base removed)
+
+            _selectedBaseId = _pinnedBaseId
+                ?? BaseSelector.Choose(BaseVMs?.Bases, _selectedBaseId, BaseSwitchThreshold);
+
+            SelectedBase = BaseVMs?.Bases.FirstOrDefault(b => b.Id == _selectedBaseId);
+        }
+
+        // Clicking a base pins it; clicking the pinned one again goes back to following the nearest.
+        private void TogglePin(long id)
+        {
+            _pinnedBaseId = _pinnedBaseId == id ? null : id;
+            UpdateSelection();
+        }
+
+        private void Unpin()
+        {
+            _pinnedBaseId = null;
+            UpdateSelection();
         }
 
         private async Task ReloadNotebook()
