@@ -53,11 +53,12 @@ namespace RRSOS_PCC.Classes
 
         /// <summary>
         /// The game's compass on the ground plane, as (east, north) for a world (X, Z) point or direction.
-        /// Calibrated to the direction letters the base list has always shown: north is world -X and
-        /// east is world +Z. Everything that draws a compass, a map or a bearing goes through here,
-        /// so if this ever turns out to be off, this is the one line to change.
+        /// Measured in the game with the live-data plugin (2026-09-21): running along world -X, the
+        /// in-game compass read south, and along world -Z it read east. So north is world +X and east
+        /// is world -Z. (The base list's old letters, and this line until then, had it 180 degrees off.)
+        /// Everything that draws a compass, a map or a bearing goes through here.
         /// </summary>
-        public static Vector2 ToEastNorth(Vector2 worldXZ) => new(worldXZ.Y, -worldXZ.X);
+        public static Vector2 ToEastNorth(Vector2 worldXZ) => new(-worldXZ.Y, worldXZ.X);
 
         /// <summary>Compass bearing in degrees for an (east, north) direction: 0 = north, 90 = east.</summary>
         public static float BearingDegrees(Vector2 eastNorth)
