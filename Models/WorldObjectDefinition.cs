@@ -9,7 +9,8 @@ namespace RRSOS_PCC.Models
         public string Tier { get; set; } = "T1";
 
         /// <summary>
-        /// Power per machine in kW: positive makes power, negative uses it, absent means unknown
+        /// Power per machine in kW: positive makes power (for a generator, its base output before
+        /// optimizer boosts), negative uses it, absent means unknown
         /// (not "zero"). Tiers differ, so this is only ever read from an exact gId entry.
         /// </summary>
         public decimal? PowerKw { get; set; }

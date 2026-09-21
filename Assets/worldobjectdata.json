@@ -16,9 +16,9 @@
 
   "Farm1": {
     "BaseId": "Farm",
-    "Name": "Farm",
+    "Name": "Outdoor Farm",
     "Tier": "T1",
-    "PowerKw": -7.25,
+    "PowerKw": -45.5,
     "Type": 5520
   },
 
@@ -950,7 +950,7 @@
     "BaseId": "EnergyGenerator6",
     "Name": "Fusion Generator",
     "Tier": "T6",
-    "PowerKw": 8074.6875,
+    "PowerKw": 1485,
     "Type": 6920
   },
 
@@ -2183,9 +2183,9 @@
 
   "VegetubeOutside1": {
     "BaseId": "VegetubeOutside",
-    "Name": "Outdoor Farm",
-    "Tier": "T1",
-    "PowerKw": -45.5,
+    "Name": "Vegetube",
+    "Tier": "T3",
+    "PowerKw": -7.25,
     "Type": 5520
   },
 
