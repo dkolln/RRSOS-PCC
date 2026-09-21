@@ -1,27 +1,147 @@
 .power-body {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 8px 16px;
+    gap: 6px;
 }
 
+/* The dial is a button so it works with keyboard and screen readers. */
 .power-dial {
-    flex: 0 0 150px;
-    min-width: 0;
+    display: block;
+    width: 100%;
+    max-width: 200px;
+    padding: 4px 8px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
 }
 
-.power-figures {
-    /* Wide enough for "Wind Turbine x11 13.2 kW"; on a narrow card it drops below the dial instead of truncating. */
-    flex: 1 1 220px;
+.power-dial:hover,
+.power-dial:focus-visible {
+    border-color: #3a5068;
+    box-shadow: 0 0 10px rgba(122, 184, 255, 0.25);
+    outline: none;
+}
+
+.power-values {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px 32px;
+}
+
+.power-value {
     display: flex;
     flex-direction: column;
-    gap: 2px;
-    min-width: 0;
+    align-items: center;
 }
 
-.power-sub {
-    padding-left: 14px;
-    font-size: 0.85rem;
-    opacity: 0.85;
+.power-left { --value-color: #4fd18b; }
+.power-need { --value-color: #ff6b6b; }
+
+.power-value .num,
+.power-dialog-summary .num {
+    color: var(--value-color, #c8e4ff);
+    font-weight: bold;
+    font-variant-numeric: tabular-nums;
+}
+
+.power-value .num {
+    font-size: 1.05rem;
+}
+
+.lbl {
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #7ab8ff;
+}
+
+.power-note {
+    max-width: 260px;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #ffd86b;
+}
+
+/* ---- Breakdown dialog ---- */
+
+.power-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: rgba(5, 8, 14, 0.75);
+    outline: none;
+}
+
+.power-dialog {
+    display: flex;
+    flex-direction: column;
+    width: min(960px, 100%);
+    max-height: 88vh;
+    background: #0b0f17;
+    color: #c8e4ff;
+    border: 1px solid #24384d;
+    border-radius: 6px;
+    box-shadow: 0 0 24px rgba(0, 0, 0, 0.7), inset 0 0 12px #0a1220;
+    font-family: 'Consolas', 'Courier New', monospace;
+}
+
+.power-dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    border-bottom: 1px solid #24384d;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.power-close {
+    background: transparent;
+    border: 1px solid #3a5068;
+    border-radius: 4px;
+    color: #c8e4ff;
+    padding: 2px 8px;
+    cursor: pointer;
+}
+
+.power-close:hover,
+.power-close:focus-visible {
+    background: #14202e;
+    outline: none;
+}
+
+.power-dialog-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 32px;
+    padding: 10px 14px;
+    border-bottom: 1px solid #24384d;
+}
+
+.power-dialog-summary > div {
+    display: flex;
+    flex-direction: column;
+}
+
+.power-dialog-summary .num {
+    font-size: 1.1rem;
+}
+
+.power-dialog-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 20px;
+    padding: 12px 14px 16px;
+    overflow-y: auto;
 }

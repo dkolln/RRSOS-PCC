@@ -1,0 +1,97 @@
+.plt {
+    --plt-accent: #7ab8ff;
+    min-width: 0;
+}
+
+.plt.input {
+    --plt-accent: #4fd18b;
+}
+
+.plt.output {
+    --plt-accent: #ff6b6b;
+}
+
+.plt-title {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 0 0 6px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--plt-accent);
+    font-size: 0.95rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--plt-accent);
+}
+
+.plt-total {
+    white-space: nowrap;
+}
+
+.plt-empty {
+    color: #7a8ea6;
+    padding: 6px 0;
+}
+
+/* Room for 20 data rows plus the pinned header; more than that scrolls. */
+.plt-body {
+    --plt-row-h: 1.6rem;
+    --plt-max-rows: 20;
+    max-height: calc(var(--plt-row-h) * (var(--plt-max-rows) + 1));
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+}
+
+/*
+ * Every row shares this grid, so the column widths must not depend on a row's own font size:
+ * `ch` is relative to the element it is used on, which is why the smaller header font is set
+ * on the header's spans and not on the header row itself.
+ */
+.plt-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 3ch 8ch 11ch 7ch;
+    gap: 10px;
+    align-items: center;
+    box-sizing: border-box;
+    height: var(--plt-row-h);
+    font-size: 0.85rem;
+    border-bottom: 1px solid rgba(36, 56, 77, 0.5);
+}
+
+.plt-row .name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.plt-row .num {
+    text-align: right;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.plt-head {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #0b0f17;
+    color: #7ab8ff;
+    border-bottom-color: #24384d;
+}
+
+.plt-head span {
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.plt-unrated {
+    color: #ffd86b;
+}
+
+/* "no rate yet" text spans the three number columns */
+.plt-unrated .plt-span {
+    grid-column: 3 / -1;
+    white-space: normal;
+}

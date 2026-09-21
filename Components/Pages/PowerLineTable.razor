@@ -1,0 +1,75 @@
+@using RRSOS_PCC.ViewModels
+
+<section class="plt @Kind">
+    <h3 class="plt-title">
+        <span>@Title</span>
+        <span class="plt-total">@Kw(Total)</span>
+    </h3>
+
+    @if (Lines.Count == 0 && Unrated.Count == 0)
+    {
+        <div class="plt-empty">@EmptyText</div>
+    }
+    else
+    {
+        @* Scrolls after MaxVisibleRows; the header row is pinned so it stays over its columns. *@
+        <div class="plt-body">
+            <div class="plt-row plt-head" aria-hidden="true">
+                <span>Machine</span>
+                <span class="num">Qty</span>
+                <span class="num">Each</span>
+                <span class="num">Total</span>
+                <span class="num">Share</span>
+            </div>
+
+            @foreach (var line in Lines)
+            {
+                <div class="plt-row">
+                    <span class="name" title="@line.GId">@line.Name</span>
+                    <span class="num">@line.Count</span>
+                    <span class="num">@Number(line.KwEach)</span>
+                    <span class="num">@Number(line.KwTotal)</span>
+                    <span class="num">@Share(line)</span>
+                </div>
+            }
+
+            @foreach (var line in Unrated)
+            {
+                <div class="plt-row plt-unrated">
+                    <span class="name" title="@line.GId">@line.Name</span>
+                    <span class="num">@line.Count</span>
+                    <span class="num plt-span">no rate yet, not counted</span>
+                </div>
+            }
+        </div>
+    }
+</section>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Title { get; set; } = "";
+
+    [Parameter, EditorRequired]
+    public IReadOnlyList<PowerLine> Lines { get; set; } = Array.Empty<PowerLine>();
+
+    /// <summary>Sum of <see cref="Lines"/>; also the base for the share column.</summary>
+    [Parameter]
+    public decimal Total { get; set; }
+
+    /// <summary>Machines we know exist but have no rate for, listed so the gap is visible.</summary>
+    [Parameter]
+    public IReadOnlyList<PowerLine> Unrated { get; set; } = Array.Empty<PowerLine>();
+
+    [Parameter]
+    public string EmptyText { get; set; } = "Nothing to show.";
+
+    /// <summary>"input" or "output"; picks the accent colour.</summary>
+    [Parameter]
+    public string Kind { get; set; } = "";
+
+    private static string Number(decimal value) => value.ToString("#,##0.0#");
+
+    private static string Kw(decimal value) => $"{value:#,##0.0#} kW";
+
+    private string Share(PowerLine line) => Total > 0 ? $"{line.KwTotal / Total * 100m:0.0}%" : "";
+}

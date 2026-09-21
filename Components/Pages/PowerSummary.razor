@@ -1,3 +1,4 @@
+@using Microsoft.JSInterop
 @using RRSOS_PCC.ViewModels
 
 <div class="readout-section">
@@ -10,59 +11,136 @@
     else
     {
         <div class="power-body">
-            <div class="power-dial">
+            <button type="button" class="power-dial" @ref="_dialButton" @onclick="Open"
+                    aria-haspopup="dialog" aria-label="@DialLabel" title="Show power breakdown">
                 <Gauge Label="Power load"
                        Value="@Data.Load"
                        Unknown="@(!Data.HasUsageData)"
-                       DisplayText="@Kw(Data.Required)"
-                       MaxLabel="@Data.Capacity.ToString("0.#")"
+                       DisplayText="@LoadText"
+                       MaxLabel="@Compact(Data.Capacity)"
                        HigherIsWorse="true"
                        WarnAt="@PowerSummaryViewModel.LoadWarnAt"
                        CritAt="@PowerSummaryViewModel.LoadCritAt" />
-            </div>
+            </button>
 
-            <div class="power-figures">
-                <div class="readout-line">
-                    <span class="label">» Capacity</span>
-                    <span class="value">@Kw(Data.Capacity)</span>
+            <div class="power-values">
+                <div class="power-value @(Short ? "power-need" : "power-left")">
+                    <span class="num">@(Data.HasUsageData ? Kw(Math.Abs(Data.Spare)) : "--")</span>
+                    <span class="lbl">@(Short ? "Short" : "Left")</span>
                 </div>
 
-                @foreach (var line in Data.Generation)
-                {
-                    <div class="readout-line power-sub">
-                        <span class="label">@line.Name x@(line.Count)</span>
-                        <span class="value">@Kw(line.KwTotal)</span>
-                    </div>
-                }
-
-                @foreach (var line in Data.Unrated)
-                {
-                    <div class="readout-line power-sub warn">
-                        <span class="label">@line.Name x@(line.Count)</span>
-                        <span class="value">no rate</span>
-                    </div>
-                }
-
-                <div class="readout-line">
-                    <span class="label">» Required</span>
-                    <span class="value">@(Data.HasUsageData ? Kw(Data.Required) : "unknown")</span>
+                <div class="power-value power-need">
+                    <span class="num">@(Data.HasUsageData ? Kw(Data.Required) : "--")</span>
+                    <span class="lbl">Needed</span>
                 </div>
-
-                @if (Data.HasUsageData)
-                {
-                    <div class="readout-line">
-                        <span class="label">» @(Data.Spare < 0 ? "Shortfall" : "Spare")</span>
-                        <span class="value @(Data.Spare < 0 ? "crit" : "")">@Kw(Math.Abs(Data.Spare))</span>
-                    </div>
-                }
             </div>
+
+            @if (Data.Unrated.Count > 0)
+            {
+                <div class="power-note">
+                    @Data.Unrated.Count generator type(s) have no rate yet, so capacity is understated.
+                </div>
+            }
         </div>
     }
 </div>
 
+@if (_open && Data is not null)
+{
+    <div class="power-backdrop" @ref="_overlay" tabindex="-1" @onclick="Close" @onkeydown="OnKeyDown">
+        <div class="power-dialog" role="dialog" aria-modal="true" aria-labelledby="power-dialog-title" @onclick:stopPropagation>
+            <div class="power-dialog-header">
+                <span id="power-dialog-title">Power breakdown</span>
+                <button type="button" class="power-close" @onclick="Close" aria-label="Close">✖</button>
+            </div>
+
+            <div class="power-dialog-summary">
+                <div><span class="lbl">Capacity</span><span class="num power-left">@Kw(Data.Capacity)</span></div>
+                <div><span class="lbl">Needed</span><span class="num power-need">@(Data.HasUsageData ? Kw(Data.Required) : "unknown")</span></div>
+                @if (Data.HasUsageData)
+                {
+                    <div>
+                        <span class="lbl">@(Short ? "Short" : "Left")</span>
+                        <span class="num @(Short ? "power-need" : "power-left")">@Kw(Math.Abs(Data.Spare))</span>
+                    </div>
+                    <div><span class="lbl">Load</span><span class="num">@LoadText</span></div>
+                }
+            </div>
+
+            <div class="power-dialog-columns">
+                <PowerLineTable Kind="input" Title="Input (generation)" Lines="@Data.Generation"
+                                Unrated="@Data.Unrated" Total="@Data.Capacity"
+                                EmptyText="No generators placed." />
+
+                <PowerLineTable Kind="output" Title="Output (usage)" Lines="@Data.Consumption"
+                                Total="@Data.Required"
+                                EmptyText="No usage rates defined yet." />
+            </div>
+        </div>
+    </div>
+}
+
 @code {
+    private ElementReference _dialButton;
+    private ElementReference _overlay;
+    private bool _open;
+    private bool _focusOverlay;
+    private bool _focusDial;
+
     [Parameter]
     public PowerSummaryViewModel? Data { get; set; }
 
-    private static string Kw(decimal value) => $"{value:0.0#} kW";
+    private bool Short => Data is { HasUsageData: true, Spare: < 0 };
+
+    private string LoadText => Data is { HasUsageData: true } ? $"{(int)Math.Round(Data.Load * 100)}%" : "--";
+
+    private string DialLabel => Data is { HasUsageData: true }
+        ? $"Power load {LoadText}: {Kw(Data.Required)} needed of {Kw(Data.Capacity)} available. Open breakdown."
+        : $"Power capacity {Kw(Data?.Capacity ?? 0)}, usage unknown. Open breakdown.";
+
+    private void Open()
+    {
+        _open = true;
+        _focusOverlay = true;
+    }
+
+    private void Close()
+    {
+        _open = false;
+        _focusDial = true;
+    }
+
+    private void OnKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Escape")
+            Close();
+    }
+
+    // Move focus into the dialog when it opens and back to the dial when it closes.
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        try
+        {
+            if (_focusOverlay)
+            {
+                _focusOverlay = false;
+                await _overlay.FocusAsync();
+            }
+            else if (_focusDial)
+            {
+                _focusDial = false;
+                await _dialButton.FocusAsync();
+            }
+        }
+        catch (Exception ex) when (ex is JSException or JSDisconnectedException or InvalidOperationException)
+        {
+            // Circuit gone or element replaced by a re-render; losing focus is harmless.
+        }
+    }
+
+    private static string Kw(decimal value) => $"{value:#,##0.0#} kW";
+
+    // Short form for the small scale label on the dial, e.g. 64,597.5 -> "64.6K".
+    private static string Compact(decimal value) =>
+        value >= 1000 ? $"{value / 1000:0.#}K" : $"{value:0.#}";
 }
