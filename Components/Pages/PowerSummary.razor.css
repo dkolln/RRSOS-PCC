@@ -148,14 +148,46 @@
 }
 
 /* One icon per generator */
-.power-generators {
+/* Dial in the middle, generator icons either side of it. */
+.power-body {
+    container-type: inline-size;
+    width: 100%;
+}
+
+.power-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+}
+
+.power-center {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: flex-end;
-    gap: 6px 16px;
-    max-width: 100%;
-    padding-top: 2px;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.power-side {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+}
+
+.power-side-left { align-items: flex-end; }
+.power-side-right { align-items: flex-start; }
+
+.power-side-left .power-gen-group { justify-content: flex-end; }
+.power-side-right .power-gen-group { justify-content: flex-start; }
+
+/* A very narrow card: dial on top, the icon groups stacked underneath. */
+@container (max-width: 280px) {
+    .power-main { grid-template-columns: 1fr; }
+    .power-center { order: -1; }
+    .power-side { align-items: center; }
+    .power-side .power-gen-group { justify-content: center; }
 }
 
 .power-gen-group {

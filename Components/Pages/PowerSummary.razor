@@ -11,6 +11,10 @@
     else
     {
         <div class="power-body">
+          @* Wind and solar sit left of the dial, nuclear and fusion right, so the bottom of the card stays clear. *@
+          <div class="power-main">
+            <div class="power-side power-side-left">@GroupList(LeftGroups)</div>
+            <div class="power-center">
             <button type="button" class="power-dial" @ref="_dialButton" @onclick="Open"
                     aria-haspopup="dialog" aria-label="@DialLabel" title="Show power breakdown">
                 <Gauge Label="Power load"
@@ -31,25 +35,9 @@
                 </div>
             </div>
 
-            @* One little picture per generator on the grid. *@
-            @if (Groups.Count > 0)
-            {
-                <div class="power-generators">
-                    @foreach (var group in Groups)
-                    {
-                        <div class="power-gen-group" title="@group.Title" role="img" aria-label="@group.Label">
-                            @for (var i = 0; i < Math.Min(group.Count, MaxIconsPerGroup); i++)
-                            {
-                                <PowerIcon Kind="@group.Icon" Index="@i" Dim="@group.Dim" />
-                            }
-                            @if (group.Count > MaxIconsPerGroup)
-                            {
-                                <span class="power-gen-more">+@(group.Count - MaxIconsPerGroup)</span>
-                            }
-                        </div>
-                    }
-                </div>
-            }
+            </div>
+            <div class="power-side power-side-right">@GroupList(RightGroups)</div>
+          </div>
 
             @if (Data.Unrated.Count > 0)
             {
@@ -108,6 +96,30 @@
 
     // A base with dozens of one kind would otherwise push everything else off the card.
     private const int MaxIconsPerGroup = 40;
+
+    // Wind and solar go left of the dial; everything else (nuclear, fusion, unknown) goes right.
+    private static readonly HashSet<string> LeftIcons = new(StringComparer.OrdinalIgnoreCase) { "windmill", "sun", "sun-large" };
+
+    private IEnumerable<GeneratorGroup> LeftGroups => Groups.Where(g => g.Icon is not null && LeftIcons.Contains(g.Icon));
+
+    private IEnumerable<GeneratorGroup> RightGroups => Groups.Where(g => g.Icon is null || !LeftIcons.Contains(g.Icon));
+
+    // One little picture per generator on the grid.
+    private RenderFragment GroupList(IEnumerable<GeneratorGroup> groups) => @<text>
+        @foreach (var group in groups)
+        {
+            <div class="power-gen-group" title="@group.Title" role="img" aria-label="@group.Label">
+                @for (var i = 0; i < Math.Min(group.Count, MaxIconsPerGroup); i++)
+                {
+                    <PowerIcon Kind="@group.Icon" Index="@i" Dim="@group.Dim" />
+                }
+                @if (group.Count > MaxIconsPerGroup)
+                {
+                    <span class="power-gen-more">+@(group.Count - MaxIconsPerGroup)</span>
+                }
+            </div>
+        }
+    </text>;
 
     private sealed record GeneratorGroup(string? Icon, int Count, bool Dim, string Title, string Label);
 

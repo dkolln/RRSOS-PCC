@@ -14,6 +14,9 @@ namespace RRSOS_PCC.ViewModels
         // UI-friendly heading (e.g., "123.4°")
         public string Heading => $"{_rot.HeadingDegrees:F1}°";
 
+        // Compass heading in degrees (0 = +Z), for the heading dial
+        public float Degrees => _rot.HeadingDegrees;
+
         // Optional: quaternion display for debugging or advanced UI
         public string Quaternion =>
             $"({_rot.RotationQuat.X:F3}, {_rot.RotationQuat.Y:F3}, {_rot.RotationQuat.Z:F3}, {_rot.RotationQuat.W:F3})";

@@ -15,20 +15,7 @@
         <div class="readout-section">
             <div class="readout-header">Position</div>
 
-            <div class="readout-line">
-                <span class="label">» Position</span>
-                <span class="value">@Data.Position.Display2D</span>
-            </div>
-
-            <div class="readout-line">
-                <span class="label">» Elevation</span>
-                <span class="value">@Data.Position.DisplayElevation</span>
-            </div>
-
-            <div class="readout-line">
-                <span class="label">» Heading</span>
-                <span class="value">@Data.Rotation.Heading</span>
-            </div>
+            <NavDisplay Position="@Data.Position.Full" Heading="@Data.Rotation.Degrees" />
         </div>
 
         <!-- Vitals -->

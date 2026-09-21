@@ -1,13 +1,25 @@
-﻿.ti-row {
+.ti-gauges {
     display: grid;
-    grid-template-columns: 140px 120px 80px; /* adjust to taste */
-    column-gap: 12px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px 6px;
+    padding: 4px 0 2px;
 }
 
-.ti-abs {
-    text-align: right;
+.ti-gauge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 0;
+    cursor: default;
 }
 
-.ti-pct {
-    text-align: right;
+.ti-value {
+    margin-top: -1px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: #c8e4ff;
+}
+
+.ti-gauge.is-idle .ti-value {
+    color: #5f7d99;
 }

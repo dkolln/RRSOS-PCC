@@ -1,6 +1,5 @@
-﻿@using RRSOS_PCC.Classes
+@using RRSOS_PCC.Classes
 @using RRSOS_PCC.ViewModels
-@using RRSOS_PCC.Services
 
 <div class="pcc-readout">
 
@@ -12,17 +11,24 @@
     }
     else
     {
+        @* One dial per category: the needle is how far it is from an equal share. Details are hover-only. *@
         <div class="readout-section">
-            <div class="readout-header">TI Breakdown</div>
-
-            @foreach (var row in Data.Breakdown)
-            {
-                <div class="readout-line ti-row">
-                    <span class="label">» @row.Name</span>
-                    <span class="value ti-abs">@PCMath.MultiplierAbbreviation(@row.Value)</span>
-                    <span class="value ti-pct">@row.Percent.ToString("P2")</span>
-                </div>
-            }
+            <div class="ti-gauges">
+                @foreach (var category in Data.Categories)
+                {
+                    <div class="ti-gauge @(category.Status == TiStatus.Idle ? "is-idle" : "")" title="@Tooltip(category)">
+                        <Gauge Label="@category.Name"
+                               Centered="true"
+                               Value="@(category.Deviation / TiBalance.ScalePoints)"
+                               Unknown="@(category.Status == TiStatus.Idle)"
+                               StatusOverride="@StatusName(category.Status)"
+                               DisplayText="@Signed(category.Deviation)"
+                               MinLabel="@Scale("−")"
+                               MaxLabel="@Scale("+")" />
+                        <div class="ti-value">@PCMath.MultiplierAbbreviation(category.Value)</div>
+                    </div>
+                }
+            </div>
         </div>
 
         <div class="readout-section">

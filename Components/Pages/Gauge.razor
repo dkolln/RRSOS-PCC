@@ -1,18 +1,31 @@
 <div class="gauge @StateClass"
      role="meter"
      aria-label="@Label"
-     aria-valuemin="0"
+     aria-valuemin="@(Centered ? -100 : 0)"
      aria-valuemax="100"
-     aria-valuenow="@Percent"
+     aria-valuenow="@AriaNow"
      aria-valuetext="@(DisplayText ?? $"{Percent} percent"), @StatusText">
     <svg viewBox="0 0 140 100" aria-hidden="true">
         <!-- Dial face -->
         <path class="gauge-face" d="M 6 100 L 6 70 A 64 64 0 0 1 134 70 L 134 100 Z" />
 
-        <!-- Green / yellow / red zones. The one the needle is in lights up. -->
-        @foreach (var zone in Zones)
+        @if (Centered)
         {
-            <path class="gauge-zone zone-@zone.Name @(zone.Name == Status ? "active" : "")" d="@Arc(zone.From, zone.To)" />
+            <!-- Centre-zero dial: a plain track, and a coloured arc from the centre out to the needle. -->
+            <path class="gauge-track" d="@Arc(0f, 1f)" />
+
+            @if (CenteredArc is { } arc)
+            {
+                <path class="gauge-arc zone-@Status" d="@arc" />
+            }
+        }
+        else
+        {
+            <!-- Green / yellow / red zones. The one the needle is in lights up. -->
+            @foreach (var zone in Zones)
+            {
+                <path class="gauge-zone zone-@zone.Name @(zone.Name == Status ? "active" : "")" d="@Arc(zone.From, zone.To)" />
+            }
         }
 
         @foreach (var tick in Ticks)
@@ -84,12 +97,44 @@
     [Parameter]
     public bool Unknown { get; set; }
 
+    /// <summary>
+    /// Centre-zero dial: <see cref="Value"/> runs from -1 to +1 and the needle points straight up at 0.
+    /// The colour comes from <see cref="StatusOverride"/>, not from thresholds. With no reading the
+    /// needle parks at the far left, so an empty dial can never be mistaken for "exactly on target".
+    /// </summary>
+    [Parameter]
+    public bool Centered { get; set; }
+
+    /// <summary>"good", "warn" or "crit": colours the dial regardless of where the needle is.</summary>
+    [Parameter]
+    public string? StatusOverride { get; set; }
+
     private float Fraction => Unknown || !float.IsFinite(Value) ? 0f : Math.Clamp(Value, 0f, 1f);
+
+    private float Signed => Unknown || !float.IsFinite(Value) ? -1f : Math.Clamp(Value, -1f, 1f);
 
     private int Percent => (int)MathF.Round(Fraction * 100f);
 
+    private int AriaNow => Centered ? (int)MathF.Round(Signed * 100f) : Percent;
+
     // The needle is drawn pointing straight up: 0% swings it fully left, 100% fully right.
-    private string Angle => Inv($"{-90f + Fraction * 180f:0.##}deg");
+    // A centre-zero dial keeps 0 at the top and swings 90 degrees either way.
+    private string Angle => Centered
+        ? Inv($"{Signed * 90f:0.##}deg")
+        : Inv($"{-90f + Fraction * 180f:0.##}deg");
+
+    // The coloured stretch between the top of a centre-zero dial and the needle.
+    private string? CenteredArc
+    {
+        get
+        {
+            if (Unknown)
+                return null;
+
+            var end = 0.5f + Signed / 2f;
+            return MathF.Abs(end - 0.5f) < 0.005f ? null : Arc(MathF.Min(end, 0.5f), MathF.Max(end, 0.5f));
+        }
+    }
 
     // Same comparisons as the vitals view model's warning flags, so the colours agree with them.
     private bool Critical => HigherIsWorse ? Fraction > CritAt : Fraction < CritAt;
@@ -97,11 +142,16 @@
     private bool Warning => HigherIsWorse ? Fraction > WarnAt : Fraction < WarnAt;
 
     // One status drives the value colour, the lit zone and the lamps, so they can never disagree.
-    private string Status => Unknown ? "unknown" : Critical ? "crit" : Warning ? "warn" : "good";
+    private string Status => Unknown ? "unknown" : StatusOverride ?? (Critical ? "crit" : Warning ? "warn" : "good");
 
     private string StatusText => Status switch { "crit" => "danger", "warn" => "warning", "unknown" => "no data", _ => "normal" };
 
-    private string StateClass => Status is "good" or "unknown" ? "" : "is-" + Status;
+    // A centre-zero dial paints its readout green too; the others keep the calm default for "normal".
+    private string StateClass => Status switch
+    {
+        "good" => Centered ? "is-good" : "",
+        _ => "is-" + Status
+    };
 
     private Zone[] Zones => HigherIsWorse
         ? new[] { new Zone("good", 0f, WarnAt), new Zone("warn", WarnAt, CritAt), new Zone("crit", CritAt, 1f) }

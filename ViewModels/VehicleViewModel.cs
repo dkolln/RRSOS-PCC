@@ -13,6 +13,9 @@ namespace RRSOS_PCC.ViewModels
         public PositionViewModel Position { get; }
         public RotationViewModel Rotation { get; }
 
+        // A stowed truck has no pos/rot in the save at all; Position then holds a made-up 0,0,0.
+        public bool HasPosition { get; }
+
         public IReadOnlyList<WorldObjectViewModel> Trunk { get; }
         public IReadOnlyList<WorldObjectViewModel> Modules { get; }
 
@@ -25,6 +28,7 @@ namespace RRSOS_PCC.ViewModels
             Name = v.gId;
             Type = v.gId;
 
+            HasPosition = !string.IsNullOrWhiteSpace(v.pos);
             Position = new PositionViewModel(v.Position);
             Rotation = new RotationViewModel(v.Rotation);
 

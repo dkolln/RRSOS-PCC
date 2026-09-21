@@ -154,3 +154,34 @@
         animation: none;
     }
 }
+
+/* Centre-zero dial (planet balance) */
+.gauge.is-good {
+    --gauge-color: var(--zone-good);
+}
+
+.gauge-track {
+    fill: none;
+    stroke: #14202e;
+    stroke-width: 8;
+}
+
+.gauge-arc {
+    fill: none;
+    stroke-width: 8;
+}
+
+.gauge-arc.zone-good { filter: drop-shadow(0 0 3px var(--zone-good)); }
+.gauge-arc.zone-warn { filter: drop-shadow(0 0 3px var(--zone-warn)); }
+.gauge-arc.zone-crit { filter: drop-shadow(0 0 3px var(--zone-crit)); }
+
+/* Nothing to show yet: everything dims and the needle rests. */
+.gauge.is-unknown .gauge-needle polygon {
+    fill: #4b6580;
+}
+
+.gauge.is-unknown .gauge-value,
+.gauge.is-unknown .gauge-label {
+    color: #5f7d99;
+    fill: #5f7d99;
+}
