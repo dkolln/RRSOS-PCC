@@ -7,13 +7,14 @@ using System.Text.RegularExpressions;
 namespace RRSOS_PCC.Services;
 
 /// <summary>
-/// Owns the current parsed save. A background loop watches the selected save file and
-/// reloads it when it changes; subscribers to <see cref="OnChange"/> are told exactly once
-/// per real change (or when the load-error status changes), never on an idle tick.
+/// Owns the current parsed save. A background loop checks the selected save file every
+/// <see cref="SaveSettings.AutoRefreshIntervalSeconds"/> seconds (10 by default) and reloads it
+/// when it changed; subscribers to <see cref="OnChange"/> are told exactly once per real change
+/// (or when the load-error status changes), never on an idle tick.
 ///
-/// The game writes a save on a steady cadence, so the loop is predictive: after each load it
-/// sleeps until shortly before the next save is due, then checks the file every second until
-/// it lands (see <see cref="SavePollPlanner"/>).
+/// The check is just a timestamp-and-size comparison, so it is cheap. An earlier version tried
+/// to predict when the next save was due and sleep until then; that could sleep through a save
+/// that arrived early (a manual save, one on exit), so the loop is deliberately plain.
 /// </summary>
 public class SaveService : IDisposable
 {
@@ -35,23 +36,29 @@ public class SaveService : IDisposable
     private readonly object _loopLock = new();
     private CancellationTokenSource? _loopCts;
 
-    private readonly SaveIntervalTracker _intervals = new();
     private SaveSignature? _loadedSignature;
     private SaveSignature? _failedSignature;
     private int _failedAttempts;
 
     private volatile SaveState? _currentState;
     private volatile string? _lastLoadError;
-    private volatile SaveSchedule _schedule = SaveSchedule.None;
     private long _lastLoadedAtTicks;
+    private long _lastCheckedAtTicks;
 
     public SaveState? CurrentState => _currentState;
 
     /// <summary>Set while the newest save could not be read; cleared by the next successful load.</summary>
     public string? LastLoadError => _lastLoadError;
 
-    /// <summary>Where the poller is in its wait-for-next-save cycle (for the status display).</summary>
-    public SaveSchedule Schedule => _schedule;
+    /// <summary>When the save file was last looked at, whether or not it had changed (for the status display).</summary>
+    public DateTime? LastCheckedAtUtc
+    {
+        get
+        {
+            var ticks = Interlocked.Read(ref _lastCheckedAtTicks);
+            return ticks == 0 ? null : new DateTime(ticks, DateTimeKind.Utc);
+        }
+    }
 
     public DateTime? LastLoadedAtUtc
     {
@@ -207,6 +214,8 @@ public class SaveService : IDisposable
         var info = new FileInfo(path);
         var signature = new SaveSignature(path, info.LastWriteTimeUtc, info.Length);
 
+        Interlocked.Exchange(ref _lastCheckedAtTicks, DateTime.UtcNow.Ticks);
+
         if (!force)
         {
             if (signature == _loadedSignature)
@@ -231,7 +240,6 @@ public class SaveService : IDisposable
             _loadedSignature = signature;
             _failedSignature = null;
             _failedAttempts = 0;
-            _intervals.Observe(path, signature.LastWriteUtc);
 
             Interlocked.Exchange(ref _lastLoadedAtTicks, DateTime.UtcNow.Ticks);
             _lastLoadError = null;
@@ -298,7 +306,7 @@ public class SaveService : IDisposable
     }
 
     // ------------------------------------------------------------------
-    // Predictive polling
+    // Polling
     // ------------------------------------------------------------------
 
     /// <summary>Starts watching for new saves (idempotent) and makes sure the current one is loaded.</summary>
@@ -326,7 +334,6 @@ public class SaveService : IDisposable
             _loopCts = null;
         }
 
-        _schedule = SaveSchedule.None;
         return Task.CompletedTask;
     }
 
@@ -358,14 +365,11 @@ public class SaveService : IDisposable
 
     private TimeSpan NextDelay()
     {
-        var plan = SavePollPlanner.Plan(DateTime.UtcNow, _intervals.LastWriteUtc, _intervals.Median, _cfg);
-        _schedule = new SaveSchedule(plan.Phase, plan.ExpectedUtc);
-
         // A read that failed is probably the game mid-write: try again soon.
         if (_failedSignature != null && _failedAttempts < MaxRetriesPerFile)
             return TimeSpan.FromSeconds(Math.Min(_failedAttempts * 2, 10));
 
-        return plan.Delay;
+        return TimeSpan.FromSeconds(Math.Max(1, _cfg.AutoRefreshIntervalSeconds));
     }
 
     private void WakePoller()

@@ -1,4 +1,3 @@
-@using RRSOS_PCC.Classes
 @using RRSOS_PCC.Services
 @implements IDisposable
 @inject SaveService SaveSvc
@@ -30,6 +29,8 @@
         catch (ObjectDisposedException) { /* circuit already gone */ }
     }
 
+    // "LOADED" is when the newest save was read; "CHECKED" is when the file was last looked at.
+    // When the two drift apart the poll is alive and simply has nothing new to load.
     private string StatusLine
     {
         get
@@ -40,28 +41,14 @@
 
             var text = $"LOADED {loaded.Value.ToLocalTime():HH:mm:ss}";
 
-            if (SaveSvc.Schedule.ExpectedUtc is not DateTime expected)
-                return text;
-
-            var remaining = expected - DateTime.UtcNow;
-
-            if (remaining > TimeSpan.Zero)
-                return $"{text} // NEXT SAVE ~{Format(remaining)}";
-
-            if (SaveSvc.Schedule.Phase != PollPhase.Overdue)
-                return $"{text} // WAITING FOR SAVE...";
-
-            // A save that is many minutes late means the game is closed or paused, not a slow autosave.
-            return -remaining > TimeSpan.FromMinutes(10)
-                ? $"{text} // SAVE IS {Format(-remaining)} OLD"
-                : $"{text} // SAVE OVERDUE {Format(-remaining)}";
+            return SaveSvc.LastCheckedAtUtc is DateTime checkedAt
+                ? $"{text} // CHECKED {Ago(DateTime.UtcNow - checkedAt)} AGO"
+                : text;
         }
     }
 
-    private static string Format(TimeSpan span) =>
-        span.TotalHours >= 1
-            ? $"{(int)span.TotalHours}:{span.Minutes:00}:{span.Seconds:00}"
-            : $"{(int)span.TotalMinutes}:{span.Seconds:00}";
+    private static string Ago(TimeSpan span) =>
+        span.TotalSeconds < 60 ? $"{Math.Max(0, (int)span.TotalSeconds)} S" : $"{(int)span.TotalMinutes} MIN";
 
     public void Dispose()
     {
