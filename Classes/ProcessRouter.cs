@@ -177,8 +177,8 @@ namespace RRSOS_PCC.Classes
                 return;
             }
 
-            //Message Events
-            if (json.Contains("Message"))
+            //Message Events (a record with a gId is an object that merely has "Message" in its name, e.g. ScreenMessage)
+            if (json.Contains("Message") && !json.Contains("\"gId\""))
             {
                 state.Messages.Add(JsonSerializer.Deserialize<Message>(json)
                     ?? new Message());

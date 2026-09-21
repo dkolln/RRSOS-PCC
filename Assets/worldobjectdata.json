@@ -10,6 +10,7 @@
     "BaseId": "VegetableGrower",
     "Name": "Vegetable Grower",
     "Tier": "T2",
+    "PowerKw": -29.5,
     "Type": 5510
   },
 
@@ -17,6 +18,7 @@
     "BaseId": "Farm",
     "Name": "Farm",
     "Tier": "T1",
+    "PowerKw": -7.25,
     "Type": 5520
   },
 
@@ -789,16 +791,32 @@
     "Type": 4310
   },
 
+  "AlgaeGenerator1": {
+    "BaseId": "AlgaeGenerator",
+    "Name": "Algae Generator",
+    "Tier": "T1",
+    "PowerKw": -13
+  },
+
+  "AlgaeGenerator2": {
+    "BaseId": "AlgaeGenerator",
+    "Name": "Algae Generator",
+    "Tier": "T2",
+    "PowerKw": -27
+  },
+
   "biodome": {
     "BaseId": "biodome",
     "Name": "Biodome",
     "Tier": "T1",
+    "PowerKw": -37,
     "Type": 6630
   },
   "biodome2": {
     "BaseId": "biodome",
     "Name": "Biodome",
     "Tier": "T2",
+    "PowerKw": -75,
     "Type": 6630
   },
 
@@ -806,6 +824,7 @@
     "BaseId": "ButterflyDome",
     "Name": "Butterfly Dome",
     "Tier": "T1",
+    "PowerKw": -139,
     "Type": 6640
   },
 
@@ -813,6 +832,7 @@
     "BaseId": "Biolab",
     "Name": "Biolab",
     "Tier": "T1",
+    "PowerKw": -40,
     "Type": 6650
   },
 
@@ -827,12 +847,14 @@
     "BaseId": "CraftStation",
     "Name": "Craft Station",
     "Tier": "T2",
+    "PowerKw": -12.5,
     "Type": 6810
   },
   "AutoCrafter1": {
     "BaseId": "AutoCrafter1",
     "Name": "Auto Crafter",
     "Tier": "T1",
+    "PowerKw": -155,
     "Type": 6810
   },
 
@@ -847,6 +869,7 @@
     "BaseId": "Teleporter",
     "Name": "Teleporter",
     "Tier": "T1",
+    "PowerKw": -276,
     "Type": 6520
   },
 
@@ -879,6 +902,7 @@
     "BaseId": "Drill4",
     "Name": "Drill",
     "Tier": "T5",
+    "PowerKw": -375.5,
     "Type": 5110
   },
 
@@ -886,6 +910,7 @@
     "BaseId": "HarvestingRobot",
     "Name": "Harvesting Robot",
     "Tier": "T1",
+    "PowerKw": -120,
     "Type": 5440
   },
 
@@ -925,6 +950,7 @@
     "BaseId": "EnergyGenerator6",
     "Name": "Fusion Generator",
     "Tier": "T6",
+    "PowerKw": 8074.6875,
     "Type": 6920
   },
 
@@ -1066,6 +1092,7 @@
     "BaseId": "GrassSpreader",
     "Name": "Grass Spreader",
     "Tier": "T1",
+    "PowerKw": -13.8,
     "Type": 5330
   },
   "GrassSpreader2": {
@@ -1093,6 +1120,7 @@
     "BaseId": "Heater",
     "Name": "Heater",
     "Tier": "T3",
+    "PowerKw": -17.5,
     "Type": 5210
   },
   "Heater4": {
@@ -1105,6 +1133,7 @@
     "BaseId": "Heater",
     "Name": "Heater",
     "Tier": "T5",
+    "PowerKw": -360.5,
     "Type": 5210
   },
 
@@ -1112,12 +1141,14 @@
     "BaseId": "LaunchPlatform",
     "Name": "Launch Platform",
     "Tier": "",
+    "PowerKw": -55,
     "Type": 6530
   },
   "TradePlatform1": {
     "BaseId": "TradePlatform",
     "Name": "Trade Platform",
     "Tier": "",
+    "PowerKw": -425,
     "Type": 6540
   },
 
@@ -1158,6 +1189,7 @@
     "BaseId": "ScreenTerraStage",
     "Name": "Terra Stage Screen",
     "Tier": "",
+    "PowerKw": -1.3,
     "Type": 1310
   },
   "ScreenUnlockables": {
@@ -1191,6 +1223,7 @@
     "BaseId": "DroneStation",
     "Name": "Drone Station",
     "Tier": "T1",
+    "PowerKw": -850,
     "Type": 6550
   },
 
@@ -1198,6 +1231,7 @@
     "BaseId": "VehicleCrafter1",
     "Name": "Vehicle Crafter",
     "Tier": "T1",
+    "PowerKw": -63,
     "Type": 6560
   },
 
@@ -1232,6 +1266,7 @@
     "BaseId": "GeneticManipulator",
     "Name": "Genetic Manipulator",
     "Tier": "T1",
+    "PowerKw": -117.5,
     "Type": 3210
   },
   "DNASequence": {
@@ -1244,12 +1279,14 @@
     "BaseId": "GeneticExtractor",
     "Name": "Genetic Extractor",
     "Tier": "T1",
+    "PowerKw": -317.5,
     "Type": 3210
   },
   "GeneticSynthetizer1": {
     "BaseId": "GeneticSynthetizer",
     "Name": "Genetic Synthetizer",
     "Tier": "T1",
+    "PowerKw": -292,
     "Type": 3210
   },
 
@@ -1264,12 +1301,14 @@
     "BaseId": "Aquarium",
     "Name": "Aquarium",
     "Tier": "T1",
+    "PowerKw": -75,
     "Type": 3510
   },
   "Aquarium2": {
     "BaseId": "Aquarium",
     "Name": "Aquarium",
     "Tier": "T2",
+    "PowerKw": -225,
     "Type": 3510
   },
   "AquariumTube1": {
@@ -1525,6 +1564,7 @@
     "BaseId": "ComAntenna",
     "Name": "Transmission Antenna",
     "Tier": "",
+    "PowerKw": -15,
     "Type": 6510
   },
 
@@ -1585,8 +1625,9 @@
 
   "Destructor1": {
     "BaseId": "Destructor",
-    "Name": "Recycler",
+    "Name": "Shredder",
     "Tier": "T1",
+    "PowerKw": -18,
     "Type": 6830
   },
 
@@ -1690,6 +1731,7 @@
     "BaseId": "GasExtractor",
     "Name": "Gas Extractor",
     "Tier": "T2",
+    "PowerKw": -218,
     "Type": 5450
   },
 
@@ -1710,6 +1752,7 @@
     "BaseId": "Incubator",
     "Name": "Incubator",
     "Tier": "T1",
+    "PowerKw": -215,
     "Type": 3550
   },
   "Ivy1": {
@@ -1824,12 +1867,14 @@
     "BaseId": "Optimizer",
     "Name": "Machine Optimizer",
     "Tier": "T1",
+    "PowerKw": -50,
     "Type": 8030
   },
   "Optimizer2": {
     "BaseId": "Optimizer",
     "Name": "Machine Optimizer",
     "Tier": "T2",
+    "PowerKw": -150,
     "Type": 8030
   },
   "OreExtractor1": {
@@ -1842,12 +1887,14 @@
     "BaseId": "OreExtractor",
     "Name": "Ore Extractor",
     "Tier": "T2",
+    "PowerKw": -164,
     "Type": 5430
   },
   "OreExtractor3": {
     "BaseId": "OreExtractor",
     "Name": "Ore Extractor",
     "Tier": "T3",
+    "PowerKw": -289,
     "Type": 5430
   },
   "OxygenTank1": {
@@ -1932,6 +1979,7 @@
     "BaseId": "RecyclingMachine",
     "Name": "Recycler",
     "Tier": "",
+    "PowerKw": -12.5,
     "Type": 6830
   },
   "RocketBiomass1": {
@@ -1999,24 +2047,28 @@
     "BaseId": "ScreenMap",
     "Name": "Map Screen",
     "Tier": "T1",
+    "PowerKw": -14.7,
     "Type": 1310
   },
   "ScreenMessage": {
     "BaseId": "ScreenMessage",
     "Name": "Messages Screen",
     "Tier": "",
+    "PowerKw": -0.4,
     "Type": 1310
   },
   "ScreenBiomass": {
     "BaseId": "ScreenBiomass",
     "Name": "Biomass Screen",
     "Tier": "",
+    "PowerKw": -3.4,
     "Type": 1310
   },
   "ScreenRockets": {
     "BaseId": "ScreenRockets",
     "Name": "Orbital Information Screen",
     "Tier": "",
+    "PowerKw": -35.2,
     "Type": 1310
   },
   "RocketInformations2": {
@@ -2028,15 +2080,17 @@
 
   "SeedSpreader1": {
     "BaseId": "SeedSpreader",
-    "Name": "Grass Spreader",
+    "Name": "Flower Spreader",
     "Tier": "T1",
-    "Type": 5330
+    "PowerKw": -28.8,
+    "Type": 5320
   },
   "SeedSpreader2": {
     "BaseId": "SeedSpreader",
-    "Name": "Grass Spreader",
+    "Name": "Flower Spreader",
     "Tier": "T2",
-    "Type": 5330
+    "PowerKw": -38.8,
+    "Type": 5320
   },
 
   "Server1": {
@@ -2107,6 +2161,7 @@
     "BaseId": "TreeSpreader",
     "Name": "Tree Spreader",
     "Tier": "T2",
+    "PowerKw": -153,
     "Type": 5310
   },
 
@@ -2130,6 +2185,7 @@
     "BaseId": "VegetubeOutside",
     "Name": "Outdoor Farm",
     "Tier": "T1",
+    "PowerKw": -45.5,
     "Type": 5520
   },
 
@@ -2137,12 +2193,14 @@
     "BaseId": "FishFarm",
     "Name": "Fish Farm",
     "Tier": "T1",
+    "PowerKw": -155.5,
     "Type": 3530
   },
   "AmphibiansFarm1": {
     "BaseId": "AmphibiansFarm",
     "Name": "Amphibian Farm",
     "Tier": "T1",
+    "PowerKw": -155,
     "Type": 3560
   },
 
@@ -2150,12 +2208,14 @@
     "BaseId": "Ecosystem",
     "Name": "Eco System",
     "Tier": "T1",
+    "PowerKw": -325,
     "Type": 6930
   },
   "WaterLifeCollector1": {
     "BaseId": "WaterLifeCollector",
     "Name": "Water Life Collector",
     "Tier": "T1",
+    "PowerKw": -105.5,
     "Type": 6930
   },
 
@@ -2163,12 +2223,14 @@
     "BaseId": "ButterflyFarm",
     "Name": "Butterfly Farm",
     "Tier": "T1",
+    "PowerKw": -30,
     "Type": 3540
   },
   "ButterflyFarm2": {
     "BaseId": "ButterflyFarm",
     "Name": "Butterfly Farm",
     "Tier": "T2",
+    "PowerKw": -45,
     "Type": 3540
   },
 
@@ -2176,12 +2238,14 @@
     "BaseId": "Beehive",
     "Name": "Beehive",
     "Tier": "T1",
+    "PowerKw": -25,
     "Type": 6910
   },
   "Beehive2": {
     "BaseId": "Beehive",
     "Name": "Beehive",
     "Tier": "T2",
+    "PowerKw": -95,
     "Type": 6910
   },
 
@@ -2189,6 +2253,7 @@
     "BaseId": "AnimalFeeder",
     "Name": "Animal Feeder",
     "Tier": "",
+    "PowerKw": -95,
     "Type": 5510
   },
 
@@ -2196,6 +2261,7 @@
     "BaseId": "AnimalShelter",
     "Name": "Animal Shelter",
     "Tier": "",
+    "PowerKw": -270,
     "Type": 3520
   },
 
@@ -2203,6 +2269,7 @@
     "BaseId": "SilkGenerator",
     "Name": "Silk Generator",
     "Tier": "",
+    "PowerKw": -38,
     "Type": 6850
   },
 
@@ -2238,12 +2305,14 @@
     "BaseId": "WaterCollector",
     "Name": "Water Collector",
     "Tier": "T1",
+    "PowerKw": -11,
     "Type": 6940
   },
   "WaterCollector2": {
     "BaseId": "WaterCollector",
     "Name": "Water Collector",
     "Tier": "T2",
+    "PowerKw": -19,
     "Type": 6940
   },
 

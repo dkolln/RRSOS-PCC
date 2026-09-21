@@ -12,7 +12,8 @@ namespace RRSOS_PCC.Services
     {
         private static readonly Regex TrailingDigits = new(@"\d+$", RegexOptions.Compiled);
 
-        private readonly Dictionary<string, WorldObjectDefinition> _definitions = new();
+        // The game is not consistent about gId casing ("Biodome2" in a save, "biodome2" in the data file).
+        private readonly Dictionary<string, WorldObjectDefinition> _definitions = new(StringComparer.OrdinalIgnoreCase);
 
         // A save has thousands of objects but only a few hundred distinct gIds.
         private readonly ConcurrentDictionary<string, WorldObjectDefinition> _resolved = new();
