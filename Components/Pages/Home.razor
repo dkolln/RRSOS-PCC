@@ -32,7 +32,7 @@
         @if (ShowPlayer)
         {
             <ResupplyButton />
-            <PlayerSummary Data="@PlayerVM" />
+            <PlayerSummary Data="@PlayerVM" Bases="@BaseVMs" SelectedBaseId="@_selectedBaseId" OnBaseSelect="ShowBase" />
         }
     </div>
 
@@ -42,7 +42,7 @@
         </div>
         @if (ShowPlanet)
         {
-            <PlanetSummary Data="@PlanetVM" Power="@PowerVM" />
+            <PlanetSummary Data="@PlanetVM" Power="@PowerVM" Rockets="@Rockets" />
         }
     </div>
 
@@ -54,7 +54,7 @@
             </div>
             @if (ShowVehicle)
             {
-                <VehicleSummary Data="@VehicleVM" />
+                <VehicleSummary Data="@VehicleVM" Player="@PlayerVM" />
             }
         </div>
 

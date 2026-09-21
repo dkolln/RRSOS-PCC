@@ -122,22 +122,7 @@
     stroke-dasharray: 2 1.6;
 }
 
-.map-label {
-    fill: #cfe4ff;
-    font-family: 'Consolas', 'Courier New', monospace;
-    font-size: 6.5px;
-    text-anchor: middle;
-    paint-order: stroke;
-    stroke: #0b0f17;
-    stroke-width: 2px;
-    opacity: 0;
-    pointer-events: none;
-}
 
-.map-pip:hover .map-label,
-.map-pip.selected .map-label {
-    opacity: 1;
-}
 
 /* Controls */
 .map-controls {
@@ -179,4 +164,54 @@
     .map-turn {
         transition: none;
     }
+}
+
+/* Name of the base under the mouse, or the one being shown. Fixed height so the card never jumps. */
+.map-caption {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 4px 10px;
+    min-height: 1.5em;
+    font-family: 'Consolas', 'Courier New', monospace;
+}
+
+.map-caption-name {
+    color: #e6f2ff;
+    font-weight: bold;
+}
+
+.map-caption-meta {
+    color: #7f9db9;
+    font-size: 0.85rem;
+}
+
+.map-caption-lock {
+    font-size: 0.75rem;
+    color: #ffd86b;
+}
+
+/* Hovering a base other than the one being shown */
+.map-caption.is-hover .map-caption-name {
+    color: #9ac7ff;
+}
+
+/* Compact: the small map on the player card. Same picture, less room. */
+.base-map.compact {
+    gap: 2px;
+    padding: 0;
+}
+
+.base-map.compact svg {
+    max-width: 170px;
+}
+
+.base-map.compact .map-caption {
+    min-height: 1.3em;
+    font-size: 0.8rem;
+}
+
+.base-map.compact .map-caption-meta {
+    font-size: 0.72rem;
 }

@@ -10,6 +10,18 @@ namespace RRSOS_PCC.Components.Pages
         [Parameter]
         public PlayerViewModel? Data { get; set; }
 
+        /// <summary>The bases, for the small map around the player. Null shows the plain position map instead.</summary>
+        [Parameter]
+        public BaseSummaryViewModel? Bases { get; set; }
+
+        /// <summary>The base currently shown on the Base tab.</summary>
+        [Parameter]
+        public long? SelectedBaseId { get; set; }
+
+        /// <summary>Raised with a base's id when it is clicked on the small map.</summary>
+        [Parameter]
+        public EventCallback<long> OnBaseSelect { get; set; }
+
         public List<(string Name, int Count)> LeftColumn { get; set; } = new();
         public List<(string Name, int Count)> RightColumn { get; set; } = new();
 

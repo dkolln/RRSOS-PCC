@@ -15,7 +15,8 @@
         <div class="readout-section">
             <div class="readout-header">Position</div>
 
-            <NavDisplay Position="@Data.Position.Full" Heading="@Data.Rotation.Degrees" />
+            <NavDisplay Position="@Data.Position.Full" Heading="@Data.Rotation.Degrees"
+                        Bases="@Bases" SelectedBaseId="@SelectedBaseId" OnBaseSelect="OnBaseSelect" />
         </div>
 
         <!-- Vitals -->

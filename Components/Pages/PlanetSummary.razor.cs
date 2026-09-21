@@ -12,6 +12,20 @@ namespace RRSOS_PCC.Components.Pages
         [Parameter]
         public PowerSummaryViewModel? Power { get; set; }
 
+        /// <summary>What the launched rockets grant each stat, by dial name. Empty when none are launched.</summary>
+        [Parameter]
+        public IReadOnlyDictionary<string, RocketBonus>? Rockets { get; set; }
+
+        // Hover text for the rocket line: the sum, and what one more rocket would be worth.
+        private static string RocketTooltip(RocketBonus rocket)
+        {
+            var tiers = rocket.Tier2 > 0 ? $"{rocket.Tier1} tier 1, {rocket.Tier2} tier 2" : $"{rocket.Tier1} tier 1";
+
+            return $"{rocket.Stat}: {rocket.Rockets} rocket(s) launched ({tiers}) give +{rocket.Percent:0}%, " +
+                   $"so {rocket.Stat.ToLowerInvariant()} generation is x{rocket.Multiplier:0.##} the machines' base rate. " +
+                   $"One more tier 1 rocket adds {rocket.NextTier1Percent:0}%, raising the total rate by {rocket.NextGainPercent:0.#}%.";
+        }
+
         private static string? StatusName(TiStatus status) => status switch
         {
             TiStatus.Good => "good",

@@ -26,6 +26,11 @@
                                MinLabel="@Scale("−")"
                                MaxLabel="@Scale("+")" />
                         <div class="ti-value">@PCMath.MultiplierAbbreviation(category.Value)</div>
+
+                        @if (Rockets is not null && Rockets.TryGetValue(category.Name, out var rocket) && rocket.Rockets > 0)
+                        {
+                            <div class="ti-rockets" title="@RocketTooltip(rocket)">🚀 @rocket.Rockets · ×@rocket.Multiplier.ToString("0.##")</div>
+                        }
                     </div>
                 }
             </div>

@@ -23,3 +23,15 @@
 .ti-gauge.is-idle .ti-value {
     color: #5f7d99;
 }
+
+/* Launched rockets for this stat: how many, and the factor they give the base rate. */
+.ti-rockets {
+    margin-top: 1px;
+    font-size: 0.75rem;
+    color: #9ac7ff;
+    white-space: nowrap;
+}
+
+.ti-gauge.is-idle .ti-rockets {
+    color: #5f7d99;
+}

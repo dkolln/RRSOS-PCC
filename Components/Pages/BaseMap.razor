@@ -3,7 +3,7 @@
 @using RRSOS_PCC.Enums
 @using RRSOS_PCC.ViewModels
 
-<div class="base-map">
+<div class="base-map @(Compact ? "compact" : "")">
 
     @if (Data is null || Data.Bases.Count == 0)
     {
@@ -35,14 +35,16 @@
             <circle class="map-you" cx="70" cy="70" r="3.2" />
 
             @* The base being shown is drawn last so nothing sits on top of it. *@
-            @foreach (var b in Data.Bases.OrderBy(b => b.Id == SelectedId))
+            @foreach (var b in ShownBases.OrderBy(b => b.Id == SelectedId))
             {
                 var (x, y) = Place(b);
 
                 <g class="map-pip @(b.Type == BaseType.Base ? "is-base" : "is-outpost") @(b.Id == SelectedId ? "selected" : "") @(b.Id == PinnedId ? "pinned" : "") @(b.Distance > Range ? "far" : "")"
                    transform="translate(@Inv($"{x:0.##} {y:0.##}"))"
                    role="button" aria-label="@PipLabel(b)"
-                   @onclick="() => OnSelect.InvokeAsync(b.Id)">
+                   @onclick="() => OnSelect.InvokeAsync(b.Id)"
+                   @onmouseenter="() => _hoverId = b.Id"
+                   @onmouseleave="() => _hoverId = null">
                     <title>@PipLabel(b)</title>
                     <circle class="map-hit" r="6" />
 
@@ -56,21 +58,38 @@
                     }
 
                     <circle class="map-select" r="6" />
-
-                    <g>
-                        <text class="map-label" y="-8">@b.Name</text>
-                    </g>
                 </g>
             }
 
             <text class="map-range" x="130" y="130">@Range m</text>
         </svg>
 
-        <div class="map-controls">
-            <button class="map-btn" @onclick="ZoomOut" title="Zoom out">−</button>
-            <button class="map-btn" @onclick="ZoomIn" title="Zoom in">+</button>
-            <button class="map-btn @(_range is null ? "active" : "")" @onclick="Fit" title="Fit every base">Fit</button>
-            <span class="map-legend">◆ base &nbsp;● outpost &nbsp;○ shown &nbsp;┄ pinned</span>
+        @if (!Compact)
+        {
+            <div class="map-controls">
+                <button class="map-btn" @onclick="ZoomOut" title="Zoom out">−</button>
+                <button class="map-btn" @onclick="ZoomIn" title="Zoom in">+</button>
+                <button class="map-btn @(_range is null ? "active" : "")" @onclick="Fit" title="Fit every base">Fit</button>
+                <span class="map-legend">◆ base &nbsp;● outpost &nbsp;○ shown &nbsp;┄ pinned</span>
+            </div>
+        }
+
+        @* The name of the base under the mouse, or else the one being shown. Kept off the map so it never covers anything. *@
+        <div class="map-caption @(_hoverId is not null && _hoverId != SelectedId ? "is-hover" : "")" aria-live="polite">
+            @if (LabelBase is { } label)
+            {
+                <span class="map-caption-name">@label.Name</span>
+                <span class="map-caption-meta">@label.DisplayDistance @label.Direction · @(label.Type == BaseType.Outpost ? "outpost" : "base")</span>
+
+                @if (label.Id == PinnedId)
+                {
+                    <span class="map-caption-lock" title="Pinned">🔒</span>
+                }
+            }
+            else
+            {
+                <span>&nbsp;</span>
+            }
         </div>
     }
 </div>
@@ -92,6 +111,36 @@
 
     [Parameter]
     public EventCallback<long> OnSelect { get; set; }
+
+    /// <summary>
+    /// A small version with no controls, for the player card. It only reaches as far as the inner
+    /// ring of the full map (half its range) and leaves out bases beyond that.
+    /// </summary>
+    [Parameter]
+    public bool Compact { get; set; }
+
+    // The base under the mouse, if any.
+    private long? _hoverId;
+
+    // The compact map only draws what is inside its range.
+    private IEnumerable<BaseViewModel> ShownBases =>
+        Compact ? Data!.Bases.Where(b => b.Distance <= Range) : Data!.Bases;
+
+    // Hover wins. Otherwise the base being shown, unless it is off this small map.
+    private BaseViewModel? LabelBase
+    {
+        get
+        {
+            if (Data is null)
+                return null;
+
+            if (_hoverId is long hovered)
+                return Data.Bases.FirstOrDefault(b => b.Id == hovered);
+
+            var shown = Data.Bases.FirstOrDefault(b => b.Id == SelectedId);
+            return Compact && shown is not null && shown.Distance > Range ? null : shown;
+        }
+    }
 
     // Several of these could share a page, and SVG ids are page-wide.
     private readonly string _uid = Guid.NewGuid().ToString("N")[..8];
@@ -134,7 +183,8 @@
         }
     }
 
-    private int Range => _range ?? FitRange;
+    // The compact map stops at the full map's inner ring: half of the range that fits every base.
+    private int Range => Compact ? Math.Max(RangeSteps[0], FitRange / 2) : _range ?? FitRange;
 
     private void ZoomIn()
     {

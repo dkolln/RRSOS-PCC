@@ -9,6 +9,10 @@ namespace RRSOS_PCC.Components.Pages
         [Parameter]
         public VehicleViewModel? Data { get; set; }
 
+        /// <summary>The player, so the vehicle can be shown relative to them on the small map.</summary>
+        [Parameter]
+        public PlayerViewModel? Player { get; set; }
+
         // UI-ready grouped lists
         protected List<(string Name, int Count)> LeftColumn { get; private set; } = new();
         protected List<(string Name, int Count)> RightColumn { get; private set; } = new();

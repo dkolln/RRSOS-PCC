@@ -1,5 +1,6 @@
 @using System.Numerics
 @using RRSOS_PCC.Classes
+@using RRSOS_PCC.ViewModels
 
 <div class="nav-row @(Known ? "" : "is-unknown")">
 
@@ -32,6 +33,19 @@
 
     <!-- Map: a fixed square with the world origin (0, 0) in the middle and north up. The scale grows to fit how far out you have been. -->
     <div class="nav-panel" title="Position @PositionText">
+        @if (Bases is not null)
+        {
+            @* The player card: you in the middle, the bases around you. Clicking one opens it on the Base tab. *@
+            <BaseMap Compact="true" Data="@Bases" SelectedId="@SelectedBaseId" OnSelect="OnBaseSelect" />
+        }
+        else if (Around is not null)
+        {
+            @* The vehicle card: the player in the middle, the vehicle placed relative to them (only if it has a position). *@
+            <RelativeMap PlayerFlat="@Around.Position.Flat" PlayerHeading="@Around.Rotation.Degrees"
+                         TargetFlat="@(new Vector2(Position.X, Position.Z))" Known="@Known" />
+        }
+        else
+        {
         <svg viewBox="0 0 140 140" role="img" aria-label="Position @PositionText">
             <defs>
                 <linearGradient id="nav-cone-fade-@_uid" x1="0" y1="1" x2="0" y2="0">
@@ -78,6 +92,7 @@
 
             <text class="nav-range" x="130" y="130">@RangeText</text>
         </svg>
+        }
         <div class="nav-label">Position</div>
         <div class="nav-caption">@PositionText</div>
     </div>
@@ -149,6 +164,28 @@
     /// <summary>Compass heading in degrees, 0 = north (see PCMath.ToEastNorth).</summary>
     [Parameter]
     public float Heading { get; set; }
+
+    /// <summary>
+    /// When given, the position map is the compact base map: centred on the player, with the nearby
+    /// bases on it. When null (the vehicle), it is the plain map with 0, 0 in the middle.
+    /// </summary>
+    [Parameter]
+    public BaseSummaryViewModel? Bases { get; set; }
+
+    /// <summary>
+    /// When given (and there is no <see cref="Bases"/>), the position map has this player in the middle
+    /// and <see cref="Position"/> placed relative to them. Used by the vehicle card.
+    /// </summary>
+    [Parameter]
+    public PlayerViewModel? Around { get; set; }
+
+    /// <summary>The base shown on the Base tab (only used with <see cref="Bases"/>).</summary>
+    [Parameter]
+    public long? SelectedBaseId { get; set; }
+
+    /// <summary>Raised with the base's id when one is clicked on the base map.</summary>
+    [Parameter]
+    public EventCallback<long> OnBaseSelect { get; set; }
 
     /// <summary>False when the save holds no position, which for the truck means it is stowed in the player's pocket: nothing is plotted and the readouts show dashes.</summary>
     [Parameter]

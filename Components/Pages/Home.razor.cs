@@ -22,6 +22,7 @@ namespace RRSOS_PCC.Components.Pages
         private PlanetViewModel? PlanetVM;
         private VehicleViewModel? VehicleVM;
         private PowerSummaryViewModel? PowerVM;
+        private IReadOnlyDictionary<string, RocketBonus> Rockets = new Dictionary<string, RocketBonus>();
         private BaseSummaryViewModel? BaseVMs;
         private List<NoteViewModel> NotebookVMs = new();
         private Notebook Notebook = new();
@@ -84,6 +85,7 @@ namespace RRSOS_PCC.Components.Pages
             PlanetVM = s?.PlanetInfo != null ? new PlanetViewModel(s.PlanetInfo) : null;
             VehicleVM = s?.Vehicle != null ? new VehicleViewModel(s.Vehicle) : null;
             PowerVM = PowerSvc.Summarize(s);
+            Rockets = RocketBonuses.Summarize(s);
 
             BaseVMs = s?.Bases != null && s.Player != null
                 ? new BaseSummaryViewModel(s.Bases, s.Player)
@@ -115,6 +117,14 @@ namespace RRSOS_PCC.Components.Pages
         {
             _pinnedBaseId = _pinnedBaseId == id ? null : id;
             UpdateSelection();
+        }
+
+        // Clicking a base on the player card's small map: pin it and go to the Base tab to see it.
+        private void ShowBase(long id)
+        {
+            _pinnedBaseId = id;
+            UpdateSelection();
+            Tab = HomeTab.Base;
         }
 
         private void Unpin()

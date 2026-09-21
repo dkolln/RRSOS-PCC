@@ -21,6 +21,13 @@
     "PowerKw": -45.5,
     "Type": 5520
   },
+  "Farm2": {
+    "BaseId": "Farm",
+    "Name": "Outdoor Farm",
+    "Tier": "T2",
+    "PowerKw": -165,
+    "Type": 5520
+  },
 
   "VehicleEquipmentSize1": {
     "BaseId": "VehicleEquipmentSize",
@@ -893,12 +900,14 @@
     "BaseId": "Drill2",
     "Name": "Drill",
     "Tier": "T3",
+    "PowerKw": -8.5,
     "Type": 5110
   },
   "Drill3": {
     "BaseId": "Drill3",
     "Name": "Drill",
     "Tier": "T4",
+    "PowerKw": -45.5,
     "Type": 5110
   },
   "Drill4": {
@@ -943,15 +952,17 @@
   },
   "EnergyGenerator4": {
     "BaseId": "EnergyGenerator4",
-    "Name": "Energy Generator",
-    "Tier": "T4",
+    "Name": "Nuclear Reactor",
+    "Tier": "T1",
+    "PowerKw": 86.5,
     "Icon": "atom",
     "Type": 6920
   },
   "EnergyGenerator5": {
     "BaseId": "EnergyGenerator5",
-    "Name": "Energy Generator T5",
-    "Tier": "T5",
+    "Name": "Nuclear Reactor",
+    "Tier": "T2",
+    "PowerKw": 331.5,
     "Icon": "atoms",
     "Type": 6920
   },
@@ -1137,6 +1148,7 @@
     "BaseId": "Heater",
     "Name": "Heater",
     "Tier": "T4",
+    "PowerKw": -51.5,
     "Type": 5210
   },
   "Heater5": {
@@ -1743,6 +1755,7 @@
     "BaseId": "GasExtractor",
     "Name": "Gas Extractor",
     "Tier": "T1",
+    "PowerKw": -58,
     "Type": 5450
   },
   "GasExtractor2": {
@@ -1899,6 +1912,7 @@
     "BaseId": "OreExtractor",
     "Name": "Ore Extractor",
     "Tier": "T1",
+    "PowerKw": -34,
     "Type": 5430
   },
   "OreExtractor2": {
@@ -2020,7 +2034,7 @@
   },
   "RocketHeat1": {
     "BaseId": "RocketHeat",
-    "Name": "Magnetic Field Protection Rocket",
+    "Name": "Asteroid Attraction Rocket",
     "Tier": "T1",
     "Type": 8310
   },
@@ -2056,7 +2070,7 @@
   },
   "RocketPressure1": {
     "BaseId": "RocketPressure",
-    "Name": "Asteroid Attraction Rocket",
+    "Name": "Magnetic Field Protection Rocket",
     "Tier": "T1",
     "Type": 8310
   },
@@ -2167,12 +2181,14 @@
     "BaseId": "TreePlanter",
     "Name": "Tree Spreader",
     "Tier": "T2",
+    "PowerKw": -71,
     "Type": 5310
   },
   "TreeSpreader1": {
     "BaseId": "TreeSpreader",
     "Name": "Tree Spreader",
     "Tier": "T1",
+    "PowerKw": -31,
     "Type": 5310
   },
   "TreeSpreader2": {
