@@ -125,6 +125,35 @@ h1:focus {
     gap: 4px;
 }
 
+/* A list that starts folded: the heading (with its count) stays, the contents open on click. */
+.readout-fold > summary {
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+}
+
+.readout-fold > summary::-webkit-details-marker {
+    display: none;
+}
+
+.readout-fold > summary::after {
+    content: "▶";
+}
+
+.readout-fold[open] > summary::after {
+    content: "▼";
+}
+
+.readout-fold > summary:hover {
+    color: #9ac7ff;
+}
+
+.readout-fold[open] > summary {
+    margin-bottom: 4px;
+}
+
 .tabbed {
     padding-left: 36px;
 }

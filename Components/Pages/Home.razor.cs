@@ -32,6 +32,13 @@ namespace RRSOS_PCC.Components.Pages
         /// <summary>The base shown in the contents panel (sticky, see <see cref="BaseSelector"/>).</summary>
         public BaseViewModel? SelectedBase { get; private set; }
 
+        private enum HomeTab { Main, Base, Extractors }
+
+        private HomeTab Tab = HomeTab.Main;
+
+        // Inactive tabs are hidden with CSS, not removed, so they keep their state.
+        private string PaneClass(HomeTab tab) => Tab == tab ? "" : "home-hidden";
+
         //add collapsibles
         private bool ShowPlayer = true;
         private bool ShowPlanet = true;

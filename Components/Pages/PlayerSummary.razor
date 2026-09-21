@@ -38,54 +38,58 @@
 
         <!-- Backpack -->
         <div class="readout-section">
-            <div class="readout-header">Backpack (@Data.Backpack.Count)</div>
+            <details class="readout-fold">
+                <summary>Backpack (@Data.Backpack.Count)</summary>
 
-            <div class="readout-grid-2">
-                <div>
-                    @foreach (var item in LeftColumn)
-                    {
-                        <div class="readout-line">
-                            <span class="label">» @item.Name</span>
-                            <span class="value">@item.Count</span>
-                        </div>
-                    }
-                </div>
+                <div class="readout-grid-2">
+                    <div>
+                        @foreach (var item in LeftColumn)
+                        {
+                            <div class="readout-line">
+                                <span class="label">» @item.Name</span>
+                                <span class="value">@item.Count</span>
+                            </div>
+                        }
+                    </div>
 
-                <div>
-                    @foreach (var item in RightColumn)
-                    {
-                        <div class="readout-line">
-                            <span class="label">» @item.Name</span>
-                            <span class="value">@item.Count</span>
-                        </div>
-                    }
+                    <div>
+                        @foreach (var item in RightColumn)
+                        {
+                            <div class="readout-line">
+                                <span class="label">» @item.Name</span>
+                                <span class="value">@item.Count</span>
+                            </div>
+                        }
+                    </div>
                 </div>
-            </div>
+            </details>
         </div>
 
         <!-- Equipment -->
         <div class="readout-section">
-            <div class="readout-header">Equipment (@Data.Equipment.Count)</div>
+            <details class="readout-fold">
+                <summary>Equipment (@Data.Equipment.Count)</summary>
 
-            <div class="readout-grid-2">
-                <div>
-                    @foreach (var item in EquipmentLeftColumn)
-                    {
-                        <div class="readout-line">
-                            <span class="label">» @item.Name</span>
-                        </div>
-                    }
-                </div>
+                <div class="readout-grid-2">
+                    <div>
+                        @foreach (var item in EquipmentLeftColumn)
+                        {
+                            <div class="readout-line">
+                                <span class="label">» @item.Name</span>
+                            </div>
+                        }
+                    </div>
 
-                <div>
-                    @foreach (var item in EquipmentRightColumn)
-                    {
-                        <div class="readout-line">
-                            <span class="label">» @item.Name</span>
-                        </div>
-                    }
+                    <div>
+                        @foreach (var item in EquipmentRightColumn)
+                        {
+                            <div class="readout-line">
+                                <span class="label">» @item.Name</span>
+                            </div>
+                        }
+                    </div>
                 </div>
-            </div>
+            </details>
         </div>
     }
 

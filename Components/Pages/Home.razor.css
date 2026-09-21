@@ -4,6 +4,58 @@
     gap: 20px;
 }
 
+/* Base tab: the list of bases is narrow, the contents get the room. */
+.home-grid-base {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+}
+
+.home-grid-single {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.home-hidden {
+    display: none !important;
+}
+
+/* Cards that share one grid cell, one above the other. */
+.home-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 0;
+}
+
+.home-tabs {
+    display: flex;
+    gap: 22px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid #1a2a3a;
+}
+
+.home-tab {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 4px 0 6px;
+    margin-bottom: -1px;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #7f9db9;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.home-tab:hover {
+    color: #cfe4ff;
+}
+
+.home-tab.active {
+    color: #cfe4ff;
+    border-bottom-color: #7ab8ff;
+}
+
 .home-card pre {
     max-height: 600px; /* ~40 lines */
     overflow-y: auto;

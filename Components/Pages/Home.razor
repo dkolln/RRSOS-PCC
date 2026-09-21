@@ -1,11 +1,29 @@
-﻿@page "/"
+@page "/"
 @using RRSOS_PCC.Services
 @using RRSOS_PCC.Components.Pages
 
 @layout MainLayout
 @inject NavigationManager NavigationManager
 
-<div class="home-grid">
+<nav class="home-tabs" role="tablist">
+    <button class="home-tab @(Tab == HomeTab.Main ? "active" : "")" role="tab" aria-selected="@(Tab == HomeTab.Main)"
+            @onclick="() => Tab = HomeTab.Main">
+        Main
+    </button>
+    <button class="home-tab @(Tab == HomeTab.Base ? "active" : "")" role="tab" aria-selected="@(Tab == HomeTab.Base)"
+            @onclick="() => Tab = HomeTab.Base">
+        Base
+    </button>
+    <button class="home-tab @(Tab == HomeTab.Extractors ? "active" : "")" role="tab" aria-selected="@(Tab == HomeTab.Extractors)"
+            @onclick="() => Tab = HomeTab.Extractors">
+        Extractors (@ExtractorVMs.Count)
+    </button>
+</nav>
+
+@* Every tab stays in the page and the inactive ones are only hidden, so nothing resets when you switch
+   (the player's map trail keeps recording, the selected base and open lists are kept). *@
+
+<div class="home-grid @PaneClass(HomeTab.Main)">
 
     <div class="readout-section">
         <div class="readout-header" @onclick="() => ShowPlayer = !ShowPlayer">
@@ -28,15 +46,38 @@
         }
     </div>
 
-    <div class="readout-section">
-        <div class="readout-header" @onclick="() => ShowVehicle = !ShowVehicle">
-            VEHICLE <span>@(ShowVehicle ? "▼" : "▶")</span>
+    @* The vehicle card is short now that its lists fold, so the notes sit under it in the same column. *@
+    <div class="home-stack">
+        <div class="readout-section">
+            <div class="readout-header" @onclick="() => ShowVehicle = !ShowVehicle">
+                VEHICLE <span>@(ShowVehicle ? "▼" : "▶")</span>
+            </div>
+            @if (ShowVehicle)
+            {
+                <VehicleSummary Data="@VehicleVM" />
+            }
         </div>
-        @if (ShowVehicle)
+
+        @if (!IsLoading && Notebook is not null)
         {
-            <VehicleSummary Data="@VehicleVM" />
+            <div class="readout-section">
+                <div class="readout-header" @onclick="() => ShowNotebook = !ShowNotebook">
+                    NOTES <span>@(ShowNotebook ? "▼" : "▶")</span>
+                </div>
+
+                @if (ShowNotebook)
+                {
+                    <NoteSummary NotebookData="@Notebook"
+                                 Notes="@NotebookVMs"
+                                 OnNotesChanged="ReloadNotebook" />
+                }
+            </div>
         }
     </div>
+
+</div>
+
+<div class="home-grid home-grid-base @PaneClass(HomeTab.Base)">
 
     <div class="readout-section">
         <div class="readout-header" @onclick="() => ShowBases = !ShowBases">
@@ -58,6 +99,10 @@
         }
     </div>
 
+</div>
+
+<div class="home-grid home-grid-single @PaneClass(HomeTab.Extractors)">
+
     <div class="readout-section">
         <div class="readout-header" @onclick="() => ShowExtractors = !ShowExtractors">
             EXTRACTORS <span>@(ShowExtractors ? "▼" : "▶")</span>
@@ -68,25 +113,4 @@
         }
     </div>
 
-    @if (!IsLoading && Notebook is not null)
-    {
-        <div class="readout-section">
-            <div class="readout-header" @onclick="() => ShowNotebook = !ShowNotebook">
-                NOTES <span>@(ShowNotebook ? "▼" : "▶")</span>
-            </div>
-
-            @if (ShowNotebook)
-            {
-                <NoteSummary NotebookData="@Notebook"
-                             Notes="@NotebookVMs"
-                             OnNotesChanged="ReloadNotebook" />
-            }
-        </div>
-    }
-
-
-
 </div>
-
-
-
