@@ -301,3 +301,9 @@
     margin: 0;
     flex-shrink: 1;
 }
+
+.base-empty {
+    margin-bottom: 10px;
+    color: #7f9db9;
+    font-style: italic;
+}

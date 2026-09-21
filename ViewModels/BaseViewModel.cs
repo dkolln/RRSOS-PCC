@@ -15,6 +15,9 @@ namespace RRSOS_PCC.ViewModels
         public string Name => _model.Name;
         public BaseType Type => _model.Type;
 
+        /// <summary>The base's raw world (X, Z) position.</summary>
+        public Vector2 Flat => _model.Position.Flat;
+
         public string DisplayPosition => $"({_model.Position.Flat.X:0},{_model.Position.Flat.Y:0})"; 
         public float Distance => Vector2.Distance(_model.Position.Flat, _playerPos.Flat);
         public string Direction => PCMath.GetCompassDirection(_playerPos.Flat, _model.Position.Flat);

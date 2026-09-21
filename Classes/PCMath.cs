@@ -51,13 +51,24 @@ namespace RRSOS_PCC.Classes
         public static float Deviation(float actualPct, float expectedPct) =>
             actualPct - expectedPct;
 
-        public static float CalculateHeading(Vector2 vector)
-        {
-            double heading = Math.Atan2(vector.X, vector.Y) * (180.0 / Math.PI);
-            if (heading < 0) heading += 360;
+        /// <summary>
+        /// The game's compass on the ground plane, as (east, north) for a world (X, Z) point or direction.
+        /// Calibrated to the direction letters the base list has always shown: north is world -X and
+        /// east is world +Z. Everything that draws a compass, a map or a bearing goes through here,
+        /// so if this ever turns out to be off, this is the one line to change.
+        /// </summary>
+        public static Vector2 ToEastNorth(Vector2 worldXZ) => new(worldXZ.Y, -worldXZ.X);
 
-            return (float)heading;
+        /// <summary>Compass bearing in degrees for an (east, north) direction: 0 = north, 90 = east.</summary>
+        public static float BearingDegrees(Vector2 eastNorth)
+        {
+            var bearing = MathF.Atan2(eastNorth.X, eastNorth.Y) * (180f / MathF.PI);
+            return bearing < 0 ? bearing + 360f : bearing;
         }
+
+        /// <summary>Compass heading for a forward vector given in world (X, Z).</summary>
+        public static float CalculateHeading(Vector2 worldForwardXZ) =>
+            BearingDegrees(ToEastNorth(worldForwardXZ));
 
         public static Vector2 ForwardFromQuaternion(Quaternion q)
         {
@@ -73,7 +84,7 @@ namespace RRSOS_PCC.Classes
             var v = new Vector2(fx, fz);
 
             if (v.LengthSquared() < 0.0001f)
-                return new Vector2(0, 1); // fallback: north
+                return new Vector2(0, 1); // fallback: straight along +Z
 
             return Vector2.Normalize(v);
         }
@@ -83,28 +94,22 @@ namespace RRSOS_PCC.Classes
 
         public static string GetCompassDirection(Vector2 from, Vector2 to)
         {
-            var deltaZ = to.Y - from.Y;
-            var deltaX = from.X - to.X;
-
-            var angle = MathF.Atan2(deltaX, deltaZ) * (180f / MathF.PI);
-
-            if (angle < 0)
-                angle += 360f;
-
-            return angle switch
-            {
-                >= 337.5f or < 22.5f => "E",
-                >= 22.5f and < 67.5f => "NE",
-                >= 67.5f and < 112.5f => "N",
-                >= 112.5f and < 157.5f => "NW",
-                >= 157.5f and < 202.5f => "W",
-                >= 202.5f and < 247.5f => "SW",
-                >= 247.5f and < 292.5f => "S",
-                >= 292.5f and < 337.5f => "SE",
-                _ => "?"
-            };
-
+            return EightWay(BearingDegrees(ToEastNorth(to - from)));
         }
+
+        /// <summary>Compass letters for a bearing (0 = N, 90 = E).</summary>
+        public static string EightWay(float bearing) => bearing switch
+        {
+            >= 337.5f or < 22.5f => "N",
+            >= 22.5f and < 67.5f => "NE",
+            >= 67.5f and < 112.5f => "E",
+            >= 112.5f and < 157.5f => "SE",
+            >= 157.5f and < 202.5f => "S",
+            >= 202.5f and < 247.5f => "SW",
+            >= 247.5f and < 292.5f => "W",
+            >= 292.5f and < 337.5f => "NW",
+            _ => "?"
+        };
 
         public static string MultiplierAbbreviation(float n)
         {

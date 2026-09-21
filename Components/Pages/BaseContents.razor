@@ -40,6 +40,11 @@
             }
         </div>
 
+        @if (!Processed.Stored.Any && !Processed.ReadyToHarvest.Any && !Processed.Boneyard.Any)
+        {
+            <div class="base-empty">Nothing stored here.</div>
+        }
+
         @ItemGroup(GroupTitle, "resource", Processed.Stored)
         @ItemGroup("Ready to harvest", "boneyard", Processed.ReadyToHarvest)
         @ItemGroup("Boneyard (loose)", "boneyard", Processed.Boneyard)

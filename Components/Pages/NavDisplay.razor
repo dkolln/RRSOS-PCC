@@ -1,4 +1,5 @@
 @using System.Numerics
+@using RRSOS_PCC.Classes
 
 <div class="nav-row @(Known ? "" : "is-unknown")">
 
@@ -141,11 +142,11 @@
     private readonly record struct Dot(string X, string Y, string Opacity);
     private readonly record struct TapeTick(int Metres, string Y, float YValue, bool Major);
 
-    /// <summary>Where the player is in the world (X east, Y up, Z north).</summary>
+    /// <summary>Where the player is in the world (raw X, Y up, Z).</summary>
     [Parameter]
     public Vector3 Position { get; set; }
 
-    /// <summary>Compass heading in degrees, 0 = +Z.</summary>
+    /// <summary>Compass heading in degrees, 0 = north (see PCMath.ToEastNorth).</summary>
     [Parameter]
     public float Heading { get; set; }
 
@@ -221,6 +222,7 @@
 
     private string CardinalText => Known ? Points16[(int)MathF.Round(_heading / 22.5f) % 16] : "";
 
+
     private string PositionText => Known ? Inv($"X {_here.X:F1}   Z {_here.Y:F1}") : "stowed";
 
     private string ElevationText => Known ? Inv($"{_elevation:F1}") : "--";
@@ -278,12 +280,14 @@
     private string TrailLine =>
         string.Join(' ', _trail.Append(_here).Select(ToMap).Select(p => Inv($"{p.X:0.##},{p.Y:0.##}")));
 
-    // World (X east, Z north) to the square: 0, 0 is the middle. Anything past the edge is pinned to it.
+    // World (X, Z) to the square with the game's north up (see PCMath.ToEastNorth): 0, 0 is the middle.
+    // Anything past the edge is pinned to it.
     private (float X, float Y) ToMap(Vector2 world)
     {
         var scale = MapHalf / Range;
-        var x = Math.Clamp(world.X * scale, -MapHalf, MapHalf);
-        var y = Math.Clamp(world.Y * scale, -MapHalf, MapHalf);
+        var eastNorth = PCMath.ToEastNorth(world);
+        var x = Math.Clamp(eastNorth.X * scale, -MapHalf, MapHalf);
+        var y = Math.Clamp(eastNorth.Y * scale, -MapHalf, MapHalf);
         return (70f + x, 70f - y);
     }
 
