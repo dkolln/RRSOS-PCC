@@ -1168,6 +1168,18 @@
     "name": "Golden fish eggs"
   },
   {
+    "gId": "FishGalbea",
+    "name": "Galbea fish eggs"
+  },
+  {
+    "gId": "FishVelkia",
+    "name": "Velkia fish eggs"
+  },
+  {
+    "gId": "FishStabu",
+    "name": "Stabu fish eggs"
+  },
+  {
     "gId": "CookCocoaSeed",
     "name": "Cocoa seed"
   },
