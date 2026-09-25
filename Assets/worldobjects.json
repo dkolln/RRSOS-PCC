@@ -781,7 +781,7 @@
   },
   {
     "gId": "Butterfly1Larvae",
-    "name": "Azurae butterfly larva"
+    "name": "Abstreus butterfly larva"
   },
   {
     "gId": "Bee1Larvae",
@@ -797,7 +797,7 @@
   },
   {
     "gId": "Butterfly2Larvae",
-    "name": "Leani butterfly larva"
+    "name": "Alben butterfly larva"
   },
   {
     "gId": "Butterfly2Hatched",
@@ -817,11 +817,11 @@
   },
   {
     "gId": "Butterfly3Larvae",
-    "name": "Fensea butterfly larva"
+    "name": "Azurae butterfly larva"
   },
   {
     "gId": "Butterfly4Larvae",
-    "name": "Galaxe butterfly larva"
+    "name": "Chevrone butterfly larva"
   },
   {
     "gId": "Butterfly4Hatched",
@@ -829,27 +829,27 @@
   },
   {
     "gId": "Butterfly9Larvae",
-    "name": "Aemel butterfly larva"
+    "name": "Galaxe butterfly larva"
   },
   {
     "gId": "Butterfly7Larvae",
-    "name": "Penga butterfly larva"
+    "name": "Fiorente butterfly larva"
   },
   {
     "gId": "Butterfly8Larvae",
-    "name": "Chevrone butterfly larva"
+    "name": "Futura butterfly larva"
   },
   {
     "gId": "Butterfly6Larvae",
-    "name": "Empalio butterfly larva"
+    "name": "Fensea butterfly larva"
   },
   {
     "gId": "Butterfly5Larvae",
-    "name": "Abstreus butterfly larva"
+    "name": "Empalio butterfly larva"
   },
   {
     "gId": "Butterfly10Larvae",
-    "name": "Liux butterfly larva"
+    "name": "Leani butterfly larva"
   },
   {
     "gId": "Butterfly6Hatched",
@@ -945,7 +945,7 @@
   },
   {
     "gId": "Butterfly11Larvae",
-    "name": "Nere butterfly larva"
+    "name": "Liux butterfly larva"
   },
   {
     "gId": "Butterfly12Larvae",
@@ -953,15 +953,15 @@
   },
   {
     "gId": "Butterfly13Larvae",
-    "name": "Fiorente butterfly larva"
+    "name": "Nere butterfly larva"
   },
   {
     "gId": "Butterfly14Larvae",
-    "name": "Alben butterfly larva"
+    "name": "Oesbe butterfly larva"
   },
   {
     "gId": "Butterfly15Larvae",
-    "name": "Futura butterfly larva"
+    "name": "Penga butterfly larva"
   },
   {
     "gId": "ButterflyDisplayer1",
@@ -969,15 +969,15 @@
   },
   {
     "gId": "Butterfly16Larvae",
-    "name": "Imeo butterfly larva"
+    "name": "Aemel butterfly larva"
   },
   {
     "gId": "Butterfly17Larvae",
-    "name": "Serena butterfly larva"
+    "name": "Golden butterfly larva"
   },
   {
     "gId": "Butterfly18Larvae",
-    "name": "Golden butterfly larva"
+    "name": "Imeo butterfly larva"
   },
   {
     "gId": "AirFilter1",
@@ -1278,6 +1278,10 @@
   {
     "gId": "Butterfly19Larvae",
     "name": "Faleria butterfly larva"
+  },
+  {
+    "gId": "Butterfly20Larvae",
+    "name": "Feliciana butterfly larva"
   },
   {
     "gId": "FrogDisplayer1",
