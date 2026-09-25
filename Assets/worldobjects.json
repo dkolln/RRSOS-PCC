@@ -1599,15 +1599,15 @@
   },
   {
     "gId": "Skin-02",
-    "name": "Spacesuit Blasto"
+    "name": "Spacesuit Blasto (Hidden Lore)"
   },
   {
     "gId": "Skin-03",
-    "name": "Spacesuit Primo"
+    "name": "Spacesuit Primo (Trade Rocket)"
   },
   {
     "gId": "Skin-04",
-    "name": "Spacesuit Goldeo"
+    "name": "Spacesuit Goldeo (Humble DLC)"
   },
   {
     "gId": "Skin-05",
@@ -1647,23 +1647,35 @@
   },
   {
     "gId": "Skin-13",
-    "name": "Spacesuit Mekio"
+    "name": "Spacesuit Mekio (Prime DLC)"
   },
   {
     "gId": "Skin-14",
-    "name": "Spacesuit Abyso"
+    "name": "Spacesuit Abyso (Prime DLC)"
   },
   {
     "gId": "Skin-15",
-    "name": "Spacesuit Ettio"
+    "name": "Spacesuit Ettio (Prime DLC)"
   },
   {
     "gId": "Skin-16",
-    "name": "Spacesuit Plesao"
+    "name": "Spacesuit Plesao (Prime DLC)"
   },
   {
     "gId": "Skin-17",
-    "name": "Spacesuit Rorao"
+    "name": "Spacesuit Rorao (Portal Wrecks)"
+  },
+  {
+    "gId": "Skin-18",
+    "name": "Spacesuit Starforma (Humble DLC)"
+  },
+  {
+    "gId": "Skin-19",
+    "name": "Spacesuit Glitx (Humble DLC)"
+  },
+  {
+    "gId": "Skin-20",
+    "name": "Spacesuit Colonnya (Selenea DLC)"
   },
   {
     "gId": "SkinDisplayer",
