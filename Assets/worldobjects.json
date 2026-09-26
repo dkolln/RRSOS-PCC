@@ -1168,6 +1168,194 @@
     "name": "Golden fish eggs"
   },
   {
+    "gId": "Seed9Humble",
+    "name": "Seed9Humble"
+  },
+  {
+    "gId": "Seed10Humble",
+    "name": "Seed10Humble"
+  },
+  {
+    "gId": "Seed11Humble",
+    "name": "Seed11Humble"
+  },
+  {
+    "gId": "Tree14Seed",
+    "name": "Tree14Seed"
+  },
+  {
+    "gId": "Tree15Seed",
+    "name": "Tree15Seed"
+  },
+  {
+    "gId": "Tree16Seed",
+    "name": "Tree16Seed"
+  },
+  {
+    "gId": "Tree17Seed",
+    "name": "Tree17Seed"
+  },
+  {
+    "gId": "Tree18Seed",
+    "name": "Tree18Seed"
+  },
+  {
+    "gId": "Butterfly21Larvae",
+    "name": "Butterfly21Larvae"
+  },
+  {
+    "gId": "Fish15Eggs",
+    "name": "Fish15Eggs"
+  },
+  {
+    "gId": "ToxicGoo",
+    "name": "ToxicGoo"
+  },
+  {
+    "gId": "ToxicWater",
+    "name": "ToxicWater"
+  },
+  {
+    "gId": "Toxins",
+    "name": "Toxins"
+  },
+  {
+    "gId": "ToxicSpores",
+    "name": "ToxicSpores"
+  },
+  {
+    "gId": "MicroPlastics",
+    "name": "MicroPlastics"
+  },
+  {
+    "gId": "PurifiedWater",
+    "name": "PurifiedWater"
+  },
+  {
+    "gId": "PurificationCapsule",
+    "name": "PurificationCapsule"
+  },
+  {
+    "gId": "PurificationGel",
+    "name": "PurificationGel"
+  },
+  {
+    "gId": "ChlorineCapsule1",
+    "name": "ChlorineCapsule1"
+  },
+  {
+    "gId": "PristineMushroom",
+    "name": "PristineMushroom"
+  },
+  {
+    "gId": "AntiToxinsExplosive1",
+    "name": "AntiToxinsExplosive1"
+  },
+  {
+    "gId": "AntiToxinsExplosive2",
+    "name": "AntiToxinsExplosive2"
+  },
+  {
+    "gId": "ToxicityMedecine",
+    "name": "ToxicityMedecine"
+  },
+  {
+    "gId": "ToxicityAmmo",
+    "name": "ToxicityAmmo"
+  },
+  {
+    "gId": "ToxicityAmmoPack",
+    "name": "ToxicityAmmoPack"
+  },
+  {
+    "gId": "ToxicityMedecinePack",
+    "name": "ToxicityMedecinePack"
+  },
+  {
+    "gId": "AnimalBones",
+    "name": "AnimalBones"
+  },
+  {
+    "gId": "PlasticPolymer",
+    "name": "PlasticPolymer"
+  },
+  {
+    "gId": "Rod-plastic",
+    "name": "Rod-plastic"
+  },
+  {
+    "gId": "Minable-Tungsten",
+    "name": "Minable-Tungsten"
+  },
+  {
+    "gId": "Rod-tungsten",
+    "name": "Rod-tungsten"
+  },
+  {
+    "gId": "Fertilizer3",
+    "name": "Fertilizer3"
+  },
+  {
+    "gId": "RocketReactor2",
+    "name": "RocketReactor2"
+  },
+  {
+    "gId": "KeyCard2",
+    "name": "KeyCard2"
+  },
+  {
+    "gId": "FuseAnimals1",
+    "name": "FuseAnimals1"
+  },
+  {
+    "gId": "FuseGrowth1",
+    "name": "FuseGrowth1"
+  },
+  {
+    "gId": "FuseInsects1",
+    "name": "FuseInsects1"
+  },
+  {
+    "gId": "FusePurification1",
+    "name": "FusePurification1"
+  },
+  {
+    "gId": "AnimalFood3",
+    "name": "AnimalFood3"
+  },
+  {
+    "gId": "Drone3",
+    "name": "Drone3"
+  },
+  {
+    "gId": "CosmicQuartz",
+    "name": "Cosmic Quartz"
+  },
+  {
+    "gId": "Bauxite",
+    "name": "Bauxite"
+  },
+  {
+    "gId": "Dolomite",
+    "name": "Dolomite"
+  },
+  {
+    "gId": "Uraninite",
+    "name": "Uraninite"
+  },
+  {
+    "gId": "Selenium",
+    "name": "Selenium"
+  },
+  {
+    "gId": "Phosphorus",
+    "name": "Phosphorus"
+  },
+  {
+    "gId": "Amber",
+    "name": "Amber"
+  },
+  {
     "gId": "CookCocoaSeed",
     "name": "Cocoa seed"
   },
